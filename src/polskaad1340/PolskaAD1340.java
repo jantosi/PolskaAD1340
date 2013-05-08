@@ -4,6 +4,8 @@
  */
 package polskaad1340;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Kuba
@@ -15,5 +17,7 @@ public class PolskaAD1340 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        JFrame om = new OknoMapy();
+        om.setVisible(true);
     }
 }
