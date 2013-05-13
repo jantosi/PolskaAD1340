@@ -1,3 +1,5 @@
+*.png
+
 # NetBeans specific #
 nbproject/private/
 build/

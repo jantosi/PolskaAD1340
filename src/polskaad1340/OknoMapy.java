@@ -4,17 +4,73 @@
  */
 package polskaad1340;
 
+import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author Kuba
  */
 public class OknoMapy extends javax.swing.JFrame {
 
+    public ArrayList<ArrayList<JLabel>> tileGrid;
+    
+    public void createTileGrid(int size, int tileSize)
+    {
+        tileGrid = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            
+            ArrayList<JLabel> tileGridRow = new ArrayList<>(size);
+            
+            for (int j = 0; j < size; j++) {
+                int num = i*size+j;
+                String path = "/images/"+num+".png";
+                System.out.println("i:"+i+"j:"+j+"path:"+path);
+                ImageIcon ii = new ImageIcon(getClass().getResource(path));
+                
+                JLabel jl = new JLabel(ii);
+                jl.setSize(tileSize,tileSize);
+                tileGridRow.add(jl);
+            }
+            
+            tileGrid.add(tileGridRow);
+            
+        }
+        
+    }
+    
+    public void addTileGridToWindow()
+    {
+        GridLayout gl = (GridLayout) getContentPane().getLayout();
+            gl.setRows(tileGrid.size());
+            gl.setColumns(tileGrid.size());
+        
+        for (int i = 0; i < tileGrid.size(); i++) {
+            ArrayList<JLabel> arrayList = tileGrid.get(i);
+            for (int j = 0; j < arrayList.size(); j++) {
+                JLabel jLabel = arrayList.get(j);
+                getContentPane().add(jLabel);
+            }
+        }
+    }
+    
     /**
      * Creates new form OknoMapy
      */
     public OknoMapy() {
         initComponents();
+        createTileGrid(20,32);
+        addTileGridToWindow();
+        System.out.print("done");
     }
 
     /**
@@ -28,7 +84,7 @@ public class OknoMapy extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 500));
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
