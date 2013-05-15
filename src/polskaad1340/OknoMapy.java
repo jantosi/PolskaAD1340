@@ -4,15 +4,9 @@
  */
 package polskaad1340;
 
+import java.awt.Component;
 import java.awt.GridLayout;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -34,7 +28,7 @@ public class OknoMapy extends javax.swing.JFrame {
             for (int j = 0; j < size; j++) {
                 int num = i*size+j;
                 String path = "/images/"+num+".png";
-                System.out.println("i:"+i+"j:"+j+"path:"+path);
+                
                 ImageIcon ii = new ImageIcon(getClass().getResource(path));
                 
                 JLabel jl = new JLabel(ii);
@@ -46,6 +40,7 @@ public class OknoMapy extends javax.swing.JFrame {
             
         }
         
+        setBounds(20, 20, size*tileSize, size*tileSize);
     }
     
     public void addTileGridToWindow()
@@ -68,7 +63,7 @@ public class OknoMapy extends javax.swing.JFrame {
      */
     public OknoMapy() {
         initComponents();
-        createTileGrid(20,32);
+        createTileGrid(40,32);
         addTileGridToWindow();
         System.out.print("done");
     }
