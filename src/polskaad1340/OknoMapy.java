@@ -4,17 +4,11 @@
  */
 package polskaad1340;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
 /**
  *
@@ -22,8 +16,67 @@ import javax.swing.border.Border;
  */
 public class OknoMapy extends javax.swing.JFrame {
 
-    public ArrayList<ArrayList<JLabel>> foregroundTileGrid, backgroundTileGrid;
     public int tileSize;
+    
+    private ArrayList<ArrayList<JLabel>> foregroundTileGrid, backgroundTileGrid;    
+    private int defaultBgTileID = 72;
+    private boolean isResizedNow = false;
+
+    public ArrayList<ArrayList<JLabel>> getForegroundTileGrid() {
+        return foregroundTileGrid;
+    }
+
+    public ArrayList<ArrayList<JLabel>> getBackgroundTileGrid() {
+        return backgroundTileGrid;
+    }
+
+    public JLabel tileFromNumber(int num) {
+        String path = "/images/" + num + ".png";
+
+        ImageIcon ii = new ImageIcon(getClass().getResource(path));
+
+        JLabel jl = new JLabel(ii);
+        jl.setSize(tileSize, tileSize);
+        return jl;
+    }
+
+    public void importForegroundTileGrid(ArrayList<ArrayList<Integer>> arr) {
+        ArrayList<ArrayList<JLabel>> tileGrid = new ArrayList<>(arr.size());
+        for (int i = 0; i < arr.size(); i++) {
+
+            ArrayList<JLabel> tileGridRow = new ArrayList<>(arr.size());
+
+            for (int j = 0; j < arr.size(); j++) {
+
+                int num = arr.get(i).get(j);
+
+                JLabel jl = tileFromNumber(num);
+                tileGridRow.add(jl);
+            }
+            tileGrid.add(tileGridRow);
+        }
+
+        this.foregroundTileGrid = tileGrid;
+    }
+
+    public void importBackgroundTileGrid(ArrayList<ArrayList<Integer>> arr) {
+        ArrayList<ArrayList<JLabel>> tileGrid = new ArrayList<>(arr.size());
+        for (int i = 0; i < arr.size(); i++) {
+
+            ArrayList<JLabel> tileGridRow = new ArrayList<>(arr.size());
+
+            for (int j = 0; j < arr.size(); j++) {
+
+                int num = arr.get(i).get(j);
+
+                JLabel jl = tileFromNumber(num);
+                tileGridRow.add(jl);
+            }
+            tileGrid.add(tileGridRow);
+        }
+
+        this.backgroundTileGrid = tileGrid;
+    }
 
     public ArrayList<ArrayList<JLabel>> createTileGrid(int size, int defaultTileNo) {
         ArrayList<ArrayList<JLabel>> tileGrid = new ArrayList<>(size);
@@ -32,14 +85,13 @@ public class OknoMapy extends javax.swing.JFrame {
             ArrayList<JLabel> tileGridRow = new ArrayList<>(size);
 
             for (int j = 0; j < size; j++) {
-                //int num = i * size + j; //wszystkie obrazy po kolei
-                int num=defaultTileNo;
-                String path = "/images/" + num + ".png";
 
-                ImageIcon ii = new ImageIcon(getClass().getResource(path));
+                int num = defaultTileNo;
+                if (defaultTileNo == -1) {
+                    num = i * size + j;
+                } //wszystkie obrazy po kolei
 
-                JLabel jl = new JLabel(ii);
-                jl.setSize(tileSize, tileSize);
+                JLabel jl = tileFromNumber(num);
                 tileGridRow.add(jl);
             }
             tileGrid.add(tileGridRow);
@@ -47,7 +99,7 @@ public class OknoMapy extends javax.swing.JFrame {
         return tileGrid;
     }
 
-    public void addTileGridToWindow(ArrayList<ArrayList<JLabel>> tileGrid, JPanel targetPanel) {
+    private void addTileGridToWindow(ArrayList<ArrayList<JLabel>> tileGrid, JPanel targetPanel) {
         int size = tileGrid.size();
 
         GridLayout gl = (GridLayout) targetPanel.getLayout();
@@ -59,27 +111,45 @@ public class OknoMapy extends javax.swing.JFrame {
 
         for (int i = 0; i < tileGrid.size(); i++) {
             ArrayList<JLabel> arrayList = tileGrid.get(i);
-            for (int j = 0; j < arrayList.size(); j++) {
-                JLabel jLabel = arrayList.get(j);
-
-                jLabel.setBounds(j * this.tileSize, i * this.tileSize, this.tileSize, this.tileSize);
-                targetPanel.add(jLabel);
+            for (int j = 0; j < arrayList.size(); j++) {               
+                targetPanel.add(arrayList.get(j));
             }
         }
     }
 
-    /**
-     * Creates new form OknoMapy
-     */
+    public JLabel getTileAt(ArrayList<ArrayList<JLabel>> tileGrid, int tiledX, int tiledY) {
+        return (tileGrid.get(tiledY)).get(tiledX);
+    }
+
+    public void setTileAt(ArrayList<ArrayList<JLabel>> tileGrid, int tiledX, int tiledY, JLabel jl) {
+        tileGrid.get(tiledY).set(tiledX, jl);
+    }
+
     public OknoMapy() {
         initComponents();
         this.tileSize = 32;
-        foregroundTileGrid = createTileGrid(25,1793);
-        backgroundTileGrid = createTileGrid(25,56);
-        //addTileGridToWindow(foregroundTileGrid,foregroundPanel);
-        System.out.print("done");
+        addTileGridToWindow(createTileGrid(100, defaultBgTileID), overallBackgroundPanel);
+        drawForm();
     }
 
+    public void drawForm() {
+        isResizedNow=true;
+        
+        if (foregroundTileGrid != null) {
+            addTileGridToWindow(foregroundTileGrid, foregroundPanel);
+        }
+
+        if (backgroundTileGrid != null) {
+            addTileGridToWindow(backgroundTileGrid, backgroundPanel);
+        }
+
+        isResizedNow=false;
+    }
+
+    public void setForegroundTileGrid(ArrayList<ArrayList<JLabel>> foregroundTileGrid) {
+        this.foregroundTileGrid = foregroundTileGrid;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,77 +161,58 @@ public class OknoMapy extends javax.swing.JFrame {
 
         foregroundPanel = new javax.swing.JPanel();
         backgroundPanel = new javax.swing.JPanel();
+        overallBackgroundPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(500, 500));
+        setMinimumSize(new java.awt.Dimension(800, 800));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
+            }
+        });
+        getContentPane().setLayout(null);
 
-        foregroundPanel.setBackground(new java.awt.Color(102, 102, 255));
         foregroundPanel.setOpaque(false);
         foregroundPanel.setLayout(new java.awt.GridLayout(1, 0));
-        getContentPane().add(foregroundPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 100));
+        getContentPane().add(foregroundPanel);
+        foregroundPanel.setBounds(0, 0, 100, 100);
 
-        backgroundPanel.setBackground(new java.awt.Color(0, 204, 204));
         backgroundPanel.setForeground(new java.awt.Color(240, 240, 240));
+        backgroundPanel.setOpaque(false);
         backgroundPanel.setLayout(new java.awt.GridLayout(1, 0));
-        getContentPane().add(backgroundPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 10, 10));
+        getContentPane().add(backgroundPanel);
+        backgroundPanel.setBounds(0, 0, 10, 10);
+
+        overallBackgroundPanel.setForeground(new java.awt.Color(240, 240, 240));
+        overallBackgroundPanel.setLayout(new java.awt.GridLayout(1, 0));
+        getContentPane().add(overallBackgroundPanel);
+        overallBackgroundPanel.setBounds(0, 0, 620, 410);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        foregroundPanel.removeAll();
-        backgroundPanel.removeAll();
-        
-        if (foregroundTileGrid == null || backgroundTileGrid == null) {
-            return;
+        if(!isResizedNow) {
+            drawForm();
         }
-
-        addTileGridToWindow(foregroundTileGrid, foregroundPanel);
-        addTileGridToWindow(backgroundTileGrid, backgroundPanel);
     }//GEN-LAST:event_formComponentResized
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OknoMapy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OknoMapy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OknoMapy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OknoMapy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        int num = evt.getExtendedKeyCode();
+        System.out.println(num);
+        this.setTileAt(foregroundTileGrid, 0, 0, this.tileFromNumber(num));
+        this.repaint();
+        this.drawForm();
+    }//GEN-LAST:event_formKeyReleased
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new OknoMapy().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backgroundPanel;
     private javax.swing.JPanel foregroundPanel;
+    private javax.swing.JPanel overallBackgroundPanel;
     // End of variables declaration//GEN-END:variables
 }
