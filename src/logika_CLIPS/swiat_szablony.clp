@@ -1,38 +1,36 @@
+(deftemplate kratka
+	(slot id)
+	(slot pozycjaX) ;pozycja kratki na mapie
+	(slot pozycjaY)
+	(slot zawartosc) ;co sie na niej znaduje - trzeba uwzglednic dane ze wszystkich warstw
+)
+
 ;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
 (deftemplate drogaKratki 
-	(slot id) ;numer, ktory pozwoli na p√≥≈∫niejszƒÖ referencjƒô do tej drogi
-	(slot kratka) ;wsp√≥≈Çrzedne kratki w kt√≥rej zawiera siƒô droga
-	(slot kratkaY)
+	(slot id) ;numer, ktory pozwoli na pÛüniejszπ referencjÍ do tej drogi
+	(slot idKratki) ;id kratki w ktÛrej zawiera siÍ droga
 	(slot numerOdcinka) ;okresla kolejny odcinek drogi
 )
-;przykladowo stworzone fakty na podstawie template'a
-;(assert (drogaKratki (id 1) (kratkaX 1) (kratkaY 1) ))
-;(assert (drogaKratki (id 1) (kratkaX 2) (kratkaY 2) ))
-;(assert (drogaKratki (id 2) (kratkaX 2) (kratkaY 2) ))
 
 (deftemplate droga
 	(slot id) ;odniesienie do id w template drogaKratki
-	(slot skadX) ;wsp√≥≈Çrzedne pierwszej klatki na drodze
-	(slot skadY)
-	(slot dokadX) ;wspolrzedne ostatniej kratki na drodze
-	(slot dokadY)
+	(slot skad) ;id pierwszej klatki na drodze
+	(slot dokad) ;id ostatniej kratki na drodze
 	(slot dokadGrod) ;nazwa grodu, do ktorej prowadzi dana droga
-	(slot platna) ;czy droga jest platna czy te≈º bezplatna
+	(slot platna) ;czy droga jest platna czy teø bezplatna
+	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
 )
 
 (deftemplate blokada
-	(slot droga) ;droga, na kt√≥rej znajduje sie blokada
+	(slot droga) ;droga, na ktÛrej znajduje sie blokada
 	(slot nazwa)
-	(slot kratkaX) ;wsp kratki na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
-	(slot kratkaY)
+	(slot idKratki) ;id kratki, na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 )
 
 (deftemplate grod
 	(slot nazwa) ;to bedzie id grodu
-	(slot kratkaLGRX) ;wsp. grodu na mapie - lewy gorny rog
-	(slot kratkaLGRY)
-	(slot kratkaPDRX) ;wsp. grodu na mapie - prawy dolny rog
-	(slot kratkaPDRY)
+	(slot kratkaLGR) ;wsp. grodu na mapie - lewy gorny rog
+	(slot kratkaPDR) ;wsp. grodu na mapie - prawy dolny rog
 	(slot liczbaMieszkancow)
 	(slot wspAktywnosciStrazy)
 )
@@ -45,24 +43,22 @@
 
 ;przedmiot opisuje narzedzia dla drwala, uzbrojenie dla rycerza oraz konie dla poslanca
 (deftemplate przedmiot 
-	(slot nazwa) ;to bƒôdzie id
+	(slot nazwa) ;to bÍdzie id
 	(slot grod) ;grod, w ktorego magazynie sie znajduje
 	(slot zuzycie) ;procentowy wskaznik zuzycia
 	(slot cena)
 )
 
-;jako, ≈ºe drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
+;jako, øe drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
 (deftemplate drzewo
 	(slot rodzajDrzewa)
-	(slot kratkaX) ;wspolrzedne kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
-	(slot kratkaY)
+	(slot idKratki) ;id kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
 	(slot stan) ;sciete czy niesciete
 )
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
-	(slot kratkaLGRX) ;wsp√≥≈Çrzedne obszaru kleski - lewy gorny rog
-	(slot kratkaLGRY)
+	(slot kratkaLGR) ;wspÛ≥rzedne obszaru kleski - lewy gorny rog
 	(slot bokObszaru) ;dlugosc boku kwadratowego obszaru kleski
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
 	(slot oslabianieAgentow) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
@@ -71,9 +67,8 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate rozbojnicy
-	(slot droga) ;droga, na ktorej sie znajduja
-	(slot kratkaX) ;kratka drogi, na ktorej sie znajduja
-	(slot kratkaY)
+	(slot idDrogi) ;droga, na ktorej sie znajduja
+	(slot odcinekDrogi) ;odcinek drogi, na ktorej sie znajduja
 	(slot zabieraniePaczek) ;procent paczek, ktore zabieraja poslancom
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom
 )
@@ -82,8 +77,7 @@
 (deftemplate agent
 	(slot id)
 	(slot typ) ;czyli czy jest to poslaniec, kupiec, rycerz itd.
-	(slot kratkaX) ;polozenie agenta na mapie
-	(slot kratkaY)
+	(slot idKratki) ;polozenie agenta na mapie
 	(slot predkosc) ;kratki na iteracje
 	(slot poleWidzenia) ;liczba kratek, ktore agent widzi przed soba, za soba oraz ze swojej lewej lub prawej strony
 	(slot mozliwyRuch) ;liczba kratek ruchu - na poczatku kazdej itearcji rowne tyle samo co predkosc
@@ -95,6 +89,12 @@
 
 ;itd..
 
+
+;WYCINEK SWIATA, cyzli widzialna czesc swiata przez kazdego agenta
+(deftemplate obserwowaneKratki
+	(slot idAgenta)
+	(slot idKratki) ;id widzialnej kratki
+)
 
 ;AKCJE AGENTOW: wspolne
 (deftemplate akcjaPrzemieszczaniePoDrodze
@@ -132,20 +132,22 @@
 
 ;AKCJE KUPIEC
 
-;AKCJE Z≈ÅODZIEJ
+;AKCJE Z£ODZIEJ
 (deftemplate akcjaKradnij
-	(slot idAgenta) ;chodzi o id z≈Çodzieja
-	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: ma≈Çy, ≈õredni, du≈ºy 
+	(slot idAgenta) ;chodzi o id z≥odzieja
+	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: ma≥y, úredni, duøy 
 )
 
 ;AKCJE DRWAL
 (deftemplate akcjaScinanieDrzew
-	(slot idAgenta) ;chodzi oczywi≈õcie o id drwala
+	(slot idAgenta) ;chodzi oczywiúcie o id drwala
 )
 
 ;tylko agenci : RYCERZ i SMOK
 (deftemplate akcjaAtak
 	(slot idAgenta) ;agent atakujacy
 	(slot idOfiary) ;agent aatakowany
-	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id bƒôdzie liczbƒÖ od 1 do 3
+	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id bÍdzie liczbπ od 1 do 3
 )
+
+

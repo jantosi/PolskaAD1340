@@ -1,54 +1,69 @@
 ;REGULY
 
-;przemieszczanie agentow
-(defrule przemieszczaj
-	?agent <- (agent (id ?id)(mozliwyRuch ?ruch)(kratkaX ?kratkaX)(kratkaY ?kratkaY))
+;przemieszczanie agentow po kratkach
+(defrule przemieszczanie
+	?agent <- (agent (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki))
+	?kratka <- (kratka (id ?idKratki)(pozycjaX ?kratkaX)(pozycjaY ?kratkaY))
 	?akcja <- (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?kratki)(kierunek ?kierunek))
 	(test (>= ?ruch ?kratki))
 	(mapa ?height ?width)
 =>
 	(switch ?kierunek
 		(case dol then
-			(bind ?przesuniecieY (+ ?kratkaY ?kratki))
+			(bind ?nowaKratkaY (+ ?kratkaY ?kratki))
+			(bind ?nowaKratkaX ?kratkaX)
 			
-			(if (>= ?przesuniecieY ?height)
+			(if (>= ?nowaKratkaY ?height)
 			then
-				(bind ?przesuniecieY ?height)
+				(bind ?nowaKratkaY ?height)
 			)
-		
-			(modify ?agent (kratkaY ?przesuniecieY)(mozliwyRuch (- ?ruch ?kratki)))
+			
+			
+			;(modify ?agent (kratkaY ?przesuniecieY)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 		(case gora then 
-			(bind ?przesuniecieY (- ?kratkaY ?kratki))
+			(bind ?nowaKratkaY (- ?kratkaY ?kratki))
+			(bind ?nowaKratkaX ?kratkaX)
 			
-			(if (<= ?przesuniecieY 0)
+			(if (<= ?nowaKratkaY 0)
 			then
-				(bind ?przesuniecieY 0)
+				(bind ?nowaKratkaY 0)
 			)
 			
-			(modify ?agent (kratkaY ?przesuniecieY)(mozliwyRuch (- ?ruch ?kratki)))
+			;(modify ?agent (kratkaY ?przesuniecieY)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 		(case lewo then 
-			(bind ?przesuniecieX (- ?kratkaX ?kratki))
+			(bind ?nowaKratkaX (- ?kratkaX ?kratki))
+			(bind ?nowaKratkaY ?kratkaY)
 			
-			(if (<= ?przesuniecieX 0)
+			(if (<= ?nowaKratkaX 0)
 			then
-				(bind ?przesuniecieX 0)
+				(bind ?nowaKratkaX 0)
 			)
 			
-			(modify ?agent (kratkaX ?przesuniecieX)(mozliwyRuch (- ?ruch ?kratki)))
+			;(modify ?agent (kratkaX ?przesuniecieX)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 		(case prawo then 
-			(bind ?przesuniecieX (+ ?kratkaX ?kratki))
+			(bind ?nowaKratkaX (+ ?kratkaX ?kratki))
+			(bind ?nowaKratkaY ?kratkaY)
 			
-			(if (>= ?przesuniecieX ?width)
+			(if (>= ?nowaKratkaX ?width)
 			then
-				(bind ?przesuniecieX ?width)
+				(bind ?nowaKratkaX ?width)
 			)
 			
-			(modify ?agent (kratkaX ?przesuniecieX)(mozliwyRuch (- ?ruch ?kratki)))
+			;(modify ?agent (kratkaX ?przesuniecieX)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 	)
-	(printout t "Przesunieto agenta o id: "?id " o ruchu: " ?ruch " w " ?kierunek crlf)
+	
+	;pobieramy id nowej kratki, na ktorym bedzie stal przesuwany agent
+	(bind ?nowaKratkaId (fact-slot-value (nth$ 1 (find-fact ((?k kratka)) (and (eq ?k:pozycjaX ?nowaKratkaX) (eq ?k:pozycjaY ?nowaKratkaY)))) id))
+	
+	;zamieniamy id kratki, na ktorej stoi agent oraz odejmujemy mu punkty ruchu
+	(modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?ruch ?kratki)))
+	
+	;usuwamy akcje przesuwania
 	(retract ?akcja)
+	
+	(printout t "Przesunieto agenta o id: " ?id " w " ?kierunek " nowy x : " ?nowaKratkaX  " nowy y: " ?nowaKratkaY " kratka: " ?nowaKratkaId crlf)
 )
