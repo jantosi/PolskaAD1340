@@ -26,8 +26,12 @@ public class PolskaAD1340 {
         try {
             LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
             om.importBackgroundTileGrid(lm.getMap());
+            
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
-            om.drawForm();
+            om.drawAllTiles();
+            
+            om.setScrollbars(true);
+        
         } catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
         }
