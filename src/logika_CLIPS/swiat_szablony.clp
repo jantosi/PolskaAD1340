@@ -15,9 +15,11 @@
 	(slot id) ;odniesienie do id w template drogaKratki
 	(slot skad) ;id pierwszej klatki na drodze
 	(slot dokad) ;id ostatniej kratki na drodze
-	(slot dokadGrod) ;nazwa grodu, do ktorej prowadzi dana droga
+	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
+	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy te¿ bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
+	(slot dlugosc) ;dlugosc drogi liczona w kratkach
 )
 
 (deftemplate blokada
@@ -90,7 +92,7 @@
 
 
 ;WYCINEK SWIATA, cyzli widzialna czesc swiata przez kazdego agenta
-(deftemplate widoczneKratki
+(deftemplate widzialnaCzescSwiata
 	(slot idAgenta)
 	(slot idKratki) ;id widzialnej kratki
 )
