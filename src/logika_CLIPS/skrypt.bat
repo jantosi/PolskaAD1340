@@ -1,0 +1,6 @@
+(clear)
+(load swiat_szablony.clp)
+(load test.clp)
+(load swiat_logika.clp)
+(reset)
+(run)
