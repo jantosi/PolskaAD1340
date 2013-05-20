@@ -1,7 +1,7 @@
 ;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
 (deftemplate drogaKratki 
-	(slot id) ;numer, ktory pozwoli na pÛüniejszπ referencjÍ do tej drogi
-	(slot kratka) ;wspÛ≥rzedne kratki w ktÛrej zawiera siÍ droga
+	(slot id) ;numer, ktory pozwoli na p√≥≈∫niejszƒÖ referencjƒô do tej drogi
+	(slot kratka) ;wsp√≥≈Çrzedne kratki w kt√≥rej zawiera siƒô droga
 	(slot kratkaY)
 	(slot numerOdcinka) ;okresla kolejny odcinek drogi
 )
@@ -12,16 +12,16 @@
 
 (deftemplate droga
 	(slot id) ;odniesienie do id w template drogaKratki
-	(slot skadX) ;wspÛ≥rzedne pierwszej klatki na drodze
+	(slot skadX) ;wsp√≥≈Çrzedne pierwszej klatki na drodze
 	(slot skadY)
 	(slot dokadX) ;wspolrzedne ostatniej kratki na drodze
 	(slot dokadY)
 	(slot dokadGrod) ;nazwa grodu, do ktorej prowadzi dana droga
-	(slot platna) ;czy droga jest platna czy teø bezplatna
+	(slot platna) ;czy droga jest platna czy te≈º bezplatna
 )
 
 (deftemplate blokada
-	(slot droga) ;droga, na ktÛrej znajduje sie blokada
+	(slot droga) ;droga, na kt√≥rej znajduje sie blokada
 	(slot nazwa)
 	(slot kratkaX) ;wsp kratki na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 	(slot kratkaY)
@@ -45,13 +45,13 @@
 
 ;przedmiot opisuje narzedzia dla drwala, uzbrojenie dla rycerza oraz konie dla poslanca
 (deftemplate przedmiot 
-	(slot nazwa) ;to bÍdzie id
+	(slot nazwa) ;to bƒôdzie id
 	(slot grod) ;grod, w ktorego magazynie sie znajduje
 	(slot zuzycie) ;procentowy wskaznik zuzycia
 	(slot cena)
 )
 
-;jako, øe drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
+;jako, ≈ºe drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
 (deftemplate drzewo
 	(slot rodzajDrzewa)
 	(slot kratkaX) ;wspolrzedne kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
@@ -61,7 +61,7 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
-	(slot kratkaLGRX) ;wspÛ≥rzedne obszaru kleski - lewy gorny rog
+	(slot kratkaLGRX) ;wsp√≥≈Çrzedne obszaru kleski - lewy gorny rog
 	(slot kratkaLGRY)
 	(slot bokObszaru) ;dlugosc boku kwadratowego obszaru kleski
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
@@ -81,6 +81,7 @@
 ;trzeba uwzglednic to co Piotrek zrobi
 (deftemplate agent
 	(slot id)
+	(slot typ) ;czyli czy jest to poslaniec, kupiec, rycerz itd.
 	(slot kratkaX) ;polozenie agenta na mapie
 	(slot kratkaY)
 	(slot predkosc) ;kratki na iteracje
@@ -96,12 +97,16 @@
 
 
 ;AKCJE AGENTOW: wspolne
+(deftemplate akcjaPrzemieszczaniePoDrodze
+	(slot idAgenta)
+	(slot idDrogi)
+	(slot kierunek)	;w ktora strone sie przemieszcza
+)
 (deftemplate akcjaPrzemieszczanie
 	(slot idAgenta)
 	(slot ileKratek) ;o ile kratek przemiescic agenta
 	(slot kierunek) ;w ktora strone przemiescic agenta
 )
-
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala
 (deftemplate akcjaKupowanie
@@ -113,6 +118,11 @@
 	(slot idAgenta)
 	(slot dlugoscOdpoczynku) ;w liczbie iteracji
 )
+(deftemplate akcjaSpotkanieWroga
+	(slot idAgenta)
+	(slot idWroga)
+	(slot podjetaAkcja) ;czyli co robi agent jak zobaczy wroga, mozliwe opcje: ucieczka, walka
+)
 
 ;AKCJE POSLANIEC
 (deftemplate akcjaWezPaczke
@@ -122,22 +132,20 @@
 
 ;AKCJE KUPIEC
 
-;AKCJE Z£ODZIEJ
+;AKCJE Z≈ÅODZIEJ
 (deftemplate akcjaKradnij
-	(slot idAgenta) ;chodzi o id z≥odzieja
-	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: ma≥y, úredni, duøy 
+	(slot idAgenta) ;chodzi o id z≈Çodzieja
+	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: ma≈Çy, ≈õredni, du≈ºy 
 )
 
 ;AKCJE DRWAL
 (deftemplate akcjaScinanieDrzew
-	(slot idAgenta) ;chodzi oczywiúcie o id drwala
+	(slot idAgenta) ;chodzi oczywi≈õcie o id drwala
 )
 
 ;tylko agenci : RYCERZ i SMOK
 (deftemplate akcjaAtak
 	(slot idAgenta) ;agent atakujacy
 	(slot idOfiary) ;agent aatakowany
-	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id bÍdzie liczbπ od 1 do 3
+	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id bƒôdzie liczbƒÖ od 1 do 3
 )
-
-
