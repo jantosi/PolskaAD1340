@@ -8,6 +8,8 @@
 	(test (>= ?ruch ?kratki))
 	(mapa ?height ?width)
 =>
+	;okreslamy wspolrzedne nowej kratki, na ktorej bedzie stal agent po przemieszczeniu
+	;uwzgledniajac przy tym granice mapki - aby agent nie wyszedl poza mapke
 	(switch ?kierunek
 		(case dol then
 			(bind ?nowaKratkaY (+ ?kratkaY ?kratki))
@@ -17,9 +19,6 @@
 			then
 				(bind ?nowaKratkaY ?height)
 			)
-			
-			
-			;(modify ?agent (kratkaY ?przesuniecieY)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 		(case gora then 
 			(bind ?nowaKratkaY (- ?kratkaY ?kratki))
@@ -29,8 +28,6 @@
 			then
 				(bind ?nowaKratkaY 0)
 			)
-			
-			;(modify ?agent (kratkaY ?przesuniecieY)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 		(case lewo then 
 			(bind ?nowaKratkaX (- ?kratkaX ?kratki))
@@ -40,8 +37,6 @@
 			then
 				(bind ?nowaKratkaX 0)
 			)
-			
-			;(modify ?agent (kratkaX ?przesuniecieX)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 		(case prawo then 
 			(bind ?nowaKratkaX (+ ?kratkaX ?kratki))
@@ -51,12 +46,10 @@
 			then
 				(bind ?nowaKratkaX ?width)
 			)
-			
-			;(modify ?agent (kratkaX ?przesuniecieX)(mozliwyRuch (- ?ruch ?kratki)))
 		)
 	)
 	
-	;pobieramy id nowej kratki, na ktorym bedzie stal przesuwany agent
+	;pobieramy id nowej kratki, na ktorej bedzie stal agent po przemieszczeniu
 	(bind ?nowaKratkaId (fact-slot-value (nth$ 1 (find-fact ((?k kratka)) (and (eq ?k:pozycjaX ?nowaKratkaX) (eq ?k:pozycjaY ?nowaKratkaY)))) id))
 	
 	;zamieniamy id kratki, na ktorej stoi agent oraz odejmujemy mu punkty ruchu

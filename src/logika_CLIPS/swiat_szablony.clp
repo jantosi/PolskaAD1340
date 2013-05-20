@@ -2,14 +2,13 @@
 	(slot id)
 	(slot pozycjaX) ;pozycja kratki na mapie
 	(slot pozycjaY)
-	(slot zawartosc) ;co sie na niej znaduje - trzeba uwzglednic dane ze wszystkich warstw
 )
 
 ;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
 (deftemplate drogaKratki 
 	(slot id) ;numer, ktory pozwoli na póŸniejsz¹ referencjê do tej drogi
 	(slot idKratki) ;id kratki w której zawiera siê droga
-	(slot numerOdcinka) ;okresla kolejny odcinek drogi
+	(slot numerOdcinka) ;okresla numer odcinka drogi
 )
 
 (deftemplate droga
@@ -91,7 +90,7 @@
 
 
 ;WYCINEK SWIATA, cyzli widzialna czesc swiata przez kazdego agenta
-(deftemplate obserwowaneKratki
+(deftemplate widoczneKratki
 	(slot idAgenta)
 	(slot idKratki) ;id widzialnej kratki
 )
