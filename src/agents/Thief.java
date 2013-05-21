@@ -137,16 +137,16 @@ public class Thief extends Agent {
     
     /**
      * Przeciążenie metody dotyczącej odpoczynku. Podczas pobytu w więzieniu traci energie.
-     * @return boolean
      */
     @Override
-    public boolean recover() {
+    public void recover() {
         if(this.getIsInJail()) {
             this.setEnergy(this.getEnergy()-1);
             this.setNumberOfIterationsInJail(this.getNumberOfIterationsInJail()-1);
-            return true;
         }
-        return super.recover(); 
+        else {
+            super.recover(); 
+        }
     }
     
     /**

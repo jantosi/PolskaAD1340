@@ -189,7 +189,7 @@ abstract public class Agent {
     }
     
     /**
-     * Zużycie energii podczas ruchu.
+     * Zużycie energii podczas ruchu. Zwraca TRUE jeżeli agent może się poruszać i FALSE gdy nie.
      * @return boolean
      */
     public boolean run() {
@@ -200,11 +200,8 @@ abstract public class Agent {
     
     /**
      * Odzyskiwanie energii podczas odpoczynku.
-     * @return boolean
      */
-    public boolean recover() {
+    public void recover() {
         this.setEnergy(this.getEnergy()+this.getEnergyRecovery());
-        
-        return true;
     }
 }
