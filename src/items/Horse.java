@@ -5,7 +5,7 @@ package items;
  * 
  * @author Piotrek
  */
-public class Hourse extends Item {
+public class Horse extends Item {
     
     /**
      * Prędkość konia.
@@ -55,7 +55,7 @@ public class Hourse extends Item {
      * @param int velocity
      * @return Hourse
      */
-    public Hourse setVelocity(int velocity) {
+    public Horse setVelocity(int velocity) {
         this._velocity = velocity;
         
         return this;
@@ -74,7 +74,7 @@ public class Hourse extends Item {
      * @param int capacity
      * @return Hourse 
      */
-    public Hourse setCapacity(int capacity) {
+    public Horse setCapacity(int capacity) {
         this._capacity = capacity;
         
         return this;
@@ -93,7 +93,7 @@ public class Hourse extends Item {
      * @param float agentEnergyLossDecrease
      * @return HOurse
      */
-    public Hourse setAgentEnergyLossDecrease(float agentEnergyLossDecrease) {
+    public Horse setAgentEnergyLossDecrease(float agentEnergyLossDecrease) {
         this._agentEnergyLossDecrease = agentEnergyLossDecrease;
         
         return this;

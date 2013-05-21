@@ -24,9 +24,9 @@ public class Courier extends Agent {
     
     /**
      * Koń.
-     * @var Hourse
+     * @var Horse
      */
-    protected Hourse _hourse;
+    protected Horse _horse;
     
     /**
      * Konstruktor. Nadanie domyślnego udźwigu.
@@ -35,9 +35,9 @@ public class Courier extends Agent {
     public void Courier(int capacity) {
         super.Agent();
         
-        this._capacity = capacity;
+        this.setCapacity(capacity);
         this._packages = new PackCollection();
-        this._hourse = null;
+        this.setHorse(null);
     }
     
     /**
@@ -45,8 +45,8 @@ public class Courier extends Agent {
      * @return int
      */
     public int getCapacity() {
-        if(this._hourse != null) {
-            return this._hourse.getCapacity();
+        if(this.getHorse() != null) {
+            return this.getHorse().getCapacity();
         }
         return this._capacity;
     }
@@ -98,19 +98,19 @@ public class Courier extends Agent {
     
     /**
      * Getter dla konia.
-     * @return Hourse
+     * @return Horse
      */
-    public Hourse getHourse() {
-        return this._hourse;
+    public Horse getHorse() {
+        return this._horse;
     }
     
     /**
      * Setter dla konia.
-     * @param Hourse hourse
+     * @param Horse horse
      * @return Courier
      */
-    public Courier setHourse(Hourse hourse) {
-        this._hourse = hourse;
+    public Courier setHorse(Horse horse) {
+        this._horse = horse;
         
         return this;
     }
@@ -123,8 +123,8 @@ public class Courier extends Agent {
     public int getEnergyLoss() {
         int energyLoss = super.getEnergyLoss() + (int)Math.round(this.getCapacity() * 0.5);
         
-        if(this._hourse != null) {
-            energyLoss = Math.round(energyLoss * this._hourse.getAgentEnergyLossDecrease());
+        if(this.getHorse() != null) {
+            energyLoss = Math.round(energyLoss * this.getHorse().getAgentEnergyLossDecrease());
         }
         
         return energyLoss;
@@ -136,8 +136,8 @@ public class Courier extends Agent {
      */
     @Override
     public int getVelocity() {
-        if(this._hourse != null) {
-            return this._hourse.getVelocity();
+        if(this.getHorse() != null) {
+            return this.getHorse().getVelocity();
         }
         return super.getVelocity();
     }
