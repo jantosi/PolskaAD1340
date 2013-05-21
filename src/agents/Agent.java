@@ -190,15 +190,21 @@ abstract public class Agent {
     
     /**
      * Zużycie energii podczas ruchu.
+     * @return boolean
      */
-    public void run() {
+    public boolean run() {
         this.setEnergy(this.getEnergy()-this.getEnergyLoss());
+        
+        return true;
     }
     
     /**
      * Odzyskiwanie energii podczas odpoczynku.
+     * @return boolean
      */
-    public void recover() {
+    public boolean recover() {
         this.setEnergy(this.getEnergy()+this.getEnergyRecovery());
+        
+        return true;
     }
 }
