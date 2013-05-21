@@ -34,7 +34,7 @@ public class Horse extends Item {
      * @param int price 
      * @param int wearSpeed 
      */
-    public void Hourse(int velocity, int capacity, int agentEnergyLossDecrease, int price, int wearSpeed) {
+    public void Horse(int velocity, int capacity, int agentEnergyLossDecrease, int price, int wearSpeed) {
         this._velocity = velocity;
         this._capacity = capacity;
         this._agentEnergyLossDecrease = agentEnergyLossDecrease;
@@ -53,7 +53,7 @@ public class Horse extends Item {
     /**
      * Setter dla prędkości konia
      * @param int velocity
-     * @return Hourse
+     * @return Horse
      */
     public Horse setVelocity(int velocity) {
         this._velocity = velocity;
@@ -72,7 +72,7 @@ public class Horse extends Item {
     /**
      * Setter dla udźwigu.
      * @param int capacity
-     * @return Hourse 
+     * @return Horse 
      */
     public Horse setCapacity(int capacity) {
         this._capacity = capacity;
@@ -91,7 +91,7 @@ public class Horse extends Item {
     /**
      * Setter dla zmniejszenia zużycia agenta.
      * @param float agentEnergyLossDecrease
-     * @return HOurse
+     * @return Horse
      */
     public Horse setAgentEnergyLossDecrease(float agentEnergyLossDecrease) {
         this._agentEnergyLossDecrease = agentEnergyLossDecrease;
