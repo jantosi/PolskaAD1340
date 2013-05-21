@@ -116,12 +116,27 @@ public class Courier extends Agent {
     }
     
     /**
+     * Zakup konia. Zwraca TRUE jeżeli ma wystarczającą ilość golda, w przeciwnym wypadku FALSE.
+     * @param horse
+     * @return boolean
+     */
+    public boolean buyHorse(Horse horse) {
+        if(this.getGold() < horse.getPrice()) {
+            return false;
+        }
+        this.setGold(this.getGold() - horse.getPrice());
+        this.setHorse(horse);
+        
+        return true;
+    }
+    
+    /**
      * Przeciążenie getter dla zużycia energii uwzględniając obciążenie i posiadanego konia.
      * @return int;
      */
     @Override
     public int getEnergyLoss() {
-        int energyLoss = super.getEnergyLoss() + (int)Math.round(this.getCapacity() * 0.5);
+        int energyLoss = super.getEnergyLoss() + (int)Math.round(this._packages.getTotalWeight() * 0.5);
         
         if(this.getHorse() != null) {
             energyLoss = Math.round(energyLoss * this.getHorse().getAgentEnergyLossDecrease());

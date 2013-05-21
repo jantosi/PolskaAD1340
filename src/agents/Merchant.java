@@ -15,18 +15,6 @@ public class Merchant extends Agent {
      * @var int
      */
     protected int _capacity;
-    
-    /**
-     * Całkowita wartość sprzedanych towarów (obrót).
-     * @var int
-     */
-    protected int _income;
-    
-    /**
-     * Całkowity zysk ze sprzedaży.
-     * @var int
-     */
-    protected int _profit;
     /**
      * Lista przedmiotów.
      * @var ArrayList<Item>
@@ -103,51 +91,9 @@ public class Merchant extends Agent {
             this.getItems().remove(item);
             //Zwiększenie wielkości mieszka.
             this.setGold(this.getGold() + item.getPrice());
-            //Zwiększenie przychodu.
-            this.setIncome(this.getIncome() + item.getPrice());
-            //Zwiększenie zysku (30% przychodu).
-            this.setProfit(this.getProfit() + Math.round(item.getPrice() * 0.3f));
             
             return true;
         } 
         return false;
-    }
-    
-    /**
-     * Getter dla przychodu.
-     * @return int
-     */
-    public int getIncome() {
-        return this._income;
-    }
-    
-    /**
-     * Setter dla przychodu.
-     * @param int income
-     * @return Merchant
-     */
-    public Merchant setIncome(int income) {
-        this._income = income;
-        
-        return this;
-    }
-    
-    /**
-     * Getter dla zysku.
-     * @return int
-     */
-    public int getProfit() {
-        return this._profit;
-    }
-    
-    /**
-     * Setter dla zysku.
-     * @param int profit
-     * @return Merchant
-     */
-    public Merchant setProfit(int profit) {
-        this._profit = profit;
-        
-        return this;
     }
 }
