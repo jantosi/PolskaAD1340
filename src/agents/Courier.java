@@ -97,6 +97,20 @@ public class Courier extends Agent {
     }
     
     /**
+     * Dostarczanie przesyłki.
+     * @param Pack pack
+     * @return Courier
+     * @TODO Obsługa przypadku, w którym próbujemy dostarczyć przesyłkę, której nie ma przy sobie.
+     */
+    public Courier deliveryPackage(Pack pack) {
+        if(this._packages.deliveryPackage(pack)) {
+            this.setGold(this.getGold() + pack.getPrice());
+        }
+        
+        return this;
+    }
+    
+    /**
      * Getter dla konia.
      * @return Horse
      */

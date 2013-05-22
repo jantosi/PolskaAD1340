@@ -14,6 +14,12 @@ public class Pack extends Item {
     protected int _mass;
     
     /**
+     * Czas dostarczenia przesyłki.
+     * @var int
+     */
+    protected int _deliveryTime;
+    
+    /**
      * Dostarczona?
      * @TODO Sprawdzić potrzebność tego parametru.
      */
@@ -66,5 +72,24 @@ public class Pack extends Item {
         this._deliveried = deliveried;
         
         return this;
+    }
+    
+    /**
+     * Setter dla czasu dostawy.
+     * @param int deliveryTime
+     * @return Pack
+     */
+    public Pack setDeliveryTime(int deliveryTime) {
+        this._deliveryTime = deliveryTime;
+        
+        return this;
+    }
+    
+    /**
+     * Getter dla czasu dostawy.
+     * @return int
+     */
+    public int getDeliveryTime() {
+        return this._deliveryTime;
     }
 }
