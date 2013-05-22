@@ -30,7 +30,6 @@ public class PolskaAD1340 {
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
             om.drawAllTiles();
             
-            om.setScrollbars(true);
         
         } catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);

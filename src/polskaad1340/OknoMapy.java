@@ -4,22 +4,17 @@
  */
 package polskaad1340;
 
-import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicBorders;
 
@@ -34,7 +29,7 @@ public final class OknoMapy extends javax.swing.JFrame {
     private int defaultBgTileID = 72;
     private boolean isResizedNow = false;
     public BasicBorders.FieldBorder defaultBorder;
-    private boolean isTileBordered = true;
+    private boolean isTileBordered = false;
 
     public JLabel tileFromNumber(int num) {
         String path = "/images/" + num + ".png";
@@ -43,8 +38,6 @@ public final class OknoMapy extends javax.swing.JFrame {
 
         JLabel jl = new JLabel(ii);
         jl.setSize(tileSize, tileSize);
-
-        jl.setBorder(defaultBorder);
 
         jl.setBackground(new Color(num));
         //"optymalizacja": w polu Color trzymamy numer kratki.
@@ -67,12 +60,13 @@ public final class OknoMapy extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        setScrollbars(false);
+        
         initComponents();
 
         this.tileSize = 32;
-        this.defaultBorder = new BasicBorders.FieldBorder(Color.YELLOW, Color.darkGray, new Color(0, true), Color.lightGray);
-
+        this.defaultBorder = new BasicBorders.FieldBorder(Color.lightGray, new Color(0, true), new Color(0, true), new Color(0, true));
+        jCheckBoxMenuItem1.setSelected(false);
+        
         addTileGridToWindow(createTileGrid(100, defaultBgTileID), overallBackgroundPanel);
 
         drawAllTiles();
@@ -85,7 +79,7 @@ public final class OknoMapy extends javax.swing.JFrame {
 
     public void setTileBorders(boolean on) {
         //FIXME: Tiles don't remove their borders
-        System.out.println("on: "+on);
+        
         for (int i = 0; i < foregroundTileGrid.size(); i++) {
             ArrayList<JLabel> arrayList = foregroundTileGrid.get(i);
             for (int j = 0; j < arrayList.size(); j++) {
@@ -93,9 +87,10 @@ public final class OknoMapy extends javax.swing.JFrame {
                 if (on) {
                     jLabel.setBorder(defaultBorder);
                 } else {
-                    jLabel.setBorder(new EmptyBorder(0, 0, 0, 0));
+                    jLabel.setBorder(BorderFactory.createEmptyBorder());
                 }
-
+                   
+                jLabel.repaint();
             }
         }
         
@@ -206,9 +201,7 @@ public final class OknoMapy extends javax.swing.JFrame {
         this.foregroundTileGrid = foregroundTileGrid;
     }
 
-    public void setScrollbars(boolean scrollbarsShown) {
-        //TODO
-    }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -221,6 +214,7 @@ public final class OknoMapy extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         bulkPanel = new javax.swing.JPanel();
+        contextPanel = new javax.swing.JPanel();
         foregroundPanel = new javax.swing.JPanel();
         backgroundPanel = new javax.swing.JPanel();
         overallBackgroundPanel = new javax.swing.JPanel();
@@ -253,6 +247,10 @@ public final class OknoMapy extends javax.swing.JFrame {
 
         bulkPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
         bulkPanel.setLayout(null);
+
+        contextPanel.setOpaque(false);
+        bulkPanel.add(contextPanel);
+        contextPanel.setBounds(690, 360, 100, 100);
 
         foregroundPanel.setOpaque(false);
         foregroundPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -357,12 +355,15 @@ public final class OknoMapy extends javax.swing.JFrame {
     }//GEN-LAST:event_formMouseClicked
 
     private void foregroundPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundPanelMouseClicked
+        
         Point pointClicked = evt.getPoint();
         int tileX = pointClicked.x / this.tileSize;
         int tileY = pointClicked.y / this.tileSize;
         JLabel clickedTile = this.backgroundTileGrid.get(tileY).get(tileX);
 
         System.out.println("X " + tileX + " Y " + tileY + " :: " + (clickedTile.getBackground().getRGB() & 0xFFFFFF));
+        
+        
     }//GEN-LAST:event_foregroundPanelMouseClicked
 
     private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
@@ -373,6 +374,7 @@ public final class OknoMapy extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backgroundPanel;
     private javax.swing.JPanel bulkPanel;
+    private javax.swing.JPanel contextPanel;
     private javax.swing.JPanel foregroundPanel;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenu jMenu3;
