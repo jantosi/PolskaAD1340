@@ -31,7 +31,7 @@ public class WoodmanStatistics implements WoodmanStatistics_Interface{
      * @return WoodmanStatistics_Interface
      */
     @Override
-    public WoodmanStatistics_Interface setNumberOfShearedWoods( int numberOfShearedWoods){
+    public WoodmanStatistics setNumberOfShearedWoods( int numberOfShearedWoods){
         this._numberOfShearedWoods=numberOfShearedWoods;
         return this;
     }
@@ -51,7 +51,7 @@ public class WoodmanStatistics implements WoodmanStatistics_Interface{
      * @return WoodmanStatistics_Interface
      */
     @Override
-    public WoodmanStatistics_Interface setProfit(int profit){
+    public WoodmanStatistics setProfit(int profit){
         this._profit=profit;
         return this;
     }
@@ -71,7 +71,7 @@ public class WoodmanStatistics implements WoodmanStatistics_Interface{
      * @return WoodmanStatistics_Interface
      */
     @Override
-    public WoodmanStatistics_Interface setIncome(int income){
+    public WoodmanStatistics setIncome(int income){
         this._income=income;
         return this;
     }
