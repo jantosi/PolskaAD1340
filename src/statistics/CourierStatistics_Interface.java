@@ -37,7 +37,7 @@ public interface CourierStatistics_Interface {
      * @param int profit
      * @return CourierStatistics_Interface
      */
-    public CourierStatistics_Interface setPorift(int profit);
+    public CourierStatistics_Interface setProfit(int profit);
     
     /**
      * Getter dla zysku.

@@ -2,6 +2,7 @@ package agents;
 
 import java.util.ArrayList;
 import items.*;
+import statistics.*;
 
 /**
  * Klasa definiująca posłańca.
@@ -21,6 +22,12 @@ public class Courier extends Agent {
      * @var ArrayList<Pack>
      */
     protected PackCollection _packages;
+    
+    /**
+     * Statystyki posłańca.
+     * @var CourierStatistics_Interface
+     */
+    protected CourierStatistics_Interface _statistics;
     
     /**
      * Koń.
@@ -169,5 +176,24 @@ public class Courier extends Agent {
             return this.getHorse().getVelocity();
         }
         return super.getVelocity();
+    }
+    
+    /**
+     * Setter dla statystyk posłańca.
+     * @param CourierStatistics_Interface statistics
+     * @return Courier
+     */
+    public Courier setStatistics(CourierStatistics_Interface statistics) {
+        this._statistics = statistics;
+        
+        return this;
+    }
+    
+    /**
+     * Getter dla statystyk posłańca.
+     * @return CourierStatistics_Interface
+     */
+    public CourierStatistics_Interface getStatistics() {
+        return this._statistics;
     }
 }
