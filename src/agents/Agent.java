@@ -1,5 +1,7 @@
 package agents;
 
+import java.util.ArrayList;
+import agents.skills.*;
 /**
  * Klasa abstrakcyjna definiująca podstawowe operacja dla każdego agenta.
  * 
@@ -46,16 +48,23 @@ abstract public class Agent {
     protected int _gold;
     
     /**
+     * Lista ataków agenta.
+     * @var ArrayList<Attack>
+     */
+    protected ArrayList<Attack> _attacks;
+    
+    /**
      * Konstruktor. Ustawienie domyślnych parametrów dla większości agentów.
      */
     public void Agent() {
         //Domyślne parametry dla większości agentów.
-        this._fieldOfView = 1;
-        this._velocity = 2;
-        this._energy = 100;
-        this._energyLoss = 2;
-        this._energyRecovery = 2;
-        this._gold = 0;
+        this.setFieldOfView(1);
+        this.setVelocity(2);
+        this.setEnergy(100);
+        this.setEnergyLoss(2);
+        this.setEnergyRecovery(2);
+        this.setGold(0);
+        this._attacks = null;
     }
     
     /**
@@ -203,5 +212,37 @@ abstract public class Agent {
      */
     public void recover() {
         this.setEnergy(this.getEnergy()+this.getEnergyRecovery());
+    }
+    
+    /**
+     * Getter dla listy wszystkich ataków.
+     * @return ARrayList<Attack>
+     */
+    public ArrayList<Attack> getAttacks() {
+        return this._attacks;
+    }
+    
+    /**
+     * Dodawanie nowego ataku.
+     * @param Attack attack
+     * @return Agent
+     */
+    public Agent addAttack(Attack attack) {
+        this._attacks.add(attack);
+        
+        return this;
+    }
+    
+    /**
+     * Usuwanie ataku.
+     * @param Attack attack
+     * @return Agent
+     */
+    public Agent removeAttack(Attack attack) {
+        if(this._attacks.indexOf(attack) != -1) {
+            this._attacks.remove(attack);
+        }
+        
+        return this;
     }
 }

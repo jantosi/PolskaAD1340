@@ -35,7 +35,7 @@ public class Merchant extends Agent {
     public void Merchant(int capacity) {
         super.Agent();
         
-        this._capacity = capacity;
+        this.setCapacity(capacity);
         this._items = new ArrayList<Item>();
     }
     /**
