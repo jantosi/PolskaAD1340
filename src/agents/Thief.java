@@ -1,5 +1,6 @@
 package agents;
 
+import statistics.*;
 /**
  * Klasa definiująca złodzieja.
  * 
@@ -30,6 +31,12 @@ public class Thief extends Agent {
      * @var int
      */
     protected int _booty;
+    
+    /**
+     * Statystyki złodzieja.
+     * @var ThiefStatistics_Interface
+     */
+    protected ThiefStatistics_Interface _statitics;
     
     /**
      * Konstruktor złodzieja.
@@ -119,6 +126,22 @@ public class Thief extends Agent {
      */
     public Thief setBooty(int booty) {
         this._booty = booty;
+        //Zwiększenie całkowitego łupu.
+        this.getStatistics().setTotalBooty(this.getStatistics().getTotalBooty() + this.getBooty());
+        this.setGold(this.getGold() + this.getBooty());
+        
+        return this;
+    }
+    
+    /**
+     * Przeciążenie settera dla wielkości mieszka uwzględniając zapis do statystyk.
+     * @param int gold
+     * @return Thief
+     */
+    @Override
+    public Thief setGold(int gold) {
+        super.setGold(gold);
+        this.getStatistics().setProfit(this.getGold());
         
         return this;
     }
@@ -155,7 +178,30 @@ public class Thief extends Agent {
      */
     public void goToJail() {
         this.setIsInJail(true);
+        //Ustalenie długości pobytu w więzieniu na podstawie wzoru: wielkość łupu przy sobie * 0.1 + ilość dotychczasowych pobytów w więzieniu.
         this.setNumberOfIterationsInJail(Math.round(this.getBooty() * 0.1f) + this.getNumberOfStaysInJail());
+        //Zmiejszenie mieszka o ilość przechwyconego przez straż.
+        this.setGold(this.getGold() - this.getBooty());
+        //Wyzerowanie aktualnego łupu.
         this.setBooty(0);
+    }
+    
+    /**
+     * Setter dla statystyk złodzieja.
+     * @param ThiefStatistics_Interface statistics
+     * @return Thief
+     */
+    public Thief setStatistics(ThiefStatistics_Interface statistics) {
+        this._statitics = statistics;
+        
+        return this;
+    }
+    
+    /**
+     * Getter dla statystyk złodzieja.
+     * @return ThiefStatistics_Interface
+     */
+    public ThiefStatistics_Interface getStatistics() {
+        return this._statitics;
     }
 }
