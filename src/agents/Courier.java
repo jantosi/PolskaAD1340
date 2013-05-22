@@ -111,7 +111,12 @@ public class Courier extends Agent {
      */
     public Courier deliveryPackage(Pack pack) {
         if(this._packages.deliveryPackage(pack)) {
+            //Zwiększenie wielkości mieszka.
             this.setGold(this.getGold() + pack.getPrice());
+            //Zwiększenie przychodu.
+            this.getStatistics().setIncome(this.getStatistics().getIncome() + pack.getPrice());
+            //Zwiększenie zysku.
+            this.getStatistics().setProfit(this.getStatistics().getProfit() + pack.getPrice());
         }
         
         return this;
