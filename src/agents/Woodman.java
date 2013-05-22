@@ -1,6 +1,7 @@
 package agents;
 
 import items.*;
+import statistics.*;
 import java.util.ArrayList;
 /**
  * Klasa definiująca drwala.
@@ -35,8 +36,15 @@ public class Woodman extends Agent {
     
     /**
      * Lista posiadanych przy sobie drzew.
+     * @var ArrayList<Wood>
      */
     protected ArrayList<Wood> _woods;
+    
+    /**
+     * Statystyki drwala.
+     * @var WoodmanStatistics_Interface
+     */
+    protected WoodmanStatistics_Interface _statistics;
     
     /**
      * Konstruktor. Ustawienie domyślnego udźwigu.
@@ -184,6 +192,7 @@ public class Woodman extends Agent {
         //Sprawdzenie czy można wziąć kolejną paczkę.
         if(this.getWoods().size() < this.getCapacity()) {
             this.getWoods().add(wood);
+            this.getStatistics().setNumberOfShearedWoods(this.getStatistics().getNumberOfShearedWoods() + 1);
         }
         
         return this;
@@ -197,11 +206,25 @@ public class Woodman extends Agent {
     public boolean sellWood(Wood wood) {
         if(this.getWoods().indexOf(wood) != -1) {
             this.setGold(this.getGold() + wood.getPrice());
+            this.getStatistics().setIncome(this.getStatistics().getIncome() + wood.getPrice());
             this.getWoods().remove(wood);
             return true;
         }
         
         return false;
+    }
+    
+    /**
+     * Przeciążenie metody ustawiającej wielkość mieszka uwzględniając zapis do statystyk.
+     * @param int gold
+     * @return Woodman
+     */
+    @Override
+    public Woodman setGold(int gold) {
+        super.setGold(gold);
+        this.getStatistics().setProfit(this.getGold());
+        
+        return this;
     }
     
     /**
@@ -228,5 +251,24 @@ public class Woodman extends Agent {
         }
         this.setEnergy(this.getEnergy() - super.getEnergyLoss() * 2);
         return true;
+    }
+    
+    /**
+     * Setter dla statystyk.
+     * @param WoodmanStatistics_Interface statistics
+     * @return Woodman
+     */
+    public Woodman setStatistics(WoodmanStatistics_Interface statistics) {
+        this._statistics = statistics;
+        
+        return this;
+    }
+    
+    /**
+     * Getter dla statystyk.
+     * @return WoodmanStatistics_Interface
+     */
+    public WoodmanStatistics_Interface getStatistics() {
+        return this._statistics;
     }
 }
