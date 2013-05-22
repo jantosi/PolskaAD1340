@@ -100,12 +100,24 @@ public class Merchant extends Agent {
             this.setGold(this.getGold() + item.getPrice());
             //Zwiększenie przychodu.
             this.getStatistics().setIncome(this.getStatistics().getIncome() + item.getPrice());
-            //Ustawienie zysku = wielkość mieszka.
-            this.getStatistics().setProfit(this.getGold());
             
             return true;
         } 
         return false;
+    }
+    
+    
+    /**
+     * Przeciążenie settera dla wielkości mieszka uwzględniając zapis do statystyk.
+     * @param int gold
+     * @return Merchant
+     */
+    @Override
+    public Merchant setGold(int gold) {
+        super.setGold(gold);
+        this.getStatistics().setProfit(this.getGold());
+        
+        return this;
     }
     
     /**
