@@ -30,7 +30,7 @@ public class ThiefStatistics implements ThiefStatistics_Interface{
      * @return ThiefStatistics_Interface
      */
     @Override
-    public ThiefStatistics_Interface setNumberOfStaysInJail(int numberOfStaysInJail){
+    public ThiefStatistics setNumberOfStaysInJail(int numberOfStaysInJail){
         this._numberOfStaysInJail=numberOfStaysInJail;
         return this;
     }
@@ -49,7 +49,8 @@ public class ThiefStatistics implements ThiefStatistics_Interface{
      * @param int totalBooty
      * @return ThiefStatistics_Interface
      */
-    public ThiefStatistics_Interface setTotalBooty(int totalBooty){
+    @Override
+    public ThiefStatistics setTotalBooty(int totalBooty){
         this._totalBooty=totalBooty;
         return this;
     }
@@ -69,7 +70,7 @@ public class ThiefStatistics implements ThiefStatistics_Interface{
      * @return ThiefStatistics_Interface
      */
     @Override
-    public ThiefStatistics_Interface setProfit(int profit){
+    public ThiefStatistics setProfit(int profit){
         this._profit=profit;
         return this;
     }
