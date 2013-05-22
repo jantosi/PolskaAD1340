@@ -25,7 +25,7 @@ public class MerchantStatistics implements MerchantStatistics_Interface {
      * @return MerchantStatistics_Interface
      */
     @Override
-    public MerchantStatistics_Interface setIncome(int income){
+    public MerchantStatistics setIncome(int income){
         this._income=income;
         return this;
     }
@@ -45,7 +45,7 @@ public class MerchantStatistics implements MerchantStatistics_Interface {
      * @return MerchantStatistics_Interface
      */
     @Override
-    public MerchantStatistics_Interface setProfit(int profit){
+    public MerchantStatistics setProfit(int profit){
         this._profit=profit;
         return this;
     }
