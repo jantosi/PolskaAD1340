@@ -76,4 +76,12 @@ public class PackCollection {
     public ArrayList<Pack> getAll() {
         return this._packages;
     }
+    
+    public void run() {
+        for(int i = 0; i < this._packages.size(); i++) {
+            if(!this._packages.get(i).getIsDeliveried()) {
+                this._packages.get(i).setDeliveryTime(this._packages.get(i).getDeliveryTime() + 1);
+            }
+        }
+    }
 }

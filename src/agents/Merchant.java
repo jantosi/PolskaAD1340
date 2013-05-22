@@ -2,6 +2,7 @@ package agents;
 
 import java.util.ArrayList;
 import items.*;
+import statistics.*;
 
 /**
  * Klasa definiująca kupca.
@@ -20,6 +21,12 @@ public class Merchant extends Agent {
      * @var ArrayList<Item>
      */
     protected ArrayList<Item> _items;
+    
+    /**
+     * Statystyki kupca.
+     * @var MerchantStatistics_Interface
+     */
+    protected MerchantStatistics_Interface _statistics;
     
     /**
      * Konstruktor. Ustawienie domyślnej wielkości magazynu.
@@ -91,9 +98,32 @@ public class Merchant extends Agent {
             this.getItems().remove(item);
             //Zwiększenie wielkości mieszka.
             this.setGold(this.getGold() + item.getPrice());
+            //Zwiększenie przychodu.
+            this.getStatistics().setIncome(this.getStatistics().getIncome() + item.getPrice());
+            //Ustawienie zysku = wielkość mieszka.
+            this.getStatistics().setProfit(this.getGold());
             
             return true;
         } 
         return false;
+    }
+    
+    /**
+     * Setter dla statystyk kupca.
+     * @param MerchantStatistics_Interface statistics
+     * @return Merchant
+     */
+    public Merchant setStatistics(MerchantStatistics_Interface statistics) {
+        this._statistics = statistics;
+        
+        return this;
+    }
+    
+    /**
+     * Getter dla statystyk kupca.
+     * @return MerchantStatistics_Interface
+     */
+    public MerchantStatistics_Interface getStatistics() {
+        return this._statistics;
     }
 }

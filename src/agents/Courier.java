@@ -87,6 +87,8 @@ public class Courier extends Agent {
         //Sprawdzenie czy można wziąć kolejną paczkę.
         if(this._packages.getTotalWeight()+pack.getMass() <= this.getCapacity()) {
             this._packages.addPackage(pack);
+            //Zwiększenie liczby paczek.
+            this.getStatistics().setNumberOfPacks(this.getStatistics().getNumberOfPacks() + 1);
         }
         
         return this;
@@ -117,6 +119,10 @@ public class Courier extends Agent {
             this.getStatistics().setIncome(this.getStatistics().getIncome() + pack.getPrice());
             //Zwiększenie zysku.
             this.getStatistics().setProfit(this.getStatistics().getProfit() + pack.getPrice());
+            //Zwiększenie liczby dostarczonych przesyłek.
+            this.getStatistics().setNumberOfDeliveriedPacks(this.getStatistics().getNumberOfDeliveriedPacks() + 1);
+            //Zwiększenie całkowitego czasy dostawy.
+            this.getStatistics().setTotalDeliveryTime(this.getStatistics().getTotalDeliveryTime() + pack.getDeliveryTime());
         }
         
         return this;
@@ -150,7 +156,11 @@ public class Courier extends Agent {
         if(this.getGold() < horse.getPrice()) {
             return false;
         }
+        //Zmniejszenie wielkości mieszka.
         this.setGold(this.getGold() - horse.getPrice());
+        //Zmniejszenie zysku.
+        this.getStatistics().setProfit(this.getStatistics().getProfit() - horse.getPrice());
+        //Przypisanie konia do posłańca.
         this.setHorse(horse);
         
         return true;
@@ -200,5 +210,16 @@ public class Courier extends Agent {
      */
     public CourierStatistics_Interface getStatistics() {
         return this._statistics;
+    }
+    
+    /**
+     * Przeciążenie metody odpowiedzialnej za poruszanie się zwiększając czas dostaw wszystkich
+     * przesyłek, które ma przy sobie.
+     * @return boolean
+     */
+    @Override
+    public boolean run() {
+        this._packages.run();
+        return true;
     }
 }

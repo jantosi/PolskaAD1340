@@ -20,7 +20,7 @@ public class Horse extends Item {
     protected int _capacity;
     
     /**
-     * Zmniejszenie zmęczenia agenta.
+     * Zmniejszenie zmęczenia agenta w procentach wyrażonych jako liczba np. 0.3 dla 30%.
      * @var float
      */
     protected float _agentEnergyLossDecrease;
