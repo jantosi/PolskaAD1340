@@ -27,45 +27,42 @@ public class PolskaAD1340 {
 
         // TODO code application logic here
         OknoMapy om = new OknoMapy();
-                
+
         try {
             LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
             om.importBackgroundTileGrid(lm.getMap());
-            
+
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
             om.drawAllTiles();
-            
-<<<<<<< HEAD
+
 
             //test
-            om.getForegroundTileGrid().get(0).set(0,om.tileFromNumber(1895));
-            
-            ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(0,0);
+            om.getForegroundTileGrid().get(0).set(0, om.tileFromNumber(1895));
+
+            ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(0, 0);
             om.addObjectToForegroundList(opp);
             opp.move(2, 2);
-            
+
             om.drawAllTiles();
-            
-=======
+
             ClipsEnvironment clipsEnv = new ClipsEnvironment();
-            
+
             String evalString = "(find-all-facts ((?k kratka)) TRUE)";
             PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
             for (int i = 0; i < pv1.size(); i++) {
-            	System.out.print("KRATKA ");
-            	System.out.print(" id: " + pv1.get(i).getFactSlot("id"));
-            	System.out.print(", X: " + pv1.get(i).getFactSlot("pozycjaX"));
-            	System.out.println(", Y: " + pv1.get(i).getFactSlot("pozycjaY"));
+                System.out.print("KRATKA ");
+                System.out.print(" id: " + pv1.get(i).getFactSlot("id"));
+                System.out.print(", X: " + pv1.get(i).getFactSlot("pozycjaX"));
+                System.out.println(", Y: " + pv1.get(i).getFactSlot("pozycjaY"));
             }
-            
-        
->>>>>>> e63f7e7d16a9e7d5b45c8f334296bdee0045c939
+
+
         } catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         om.setVisible(true);
         System.out.println("done and done.");
-       
+
     }
 }
