@@ -7,6 +7,8 @@ package polskaad1340;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import CLIPSJNI.Environment;
+
 /**
  *
  * @author Kuba
@@ -29,6 +31,9 @@ public class PolskaAD1340 {
             
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
             om.drawAllTiles();
+            
+            Environment env = new Environment();
+            env.load("logika_CLIPS/swiat_szablony.clp");
             
         
         } catch (Exception ex) {
