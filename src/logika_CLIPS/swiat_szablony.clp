@@ -6,8 +6,8 @@
 
 ;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
 (deftemplate drogaKratki 
-	(slot id) ;numer, ktory pozwoli na póŸniejsz¹ referencjê do tej drogi
-	(slot idKratki) ;id kratki w której zawiera siê droga
+	(slot id) ;numer, ktory pozwoli na pï¿½niejszï¿½ referencjï¿½ do tej drogi
+	(slot idKratki) ;id kratki w ktï¿½rej zawiera siï¿½ droga
 	(slot numerOdcinka) ;okresla numer odcinka drogi
 )
 
@@ -17,13 +17,13 @@
 	(slot dokad) ;id ostatniej kratki na drodze
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
-	(slot platna) ;czy droga jest platna czy te¿ bezplatna
+	(slot platna) ;czy droga jest platna czy teï¿½ bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
 	(slot dlugosc) ;dlugosc drogi liczona w kratkach
 )
 
 (deftemplate blokada
-	(slot droga) ;droga, na której znajduje sie blokada
+	(slot droga) ;droga, na ktï¿½rej znajduje sie blokada
 	(slot nazwa)
 	(slot idKratki) ;id kratki, na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 )
@@ -37,6 +37,7 @@
 )
 
 (deftemplate paczka
+        (slot id)
 	(slot waga)
 	(slot grodStart) ;grod, w ktorym paczka sie znajduje
 	(slot grodKoniec) ;grod, do ktorego paczka jest przeznaczona
@@ -44,13 +45,13 @@
 
 ;przedmiot opisuje narzedzia dla drwala, uzbrojenie dla rycerza oraz konie dla poslanca
 (deftemplate przedmiot 
-	(slot nazwa) ;to bêdzie id
+	(slot nazwa) ;to bï¿½dzie id
 	(slot grod) ;grod, w ktorego magazynie sie znajduje
 	(slot zuzycie) ;procentowy wskaznik zuzycia
 	(slot cena)
 )
 
-;jako, ¿e drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
+;jako, ï¿½e drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
 (deftemplate drzewo
 	(slot rodzajDrzewa)
 	(slot idKratki) ;id kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
@@ -59,7 +60,7 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
-	(slot kratkaLGR) ;wspó³rzedne obszaru kleski - lewy gorny rog
+	(slot kratkaLGR) ;wspï¿½rzedne obszaru kleski - lewy gorny rog
 	(slot bokObszaru) ;dlugosc boku kwadratowego obszaru kleski
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
 	(slot oslabianieAgentow) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
@@ -87,7 +88,29 @@
 ;agent DRWAL
 
 ;agent POSLANIEC
+(deftemplate poslaniec
+    (slot id)
+    (slot typ)
+    (slot idKratki)
+    (slot predkosc)
+    (slot poleWidzenia)
+    (slot mozliwyRuch)
+    (slot udzwig)
+    (multislot paczki)
+)
 
+
+;agent KUPIEC
+(deftemplate kupiec
+    (slot id)
+    (slot typ)
+    (slot idKratki)
+    (slot predkosc)
+    (slot poleWidzenia)
+    (slot mozliwyRuch)
+    (slot pojemnoscMagazynu)
+    (multislot przedmioty)
+)
 ;itd..
 
 
@@ -133,22 +156,22 @@
 
 ;AKCJE KUPIEC
 
-;AKCJE Z£ODZIEJ
+;AKCJE Zï¿½ODZIEJ
 (deftemplate akcjaKradnij
-	(slot idAgenta) ;chodzi o id z³odzieja
-	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: ma³y, œredni, du¿y 
+	(slot idAgenta) ;chodzi o id zï¿½odzieja
+	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: maï¿½y, ï¿½redni, duï¿½y 
 )
 
 ;AKCJE DRWAL
 (deftemplate akcjaScinanieDrzew
-	(slot idAgenta) ;chodzi oczywiœcie o id drwala
+	(slot idAgenta) ;chodzi oczywiï¿½cie o id drwala
 )
 
 ;tylko agenci : RYCERZ i SMOK
 (deftemplate akcjaAtak
 	(slot idAgenta) ;agent atakujacy
 	(slot idOfiary) ;agent aatakowany
-	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id bêdzie liczb¹ od 1 do 3
+	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id bï¿½dzie liczbï¿½ od 1 do 3
 )
 
 

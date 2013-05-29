@@ -85,3 +85,27 @@
 	
 	(printout t "Przesunieto agenta o id: " ?id " w " ?kierunek " nowy x : " ?nowaKratkaX  " nowy y: " ?nowaKratkaY " kratka: " ?nowaKratkaId crlf)
 )
+
+; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
+(defrule wezPaczke
+    ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki ?paczki))
+    ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
+    ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
+=>
+    (modify ?agent (paczki ?paczki ?idPaczki))
+
+    (retract ?akcja)
+
+    (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
+)
+
+; TODO: Sprawdzenie, czy ma miejsce w magazynie.
+(defrule kupTowarZGrodu
+    ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
+    ?grod <- (grod (nazwa ?idGrodu))
+    ?przedmiot <- (przedmiot (id ?idPrzedmiotu))
+    ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
+=>
+    (modify ?agent (przedmioty ?przedmioty ?idPrzedmiotu))
+    (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
+)
