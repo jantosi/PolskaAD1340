@@ -45,6 +45,7 @@
 
 ;przedmiot opisuje narzedzia dla drwala, uzbrojenie dla rycerza oraz konie dla poslanca
 (deftemplate przedmiot 
+	(slot id)
 	(slot nazwa) ;to b�dzie id
 	(slot grod) ;grod, w ktorego magazynie sie znajduje
 	(slot zuzycie) ;procentowy wskaznik zuzycia

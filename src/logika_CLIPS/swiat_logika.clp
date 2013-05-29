@@ -107,5 +107,5 @@
     ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
 =>
     (modify ?agent (przedmioty ?przedmioty ?idPrzedmiotu))
-    (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
+    (printout t "Poslaniec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
 )

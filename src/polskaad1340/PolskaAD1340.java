@@ -7,6 +7,8 @@ package polskaad1340;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import logika_CLIPS.ClipsEnvironment;
+
 import CLIPSJNI.Environment;
 import CLIPSJNI.PrimitiveValue;
 
@@ -33,13 +35,10 @@ public class PolskaAD1340 {
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
             om.drawAllTiles();
             
-            Environment env = new Environment();
-            env.load("src/logika_CLIPS/swiat_szablony.clp");
-            env.load("src/logika_CLIPS/swiat_logika.clp");
-            env.load("src/logika_CLIPS/test.clp");
-            env.reset();
+            ClipsEnvironment clipsEnv = new ClipsEnvironment();
+            
             String evalString = "(find-all-facts ((?k kratka)) TRUE)";
-            PrimitiveValue pv1 = env.eval(evalString);
+            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
             for (int i = 0; i < pv1.size(); i++) {
             	System.out.print("KRATKA ");
             	System.out.print(" id: " + pv1.get(i).getFactSlot("id"));
