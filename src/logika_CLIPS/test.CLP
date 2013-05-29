@@ -44,7 +44,7 @@
 ;(akcjaPrzemieszczanie (idAgenta 1)
 	;(ileKratek 2)
 	;(kierunek "prawo")
-)
+;)
 (mapa 30 30)
 
 )
