@@ -89,7 +89,6 @@ public class PolskaAD1340 {
             agent.setGold(500);
             agent.buyAx(new Ax("Ax1", 10, 10, 10));
             agent.buyVehicle(new Vehicle("v1", 10, 10, 10));*/
-   
             KnightStatistics ks = new KnightStatistics();
             ArrayList<Attack> attacks = new ArrayList<Attack>();
             attacks.add(new Attack(10, 10, "Attack1"));
@@ -100,7 +99,6 @@ public class PolskaAD1340 {
             
             System.out.println(agent.toString());
             clipsEnv.getWorldEnv().assertString(agent.toString());
-            pv1 = clipsEnv.getWorldEnv().eval("(facts)");
             
         } catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);

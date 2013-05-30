@@ -17,6 +17,13 @@ public class ClipsEnvironment {
 		this.worldEnv.load("src/clips/test.clp");
 		this.worldEnv.reset();
 	}
+	
+	public void displayFacts() {
+		this.worldEnv.eval("(facts)");
+	}
+	public void displayRules() {
+		this.worldEnv.eval("(rules)");
+	}
 	public Environment getWorldEnv() {
 		return worldEnv;
 	}
