@@ -76,17 +76,6 @@
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom
 )
 
-;trzeba uwzglednic to co Piotrek zrobi
-(deftemplate agent
-	(slot id)
-	(slot typ) ;czyli czy jest to poslaniec, kupiec, rycerz itd.
-	(slot idKratki) ;polozenie agenta na mapie
-	(slot predkosc) ;kratki na iteracje
-	(slot poleWidzenia) ;liczba kratek, ktore agent widzi przed soba, za soba oraz ze swojej lewej lub prawej strony
-	(slot mozliwyRuch) ;liczba kratek ruchu - na poczatku kazdej itearcji rowne tyle samo co predkosc
-)
-
-
 ;agent POSLANIEC
 (deftemplate poslaniec 
 	(slot udzwig) 
@@ -151,6 +140,20 @@
 ;agent rycerz
 (deftemplate rycerz
 	(slot zbroja)
+	(multislot ataki)
+	(slot id) 
+	(slot mozliwyRuch) 
+	(slot idKratki) 
+	(slot poleWidzenia) 
+	(slot predkosc)
+	(slot energia) 
+	(slot strataEnergii) 
+	(slot odnawianieEnergii) 
+	(slot zloto)
+)
+
+;agent smok
+(deftemplate smok
 	(multislot ataki)
 	(slot id) 
 	(slot mozliwyRuch) 
