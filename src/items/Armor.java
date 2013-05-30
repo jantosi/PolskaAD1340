@@ -18,8 +18,8 @@ public class Armor extends Item {
      * @param int price
      * @param int wearSpeed 
      */
-    public Armor(int value, int price, int wearSpeed) {
-        super.Item(price, wearSpeed);
+    public Armor(String id, int value, int price, int wearSpeed) {
+        super(price, wearSpeed, id);
         
         this.setValue(value);
     }

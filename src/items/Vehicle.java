@@ -18,8 +18,8 @@ public class Vehicle extends Item {
      * @param int price
      * @param int wearSpeed 
      */
-    public void Vehicle(int capacity, int price, int wearSpeed) {
-        super.Item(price, wearSpeed);
+    public Vehicle(String id, int capacity, int price, int wearSpeed) {
+        super(price, wearSpeed, id);
         
         this.setCapacity(capacity);
     }

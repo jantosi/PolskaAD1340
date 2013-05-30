@@ -50,15 +50,17 @@ public class Woodman extends Agent {
      * Konstruktor. Ustawienie domyślnego udźwigu.
      * @param int capacity 
      */
-    public void Woodman(int capacity) {
-        super.Agent();
+    public Woodman(String id, int capacity, WoodmanStatistics_Interface stat) {
+        super(id);
         
+        this._statistics = stat;
         this.setCapacity(capacity);
         this.setNumberOfShearWoods(0);
         this.setAx(null);
         this.setVehicle(null);
         
         this._woods = new ArrayList<Wood>();
+        this.setGold(0);
     }
     
     /**
@@ -271,4 +273,51 @@ public class Woodman extends Agent {
     public WoodmanStatistics_Interface getStatistics() {
         return this._statistics;
     }
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("(drwal (udzwig ");
+		buffer.append(_capacity);
+		buffer.append(") ");
+		if (_ax != null) {
+			buffer.append(" (siekiera ");
+			buffer.append(_ax.getId());
+			buffer.append(")");
+		}
+		if (_vehicle != null) {
+			buffer.append(" (woz ");
+			buffer.append(_vehicle.getId());
+			buffer.append(")");
+		}
+		buffer.append(" (scieteDrewno ");
+		buffer.append(_woods.size());
+		buffer.append(")");
+
+		buffer.append(" (id ");
+		buffer.append(_id);
+		buffer.append(")");
+
+		buffer.append(" (mozliwyRuch ");
+		buffer.append(_possibleMove);
+		buffer.append(")");
+
+		buffer.append(" (idKratki ");
+		buffer.append(_mapFrameId);
+		buffer.append(")");
+		buffer.append(" (poleWidzenia ");
+		buffer.append(_fieldOfView);
+		buffer.append(") (predkosc ");
+		buffer.append(_velocity);
+		buffer.append(") (energia ");
+		buffer.append(_energy);
+		buffer.append(") (strataEnergii ");
+		buffer.append(_energyLoss);
+		buffer.append(") (odnawianieEnergii ");
+		buffer.append(_energyRecovery);
+		buffer.append(") (zloto ");
+		buffer.append(_gold);
+		buffer.append("))");
+		return buffer.toString();
+	}
 }

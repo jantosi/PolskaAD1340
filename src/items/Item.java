@@ -7,6 +7,11 @@ package items;
  */
 abstract public class Item {
     
+	/**
+	 * Identyfikator paczki
+	 */
+	protected String _id;
+	
     /**
      * Cena narzędnia.
      * @var int
@@ -27,12 +32,18 @@ abstract public class Item {
     
     /**
      * Konstruktor. Ustawienie domyślnej ceny i szybkości zużycia narzędzia.
+     * @param id TODO
      * @param int price
      * @param int wearSpeed 
      */
-    public void Item(int price, int wearSpeed) {
+    public Item(int price, int wearSpeed, String id) {
         this._price = price;
         this._wearSpeed = wearSpeed;
+        this._id = id;
+    }
+    
+    public Item(int price) {
+    	this._price = price;
     }
     
     /**
@@ -99,4 +110,12 @@ abstract public class Item {
     public void use() {
         this.setLevelOfWear(this.getLevelOfWear()-this.getWearSpeed());
     }
+
+	public String getId() {
+		return _id;
+	}
+
+	public void setId(String _id) {
+		this._id = _id;
+	}
 }

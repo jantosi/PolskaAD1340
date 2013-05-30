@@ -11,6 +11,7 @@
 			(bind ?x (+ ?kX ?i))
 			(bind ?y (+ ?kY ?j))
 			
+			;sprawdzenie czy kratka, ktora widzi agent nie wykracza poza obszar mapy
 			(bind ?czyJestKratka (any-factp ((?k kratka)) (and (eq ?k:pozycjaX ?x) (eq ?k:pozycjaY ?y))))
 			
 			(if (eq ?czyJestKratka TRUE)

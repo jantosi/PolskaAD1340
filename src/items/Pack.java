@@ -29,11 +29,11 @@ public class Pack extends Item {
      * Konstruktor. Nadanie paczce masy.
      * @param mass 
      */
-    public void Package(int mass) {
-        this._mass = mass;
+    public Pack(String id, int mass) {
+    	super(mass * 5, 0, id);
+    	
+    	this._mass = mass;
         this._deliveried = false;
-        
-        super.Item(this.getMass() * 5, 0);
     }
     
     /**

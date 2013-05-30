@@ -6,7 +6,7 @@ package items;
  * @author Piotrek
  */
 public class Horse extends Item {
-    
+	
     /**
      * Prędkość konia.
      * @var int
@@ -34,12 +34,12 @@ public class Horse extends Item {
      * @param int price 
      * @param int wearSpeed 
      */
-    public void Horse(int velocity, int capacity, int agentEnergyLossDecrease, int price, int wearSpeed) {
-        this._velocity = velocity;
+    public Horse(String id, int velocity, int capacity, int agentEnergyLossDecrease, int price, int wearSpeed) {
+    	super(price, wearSpeed, id);
+    	
+    	this._velocity = velocity;
         this._capacity = capacity;
         this._agentEnergyLossDecrease = agentEnergyLossDecrease;
-        
-        super.Item(price, wearSpeed);
     }
     
     /**

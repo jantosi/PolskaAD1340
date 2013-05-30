@@ -86,34 +86,82 @@
 	(slot mozliwyRuch) ;liczba kratek ruchu - na poczatku kazdej itearcji rowne tyle samo co predkosc
 )
 
-;agent DRWAL
 
 ;agent POSLANIEC
-(deftemplate poslaniec
-    (slot id)
-    (slot typ)
-    (slot idKratki)
-    (slot predkosc)
-    (slot poleWidzenia)
-    (slot mozliwyRuch)
-    (slot udzwig)
-    (multislot paczki)
+(deftemplate poslaniec 
+	(slot udzwig) 
+	(slot kon) 
+	(slot id) 
+	(multislot paczki)
+	(slot poleWidzenia) 
+	(slot predkosc) 
+	(slot energia) 
+	(slot strataEnergii) 
+	(slot odnawianieEnergii) 
+	(slot zloto)
+	(slot mozliwyRuch)
+	(slot idKratki)
 )
-
 
 ;agent KUPIEC
-(deftemplate kupiec
-    (slot id)
-    (slot typ)
-    (slot idKratki)
-    (slot predkosc)
-    (slot poleWidzenia)
-    (slot mozliwyRuch)
-    (slot pojemnoscMagazynu)
-    (multislot przedmioty)
+(deftemplate kupiec 
+	(slot pojemnoscMagazynu) 
+	(slot id)
+	(multislot przedmioty)
+	(slot mozliwyRuch)
+	(slot idKratki)
+	(slot poleWidzenia) 
+	(slot predkosc) 
+	(slot energia) 
+	(slot strataEnergii) 
+	(slot odnawianieEnergii) 
+	(slot zloto)
 )
-;itd..
 
+;agent zlodziej
+(deftemplate zlodziej 
+	(slot id) 
+	(slot mozliwyRuch) 
+	(slot idKratki) 
+	(slot poleWidzenia) 
+	(slot predkosc) 
+	(slot energia) 
+	(slot strataEnergii) 
+	(slot odnawianieEnergii) 
+	(slot zloto)
+)
+
+;agent drwal
+(deftemplate drwal 
+	(slot udzwig)  
+	(slot siekiera) 
+	(slot woz) 
+	(slot scieteDrewno) 
+	(slot id) 
+	(slot mozliwyRuch) 
+	(slot idKratki) 
+	(slot poleWidzenia) 
+	(slot predkosc) 
+	(slot energia) 
+	(slot strataEnergii)
+	(slot odnawianieEnergii) 
+	(slot zloto)
+)
+
+;agent rycerz
+(deftemplate rycerz
+	(slot zbroja)
+	(multislot ataki)
+	(slot id) 
+	(slot mozliwyRuch) 
+	(slot idKratki) 
+	(slot poleWidzenia) 
+	(slot predkosc)
+	(slot energia) 
+	(slot strataEnergii) 
+	(slot odnawianieEnergii) 
+	(slot zloto)
+)
 
 ;WYCINEK SWIATA, cyzli widzialna czesc swiata przez kazdego agenta
 (deftemplate widzialnaCzescSwiata

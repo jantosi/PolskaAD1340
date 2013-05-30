@@ -32,11 +32,13 @@ public class Merchant extends Agent {
      * Konstruktor. Ustawienie domyślnej wielkości magazynu.
      * @param int capacity 
      */
-    public void Merchant(int capacity) {
-        super.Agent();
+    public Merchant(String id, int capacity, MerchantStatistics_Interface stat) {
+        super(id);
         
         this.setCapacity(capacity);
         this._items = new ArrayList<Item>();
+        this._statistics = stat;
+        this.setGold(0);
     }
     /**
      * Getter dla pojemności magazynu.
@@ -138,4 +140,50 @@ public class Merchant extends Agent {
     public MerchantStatistics_Interface getStatistics() {
         return this._statistics;
     }
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("(kupiec (pojemnoscMagazynu ");
+		buffer.append(_capacity);
+		buffer.append(")");
+		
+		if (!this._items.isEmpty()) {
+			buffer.append(" (przedmioty ");
+			for (int i = 0; i < this._items.size(); i++) {
+				buffer.append(this._items.get(i).getId());
+				
+				if (i < this._items.size() - 1) {
+					buffer.append(" ");
+				}
+			}
+			buffer.append(")");
+		}
+		
+		buffer.append(" (id ");
+		buffer.append(_id);
+		buffer.append(")");
+	
+		buffer.append("(mozliwyRuch ");
+		buffer.append(_possibleMove);
+		buffer.append(")");
+
+		buffer.append("(idKratki ");
+		buffer.append(_mapFrameId);
+		buffer.append(")");
+
+		buffer.append("(poleWidzenia ");
+		buffer.append(_fieldOfView);
+		buffer.append(") (predkosc ");
+		buffer.append(_velocity);
+		buffer.append(") (energia ");
+		buffer.append(_energy);
+		buffer.append(") (strataEnergii ");
+		buffer.append(_energyLoss);
+		buffer.append(") (odnawianieEnergii ");
+		buffer.append(_energyRecovery);
+		buffer.append(") (zloto ");
+		buffer.append(_gold);
+		buffer.append("))");
+		return buffer.toString();
+	}
 }

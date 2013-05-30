@@ -39,13 +39,18 @@ public class Courier extends Agent {
      * Konstruktor. Nadanie domyślnego udźwigu.
      * @param capacity 
      */
-    public void Courier(int capacity) {
-        super.Agent();
+    public Courier(String id, int capacity, CourierStatistics_Interface stat) {
+        super(id);
         
         this.setCapacity(capacity);
         this._packages = new PackCollection();
         this.setHorse(null);
+        this._statistics = stat;
+        this.setGold(0);
     }
+    
+
+    
     
     /**
      * Getter dla udźwigu.
@@ -222,4 +227,49 @@ public class Courier extends Agent {
         this._packages.run();
         return true;
     }
+
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("(poslaniec (udzwig ");
+		buffer.append(_capacity);
+		buffer.append(")"); 
+		if (!this._packages.getAll().isEmpty()) {
+			buffer.append("(paczki ");
+			for (int i = 0; i < this._packages.getAll().size(); i++) {
+				buffer.append(this._packages.getAll().get(i).getId());
+				
+				if (i < this._packages.getAll().size() - 1) {
+					buffer.append(" ");
+				}
+			}
+			buffer.append(")");
+		}
+		if (_horse != null) {
+			buffer.append(" (kon ");
+			buffer.append(_horse.getId()).append(")");
+		}
+		buffer.append(" (id ");
+		buffer.append(_id);
+		buffer.append(") (poleWidzenia ");
+		buffer.append(_fieldOfView);
+		buffer.append(") (predkosc ");
+		buffer.append(_velocity);
+		buffer.append(") (energia ");
+		buffer.append(_energy);
+		buffer.append(") (strataEnergii ");
+		buffer.append(_energyLoss);
+		buffer.append(") (odnawianieEnergii ");
+		buffer.append(_energyRecovery);
+		buffer.append(") (zloto ");
+		buffer.append(_gold);
+		buffer.append(") (mozliwyRuch ");
+		buffer.append(_possibleMove);
+		buffer.append(") (idKratki ");
+		buffer.append(_mapFrameId);
+		buffer.append("))");
+		return buffer.toString();
+	}
+
 }

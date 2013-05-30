@@ -6,6 +6,11 @@ package agents.skills;
  */
 public class Attack {
     
+	/**
+	 * Identyfikator ataku
+	 */
+	private String _id;
+	
     /**
      * Wartość zadanych obrażeń tym atakiem.
      * @var int
@@ -23,9 +28,10 @@ public class Attack {
      * @param int value
      * @param int energyLoss 
      */
-    public Attack(int value, int energyLoss) {
+    public Attack(int value, int energyLoss, String id) {
         this.setValue(value);
         this.setEnergyLoss(energyLoss);
+        this._id = id;
     }
     
     /**
@@ -65,4 +71,12 @@ public class Attack {
         
         return this;
     }
+
+	public String get_id() {
+		return _id;
+	}
+
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 }

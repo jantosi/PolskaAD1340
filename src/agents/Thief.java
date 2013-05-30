@@ -41,13 +41,15 @@ public class Thief extends Agent {
     /**
      * Konstruktor złodzieja.
      */
-    public void Thief() {
-        super.Agent();
+    public Thief(String id, ThiefStatistics_Interface stat) {
+        super(id);
+        this._statitics = stat;
         
         this.setNumberOfStaysInJail(0);
         this.setIsInJail(false);
         this.setNumberOfIterationsInJail(0);
         this.setBooty(0);
+        this.setGold(0);
     }
     
     /**
@@ -204,4 +206,36 @@ public class Thief extends Agent {
     public ThiefStatistics_Interface getStatistics() {
         return this._statitics;
     }
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("(zlodziej (");
+		buffer.append("id ");
+		buffer.append(_id);
+		buffer.append(")");
+		
+		buffer.append(" (mozliwyRuch ");
+		buffer.append(_possibleMove);
+		buffer.append(")");
+		
+		buffer.append(" (idKratki ");
+		buffer.append(_mapFrameId);
+		buffer.append(")");
+		
+		buffer.append(" (poleWidzenia ");
+		buffer.append(_fieldOfView);
+		buffer.append(") (predkosc ");
+		buffer.append(_velocity);
+		buffer.append(") (energia ");
+		buffer.append(_energy);
+		buffer.append(") (strataEnergii ");
+		buffer.append(_energyLoss);
+		buffer.append(") (odnawianieEnergii ");
+		buffer.append(_energyRecovery);
+		buffer.append(") (zloto ");
+		buffer.append(_gold);
+		buffer.append("))");
+		return buffer.toString();
+	}
 }

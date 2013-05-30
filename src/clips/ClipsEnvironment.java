@@ -12,9 +12,9 @@ public class ClipsEnvironment {
 	}
 	
 	private void initialize() {
-		this.worldEnv.load("src/logika_CLIPS/swiat_szablony.clp");
-		this.worldEnv.load("src/logika_CLIPS/swiat_logika.clp");
-		this.worldEnv.load("src/logika_CLIPS/test.clp");
+		this.worldEnv.load("src/clips/swiat_szablony.clp");
+		this.worldEnv.load("src/clips/swiat_logika.clp");
+		this.worldEnv.load("src/clips/test.clp");
 		this.worldEnv.reset();
 	}
 	public Environment getWorldEnv() {

@@ -1,7 +1,5 @@
 package agents;
 
-import java.util.ArrayList;
-import agents.skills.*;
 /**
  * Klasa abstrakcyjna definiująca podstawowe operacja dla każdego agenta.
  * 
@@ -9,6 +7,21 @@ import agents.skills.*;
  */
 abstract public class Agent {
     
+	/**
+	 * Identyfikator agenta
+	 */
+	protected String _id;
+	
+	/**
+	 * Liczba kratek ruchu w danej turze
+	 */
+	protected int _possibleMove;
+	
+	/**
+	 * Id kratki, na ktorej znajduje sie agent
+	 */
+	protected String _mapFrameId;
+	
     /**
      * Pole widzenia agenta.
      * @var int
@@ -48,23 +61,16 @@ abstract public class Agent {
     protected int _gold;
     
     /**
-     * Lista ataków agenta.
-     * @var ArrayList<Attack>
-     */
-    protected ArrayList<Attack> _attacks;
-    
-    /**
      * Konstruktor. Ustawienie domyślnych parametrów dla większości agentów.
      */
-    public void Agent() {
+    public Agent(String id) {
         //Domyślne parametry dla większości agentów.
         this.setFieldOfView(1);
         this.setVelocity(2);
         this.setEnergy(100);
         this.setEnergyLoss(2);
         this.setEnergyRecovery(2);
-        this.setGold(0);
-        this._attacks = null;
+        this.setId(id);
     }
     
     /**
@@ -214,35 +220,12 @@ abstract public class Agent {
         this.setEnergy(this.getEnergy()+this.getEnergyRecovery());
     }
     
-    /**
-     * Getter dla listy wszystkich ataków.
-     * @return ARrayList<Attack>
-     */
-    public ArrayList<Attack> getAttacks() {
-        return this._attacks;
-    }
-    
-    /**
-     * Dodawanie nowego ataku.
-     * @param Attack attack
-     * @return Agent
-     */
-    public Agent addAttack(Attack attack) {
-        this._attacks.add(attack);
-        
-        return this;
-    }
-    
-    /**
-     * Usuwanie ataku.
-     * @param Attack attack
-     * @return Agent
-     */
-    public Agent removeAttack(Attack attack) {
-        if(this._attacks.indexOf(attack) != -1) {
-            this._attacks.remove(attack);
-        }
-        
-        return this;
-    }
+
+	public String getId() {
+		return _id;
+	}
+
+	public void setId(String _id) {
+		this._id = _id;
+	}
 }

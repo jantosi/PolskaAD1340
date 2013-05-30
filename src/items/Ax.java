@@ -19,8 +19,8 @@ public class Ax extends Item {
      * @param int price
      * @param int wearSpeed 
      */
-    public void Ax(int numberOfShearWoods, int price, int wearSpeed) {
-        super.Item(price, wearSpeed);
+    public Ax(String id, int numberOfShearWoods, int price, int wearSpeed) {
+        super(price, wearSpeed, id);
         
         this.setNumberOfShearWoods(numberOfShearWoods);
     }

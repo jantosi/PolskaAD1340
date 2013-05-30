@@ -4,8 +4,27 @@
  */
 package polskaad1340;
 
+import items.Ax;
+import items.Pack;
+import items.Vehicle;
+
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import statistics.CourierStatistics;
+import statistics.KnightStatistics;
+import statistics.MerchantStatistics;
+import statistics.ThiefStatistics;
+import statistics.WoodmanStatistics;
+
+import agents.Agent;
+import agents.Courier;
+import agents.Knight;
+import agents.Merchant;
+import agents.Thief;
+import agents.Woodman;
+import agents.skills.Attack;
 
 import clips.ClipsEnvironment;
 
@@ -55,7 +74,34 @@ public class PolskaAD1340 {
                 System.out.println(", Y: " + pv1.get(i).getFactSlot("pozycjaY"));
             }
 
-
+/*            CourierStatistics cs = new CourierStatistics();
+            Courier agent = new Courier("poslaniec1", 10, cs);
+            agent.setCapacity(500);
+            agent.addPackage(new Pack("Pack1", 10));
+            agent.addPackage(new Pack("Pack2", 10));*/
+            
+           /* MerchantStatistics ms = new MerchantStatistics();
+            Merchant agent = new Merchant("kupiec1", 100, ms);*/
+          /*  ThiefStatistics ts = new ThiefStatistics();
+            Thief agent = new Thief("Thief1", ts);*/
+    /*        WoodmanStatistics ws = new WoodmanStatistics();
+            Woodman agent = new Woodman("Woodman1", 100, ws);
+            agent.setGold(500);
+            agent.buyAx(new Ax("Ax1", 10, 10, 10));
+            agent.buyVehicle(new Vehicle("v1", 10, 10, 10));*/
+   
+            KnightStatistics ks = new KnightStatistics();
+            ArrayList<Attack> attacks = new ArrayList<Attack>();
+            attacks.add(new Attack(10, 10, "Attack1"));
+            attacks.add(new Attack(20, 20, "Attack2"));
+            attacks.add(new Attack(30, 30, "Attack3"));
+            Knight agent = new Knight("Knight1", attacks, ks);
+            agent.setGold(550);
+            
+            System.out.println(agent.toString());
+            clipsEnv.getWorldEnv().assertString(agent.toString());
+            pv1 = clipsEnv.getWorldEnv().eval("(facts)");
+            
         } catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
         }
