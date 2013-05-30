@@ -26,7 +26,6 @@
 				(assert (widzialnaCzescSwiata (idAgenta ?agentId)(idKratki ?widzialnaKratkaId)))
 				(printout t "Agent o id: " ?agentId " widzi kratke o id: " ?widzialnaKratkaId crlf)
 			)
-			
 		)
 	)
 )
@@ -125,5 +124,5 @@
     ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
 =>
     (modify ?agent (przedmioty ?przedmioty ?idPrzedmiotu))
-    (printout t "Poslaniec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
+    (printout t "Kupiec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
 )
