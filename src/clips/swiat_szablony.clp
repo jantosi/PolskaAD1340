@@ -3,42 +3,26 @@
 	(slot pozycjaX) ;pozycja kratki na mapie
 	(slot pozycjaY)
 )
-;chyba nie ma potrzby zeby droga by³a definiowana jako ca³y odcinek
+;chyba nie ma potrzby zeby droga byï¿½a definiowana jako caï¿½y odcinek
 (deftemplate droga
+	(slot id)
 	(slot idKratki) 
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy teï¿½ bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
-	
+	(slot numerOdcinka) ;na jakim odcinku drogi jsteï¿½my
+	(slot wszystkichOdcinkow) ;max nr odcinka
 )
-;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
-;(deftemplate drogaKratki 
-;	(slot id) ;numer, ktory pozwoli na pï¿½niejszï¿½ referencjï¿½ do tej drogi
-;	(slot idKratki) ;id kratki w ktï¿½rej zawiera siï¿½ droga
-;	(slot numerOdcinka) ;okresla numer odcinka drogi
-;)
 
-
-;(deftemplate droga
-;	(slot id) ;odniesienie do id w template drogaKratki
-;	(slot skad) ;id pierwszej klatki na drodze
-;	(slot dokad) ;id ostatniej kratki na drodze
-;	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
-;	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
-;	(slot platna) ;czy droga jest platna czy teï¿½ bezplatna
-;	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
-;	(slot dlugosc) ;dlugosc drogi liczona w kratkach
-;)
 
 (deftemplate blokada
-	;(slot droga) ;droga, na ktï¿½rej znajduje sie blokada
-	(slot nazwa)
+	(slot id)
 	(slot idKratki) ;id kratki, na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 )
 
 (deftemplate grod
-	(slot nazwa) ;to bedzie id grodu
+	(slot id) ;to bedzie id grodu
 	(slot kratkaLGR) ;wsp. grodu na mapie - lewy gorny rog
 	(slot kratkaPDR) ;wsp. grodu na mapie - prawy dolny rog
 	(slot liczbaMieszkancow)
@@ -79,8 +63,7 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate rozbojnicy
-	(slot idDrogi) ;droga, na ktorej sie znajduja
-	(slot odcinekDrogi) ;odcinek drogi, na ktorej sie znajduja
+	(slot idKratki) ;kratka, na ktorej sie znajduja
 	(slot zabieraniePaczek) ;procent paczek, ktore zabieraja poslancom
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom
 )

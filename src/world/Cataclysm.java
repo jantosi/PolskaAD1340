@@ -6,6 +6,31 @@ private int range;
 private float treesDestroy;
 private int energyLoss;
 private int populationLoss;
+
+
+public Cataclysm(int upperLeftMapFrame, int range, float treesDestroy,
+		int energyLoss, int populationLoss) {
+	super();
+	this.upperLeftMapFrame = upperLeftMapFrame;
+	this.range = range;
+	this.treesDestroy = treesDestroy;
+	this.energyLoss = energyLoss;
+	this.populationLoss = populationLoss;
+}
+
+@Override
+public String toString() {
+	StringBuffer sbuf = new StringBuffer();
+	sbuf.append("(kleska ");
+	sbuf.append("(kratkaLGR ").append(upperLeftMapFrame).append(") ");
+	sbuf.append("(bokObszaru ").append(range).append(") ");
+	sbuf.append("(niszczenieLasu ").append(treesDestroy).append(") ");
+	sbuf.append("(oslabianieAgentow ").append(energyLoss).append(") ");
+	sbuf.append("(zabijanieMieszkancow ").append(populationLoss).append(")");
+	sbuf.append(")");
+	return sbuf.toString();
+}
+
 public int getUpperLeftMapFrame() {
 	return upperLeftMapFrame;
 }

@@ -120,7 +120,7 @@
 ; TODO: Sprawdzenie, czy ma miejsce w magazynie.
 (defrule kupTowarZGrodu
     ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
-    ?grod <- (grod (nazwa ?idGrodu))
+    ?grod <- (grod (id ?idGrodu))
     ?przedmiot <- (przedmiot (id ?idPrzedmiotu))
     ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
 =>
