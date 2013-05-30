@@ -3,27 +3,36 @@
 	(slot pozycjaX) ;pozycja kratki na mapie
 	(slot pozycjaY)
 )
-
-;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
-(deftemplate drogaKratki 
-	(slot id) ;numer, ktory pozwoli na pï¿½niejszï¿½ referencjï¿½ do tej drogi
-	(slot idKratki) ;id kratki w ktï¿½rej zawiera siï¿½ droga
-	(slot numerOdcinka) ;okresla numer odcinka drogi
-)
-
+;chyba nie ma potrzby zeby droga by³a definiowana jako ca³y odcinek
 (deftemplate droga
-	(slot id) ;odniesienie do id w template drogaKratki
-	(slot skad) ;id pierwszej klatki na drodze
-	(slot dokad) ;id ostatniej kratki na drodze
+	(slot idKratki) 
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy teï¿½ bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
-	(slot dlugosc) ;dlugosc drogi liczona w kratkach
+	
 )
+;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
+;(deftemplate drogaKratki 
+;	(slot id) ;numer, ktory pozwoli na pï¿½niejszï¿½ referencjï¿½ do tej drogi
+;	(slot idKratki) ;id kratki w ktï¿½rej zawiera siï¿½ droga
+;	(slot numerOdcinka) ;okresla numer odcinka drogi
+;)
+
+
+;(deftemplate droga
+;	(slot id) ;odniesienie do id w template drogaKratki
+;	(slot skad) ;id pierwszej klatki na drodze
+;	(slot dokad) ;id ostatniej kratki na drodze
+;	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
+;	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
+;	(slot platna) ;czy droga jest platna czy teï¿½ bezplatna
+;	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
+;	(slot dlugosc) ;dlugosc drogi liczona w kratkach
+;)
 
 (deftemplate blokada
-	(slot droga) ;droga, na ktï¿½rej znajduje sie blokada
+	;(slot droga) ;droga, na ktï¿½rej znajduje sie blokada
 	(slot nazwa)
 	(slot idKratki) ;id kratki, na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 )
