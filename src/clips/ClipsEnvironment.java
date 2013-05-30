@@ -1,4 +1,4 @@
-package logika_CLIPS;
+package clips;
 
 import CLIPSJNI.Environment;
 

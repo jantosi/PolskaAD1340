@@ -7,9 +7,8 @@ package polskaad1340;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import logika_CLIPS.ClipsEnvironment;
+import clips.ClipsEnvironment;
 
-import CLIPSJNI.Environment;
 import CLIPSJNI.PrimitiveValue;
 
 /**
@@ -41,7 +40,7 @@ public class PolskaAD1340 {
 
             ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(0, 0);
             om.addObjectToForegroundList(opp);
-            opp.move(2, 2);
+           // opp.move(20, 20);
 
             om.drawAllTiles();
 
