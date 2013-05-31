@@ -67,6 +67,7 @@
     (slot idAgenta) ;id poslanca, ktory go ew posiada
     (slot udzwig)
     (slot predkosc)
+    (slot zmeczenieJezdzcy) ;o ile procent mniejsze sa straty jezdzcy w prownaniu do poruszania sie na pieszo
     (slot cena)
     (slot zuzycie)
     (slot predkoscZuzycia)

@@ -7,6 +7,12 @@ package items;
  */
 public class Horse extends Item {
 	
+	/**
+	 * Ułamek z przedzaiłu (0,1) określający o ile mniej energii na ruch zużywał będzie agent
+	 * w porównaniu do poruszania się pieszo
+	 */
+	protected double riderTiredness;
+	
     /**
      * Prędkość konia.
      * @var int
@@ -19,7 +25,7 @@ public class Horse extends Item {
      */
     protected int _capacity;
     
-    /**
+    /**s
      * Zmniejszenie zmęczenia agenta w procentach wyrażonych jako liczba np. 0.3 dla 30%.
      * @var float
      */
@@ -98,4 +104,12 @@ public class Horse extends Item {
         
         return this;
     }
+
+	public double getRiderTiredness() {
+		return riderTiredness;
+	}
+
+	public void setRiderTiredness(double riderTiredness) {
+		this.riderTiredness = riderTiredness;
+	}
 }

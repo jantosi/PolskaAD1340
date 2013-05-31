@@ -118,7 +118,7 @@
     (bind ?konPredkosc (fact-slot-value ?kupionyKon predkosc))        
     
      ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
-    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc)(kon ?konId))
+    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc) (kon ?konId))
     
     (printout t "kupienie: " ?kupienieKonia crlf)        
         
@@ -146,11 +146,19 @@
         (bind ?paczkaWaga (fact-slot-value ?paczka waga))
         (bind ?sumaWagPaczek (+ ?sumaWagPaczek ?paczkaWaga))                
     )
-    
+   
     (bind ?strataEnergii (round (+ (* ?sumaWagPaczek 0.5) 2)))
+    (if (not (eq ?kon nil))
+    then
+        (bind ?konIndex (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kon))))
+        (bind ?konZmeczenieJezdzcy (fact-slot-value ?konIndex zmeczenieJezdzcy))
+        
+        (bind ?strataEnergii (round (- ?strataEnergii (* ?strataEnergii ?konZmeczenieJezdzcy))))
+    )    
+    
     (printout t "nowa starta energii: " ?strataEnergii crlf)
     
-     (modify ?poslaniec (strataEnergii ?strataEnergii))
+    (modify ?poslaniec (strataEnergii ?strataEnergii))
     
     ;fakt kontrolny, za pomoca ktorego oznaczamy, 
     ;ze dany poslaniec w danej iteracji zostal juz zmodfikowany    
