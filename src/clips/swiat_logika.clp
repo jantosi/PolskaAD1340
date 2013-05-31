@@ -95,13 +95,69 @@
 	
 		;zamieniamy id kratki, na ktorej stoi agent oraz odejmujemy mu punkty ruchu
 		(modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?ruch ?kratki)))
-		
+
 		(printout t "Przesunieto agenta o id: " ?id " w " ?kierunek ." Nowy x : " ?nowaKratkaX  ", nowy y: " ?nowaKratkaY crlf)
 	)
 	
 	;usuwamy akcje przesuwania
 	(retract ?akcja)
 )
+
+;regula okresla parametry poslanca po zakupieniu konia, czyli
+;po sprawdzeniu istnienia faktu kupienieKonia
+(defrule sprawdzKupienieKoniaPoslaniec
+    ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
+    ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
+=>
+    ;pobieramy index kupionego konia z bazy wiedzy        
+    (bind ?kupionyKon (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kupionyKon))))        
+     
+    ;wyciagamy poszczegolne wartosci pol z obiektu kon o okreslonym wyzej indeksie        
+    (bind ?konId (fact-slot-value ?kupionyKon id))        
+    (bind ?konUdzwig (fact-slot-value ?kupionyKon udzwig))
+    (bind ?konPredkosc (fact-slot-value ?kupionyKon predkosc))        
+    
+     ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
+    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc)(kon ?konId))
+    
+    (printout t "kupienie: " ?kupienieKonia crlf)        
+        
+    ;usuwamy akcje kupienia konia        
+    (retract ?kupienieKonia)
+)
+
+;regula aktualizujaca straty energii poslanca z uwzglednieniem paczek jakie niesie
+(defrule obliczStartyEnergiiPoslanca
+    ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
+    
+    ;sprawdzamy czy poslaniec w danej turze nie byl jeszcze modyfikowany
+    ;jest to fakt kontrolny, ktory na poczatku kazdej tury NIE ISTNIEJE w bazie wiedzy
+    ;jest on wstawiany dopiero po modyfikacji poslanca    
+    (not (modyfikacjaPoslanca ?poslaniecId))
+=>
+    (bind ?sumaWagPaczek 0)
+    (loop-for-count (?i 0 (- (length $?paczki) 1)) do 
+        ;pobieramy id kolejnej, posiadanej przez agenta paczki        
+        (bind ?paczkaId (nth$ (+ ?i 1) $?paczki))
+        
+        ;znajdujemy index faktu paczki w bazie wiedzy
+        (bind ?paczka (nth$ 1 (find-fact ((?p paczka))(eq ?p:id ?paczkaId))))
+                
+        (bind ?paczkaWaga (fact-slot-value ?paczka waga))
+        (bind ?sumaWagPaczek (+ ?sumaWagPaczek ?paczkaWaga))                
+    )
+    
+    (bind ?strataEnergii (round (+ (* ?sumaWagPaczek 0.5) 2)))
+    (printout t "nowa starta energii: " ?strataEnergii crlf)
+    
+     (modify ?poslaniec (strataEnergii ?strataEnergii))
+    
+    ;fakt kontrolny, za pomoca ktorego oznaczamy, 
+    ;ze dany poslaniec w danej iteracji zostal juz zmodfikowany    
+    (assert (modyfikacjaPoslanca ?poslaniecId))
+    
+)
+
 
 ; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
 (defrule wezPaczke

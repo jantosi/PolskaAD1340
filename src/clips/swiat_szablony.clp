@@ -3,14 +3,15 @@
 	(slot pozycjaX) ;pozycja kratki na mapie
 	(slot pozycjaY)
 )
-;chyba nie ma potrzby zeby droga by³a definiowana jako ca³y odcinek
+;chyba nie ma potrzby zeby droga byï¿½a definiowana jako caï¿½y odcinek
 (deftemplate droga
 	(slot idKratki) 
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy teï¿½ bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
-	
+    (slot nrOdcinka)
+    (slot maxOdcinek)
 )
 ;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
 ;(deftemplate drogaKratki 
@@ -18,7 +19,6 @@
 ;	(slot idKratki) ;id kratki w ktï¿½rej zawiera siï¿½ droga
 ;	(slot numerOdcinka) ;okresla numer odcinka drogi
 ;)
-
 
 ;(deftemplate droga
 ;	(slot id) ;odniesienie do id w template drogaKratki
@@ -46,7 +46,7 @@
 )
 
 (deftemplate paczka
-        (slot id)
+    (slot id)
 	(slot waga)
 	(slot grodStart) ;grod, w ktorym paczka sie znajduje
 	(slot grodKoniec) ;grod, do ktorego paczka jest przeznaczona
@@ -59,6 +59,17 @@
 	(slot grod) ;grod, w ktorego magazynie sie znajduje
 	(slot zuzycie) ;procentowy wskaznik zuzycia
 	(slot cena)
+)
+
+(deftemplate kon
+    (slot id)
+    (slot grod)
+    (slot idAgenta) ;id poslanca, ktory go ew posiada
+    (slot udzwig)
+    (slot predkosc)
+    (slot cena)
+    (slot zuzycie)
+    (slot predkoscZuzycia)
 )
 
 ;jako, ï¿½e drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
@@ -214,7 +225,10 @@
 	(slot idAgenta) ;chodzi o id poslanca
 	(slot idPaczki) 
 )
-
+(deftemplate kupienieKonia
+    (slot idAgenta)
+    (slot idKonia)
+)
 ;AKCJE KUPIEC
 
 ;AKCJE Zï¿½ODZIEJ
