@@ -84,16 +84,18 @@
     (udzwig 3)
     (cel grod2)
     (energia 50)
-    (strataEnergii 0)
+    (strataEnergii 3)
+    (odnawianieEnergii 7)
 )
 (rycerz (id rycerz1) 
-	(idKratki 6)
+	(idKratki 11)
 	(predkosc 4)
 	(poleWidzenia 4)
 	(mozliwyRuch 4)
     (cel grod2)
     (energia 50)
     (strataEnergii 10)
+    (odnawianieEnergii 3)
 )
 (akcjaPrzemieszczaniePoDrodze 
     (idAgenta poslaniec1)
@@ -233,6 +235,8 @@
 	(idKratki 19) ;id kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
 	(stan sciete) ;sciete czy niesciete
 )
+(iteracja 11)
+(akcjaOdpoczywanie (idAgenta poslaniec1)(iteracjaKoniec 10))
 )
 
 

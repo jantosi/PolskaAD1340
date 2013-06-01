@@ -201,9 +201,9 @@
 	(slot kierunek) ;w ktora strone przemiescic agenta
 )
 (deftemplate akcjaOminiecieBlokady
-       (slot idAgenta)
-       (slot idBlokady)
-       (slot kierunek) ;czy ominiecie z lewej czy z prawej
+    (slot idAgenta)
+    (slot idBlokady)
+    (slot kierunek) ;czy ominiecie z lewej czy z prawej
 )
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala
@@ -214,7 +214,8 @@
 )
 (deftemplate akcjaOdpoczywanie
 	(slot idAgenta)
-	(slot dlugoscOdpoczynku) ;w liczbie iteracji
+    (slot iteracjaPoczatek);numer iteracji, w ktorej zaczyna odpoczywac
+	(slot iteracjaKoniec) ;numer iteracji, w ktorej konczy odpoczynek
 )
 (deftemplate akcjaSpotkanieWroga
 	(slot idAgenta)

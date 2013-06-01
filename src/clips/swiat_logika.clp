@@ -1,6 +1,7 @@
 ;template'y kontrolne
 (deftemplate modyfikacjaPoslanca (slot idPoslanca))
 (deftemplate modyfikacjaPredkosciAgenta (slot idAgenta))
+(deftemplate zregenerowanoAgenta (slot idAgenta))
 
 ;REGULY
 ;regula okresla parametry poslanca po zakupieniu konia, czyli
@@ -8,6 +9,7 @@
 (defrule sprawdzKupienieKoniaPoslaniec
     ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
     ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
     ;pobieramy index kupionego konia z bazy wiedzy        
     (bind ?kupionyKon (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kupionyKon))))        
@@ -42,6 +44,7 @@
     ;jest to fakt kontrolny, ktory na poczatku kazdej tury NIE ISTNIEJE w bazie wiedzy
     ;jest on wstawiany dopiero po modyfikacji poslanca    
     (not (modyfikacjaPoslanca (idPoslanca ?poslaniecId)))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
     (bind ?sumaWagPaczek 0)
     (loop-for-count (?i 0 (- (length $?paczki) 1)) do 
@@ -87,6 +90,7 @@
 	) 
     ;fakt kontrolny, zapobiegajacy nieskonczonemu wywolywaniu tej reguly
     (not (modyfikacjaPredkosciAgenta (idAgenta ?id)))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>   
     (bind ?dodatPredkosc 0)    
     (if (not (eq (sub-string 1 4 ?id) "smok") )
@@ -146,6 +150,8 @@
 	)
     ?droga <- (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrOdc)(maxOdcinek ?maxOdcinek))    
     ?akcja <- (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?ileKratek)(docelowyGrod ?cel))
+    (iteracja ?iteracja)
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
     ;sprawdzamy o ile moze sie przesunac dany agent
     (if (<= ?ileKratek ?mozliwyRuch) 
@@ -174,8 +180,7 @@
     
         ;przesuwamy agenta odejmujac mu przy tym punkty ruchu
         (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac))(energia (- ?energia ?potrzebnaEnergia)))  
-        (printout t "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId ", ile kratek: " ?ilePrzesunac ", strata energii: " ?strE crlf)   
-        (retract ?akcja)
+        (printout t "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId ", ile kratek: " ?ilePrzesunac ", strata energii: " ?strE crlf) 
         
         ;po przesunieciu agenta znow musimy wyznaczyc dodatek predkosci zwiazany z polozeniem na nowym terenie
         (bind ?czyModyfikacjaPredkosciAgenta (any-factp ((?m modyfikacjaPredkosciAgenta)) (eq ?m:idAgenta ?id)))
@@ -186,8 +191,10 @@
         )        
     else    
          (printout t "Agent: " ?id " chcial sie przemiescic ale zabraklo mu energii - musi odpoczac" crlf)
-         (assert (akcjaOdpoczywanie (idAgenta ?id)(dlugoscOdpoczynku 1)))   
+         (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))   
     ) 
+    
+    (retract ?akcja)
     
 )
 
@@ -205,6 +212,8 @@
 	?akcja <- (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?kratki)(kierunek ?kierunek))
 	(test (>= ?ruch ?kratki))
 	(mapa ?height ?width)
+    (iteracja ?iteracja)
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
 	;okreslamy wspolrzedne nowej kratki, na ktorej bedzie stal agent po przemieszczeniu
 	;uwzgledniajac przy tym granice mapki - aby agent nie wyszedl poza mapke
@@ -264,9 +273,6 @@
     
     		(printout t "Przesunieto agenta: " ?id " w " ?kierunek ." Nowy x : " ?nowaKratkaX  ", nowy y: " ?nowaKratkaY ", strata energii: " ?strE crlf)
     	)
-	
-    	;usuwamy akcje przesuwania
-    	(retract ?akcja)
      
         ;po przesunieciu agenta znow musimy wyznaczyc dodatek predkosci zwiazany z polozeniem na nowym terenie
         (bind ?czyModyfikacjaPredkosciAgenta (any-factp ((?m modyfikacjaPredkosciAgenta)) (eq ?m:idAgenta ?id)))
@@ -277,8 +283,41 @@
         )
     else
         (printout t "Agent: " ?id " chcial sie przemiescic ale zabraklo mu energii - musi odpoczac" crlf)
-        (assert (akcjaOdpoczywanie (idAgenta ?id)(dlugoscOdpoczynku 1)))
+        (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))
     )
+    
+    ;usuwamy akcje przesuwania
+    (retract ?akcja)
+)
+
+;regula realizujaca odpoczynek agentów, regenerujac im przy tym energie
+(defrule odpoczywanie
+    (or	
+		?agent <- (poslaniec (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
+		?agent <- (rycerz (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
+		?agent <- (drwal (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
+		?agent <- (kupiec (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
+		?agent <- (zlodziej (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
+		?agent <- (smok (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
+	)
+    (iteracja ?aktualnaIteracja)
+    ?odpoczynek <- (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec ?iteracjaKoniec))
+    (not (zregenerowanoAgenta (idAgenta ?id)))
+=>
+    ;jesli agent nadal odpoczywa to przywracamy mu pewna liczbe energii,
+    ;ktora okresla pole odnawianieEnergii   
+    (if (> ?aktualnaIteracja ?iteracjaKoniec)
+    then 
+        (printout t "Agent: " ?id " skonczyl odpoczywac" crlf)
+        (retract ?odpoczynek)    
+    else  ;jezeli przestal odpoczywac to usuwamy akcjeOdpoczynku i 
+        (modify ?agent (energia (+ ?energia ?odnawianieE)))
+
+        ;tworzymy fakt kontrolny, ze juz w tej iteracji zregenerowano agenta
+        (assert (zregenerowanoAgenta (idAgenta ?id)))
+            
+        (printout t "Agent: " ?id " odpoczywa" crlf)        
+    )  
 )
 
 ; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
