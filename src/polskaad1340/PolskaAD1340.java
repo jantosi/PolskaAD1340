@@ -32,30 +32,31 @@ public class PolskaAD1340 {
         //bugfix, patrz http://stackoverflow.com/questions/13575224/comparison-method-violates-its-general-contract-timsort-and-gridlayout
 
         // TODO code application logic here
- //       OknoMapy om = new OknoMapy();
+        OknoMapy om = new OknoMapy();
 
         try {
-//            LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
-//            om.importBackgroundTileGrid(lm.getMap());
-//
-//            om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
-//            om.drawAllTiles();
-//
-//
-//            //test
-//            om.getForegroundTileGrid().get(0).set(0, om.tileFromNumber(1895));
-//
-//            ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(0, 0);
-//            om.addObjectToForegroundList(opp);
-//           // opp.move(20, 20);
-//
-//            om.drawAllTiles();
+            LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
+            om.importBackgroundTileGrid(lm.getMap());
+
+            om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
+            om.drawAllTiles();
+
+
+            //test
+            om.getForegroundTileGrid().get(0).set(0, om.tileFromNumber(1895));
+
+            ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(0, 0);
+            om.addObjectToForegroundList(opp);
+           // opp.move(20, 20);
+
+            om.drawAllTiles();
 
         	ClipsEnvironment clipsEnv = new ClipsEnvironment();
         	World world = new World(clipsEnv);
-        	world.loadFromClips();
-        	clipsEnv.displayFacts();
- //       	System.out.println(world);
+        	//world.loadFromClips();
+        	world.loadFromMap(lm);
+        	//clipsEnv.displayFacts();
+        	System.out.println(world);
  //       	clipsEnv.displayFacts();
 
 //            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
@@ -100,7 +101,7 @@ public class PolskaAD1340 {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
         }
 
- //       om.setVisible(true);
+        om.setVisible(true);
         System.out.println("done and done.");
 
     }

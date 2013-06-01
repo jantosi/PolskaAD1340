@@ -1,6 +1,10 @@
 package world;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import polskaad1340.InformacjeOSwiecie;
+import polskaad1340.LadowanieMapy;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
 
@@ -194,7 +198,90 @@ public class World {
 		}
 	}
 
-	
+	public void loadFromMap(LadowanieMapy mapLoad){
+		height= mapLoad.getMapSize();
+		width = mapLoad.getMapSize();
+		mapFrames = new MapFrame[height][width];
+		//kratki
+		int frameID =0;
+		for (int y = 0 ; y < height; y++){
+			for(int x = 0; x< width; x++){
+				MapFrame mf = new MapFrame();
+				mf.setX(x);
+				mf.setY(y);
+				mf.setId(frameID);
+				mapFrames[y][x]=mf;
+				frameID++;
+			}
+		}
+		//obiekty
+		int townId=1;
+		
+		for (int y = 0 ; y < height; y++){
+			for(int x = 0; x< width; x++){
+				MapFrame mf = mapFrames[y][x];
+			
+				if( InformacjeOSwiecie.getKluczeKafelka("las").contains(mapLoad.getMap().get(y).get(x)) ){
+					Tree tree = new Tree();
+					tree.setWorldFrame(mf.getId());
+					trees.add(tree);
+				}
+				else if(InformacjeOSwiecie.getKluczeKafelka("wycięty las").contains(mapLoad.getMap().get(y).get(x))){
+					Tree tree = new Tree();
+					tree.setCuted(true);
+					tree.setWorldFrame(mf.getId());
+					trees.add(tree);
+				}
+				else if(InformacjeOSwiecie.getKluczeKafelka("miasto1").contains(mapLoad.getMap().get(y).get(x))){
+					
+					if( !InformacjeOSwiecie.getKluczeKafelka("miasto1").contains(mapLoad.getMap().get(y).get(x-1))){
+						Random rand = new Random();
+						Town town1 = new Town();
+						town1.setMapFrame(mf.getId());
+						int population =rand.nextInt(900)+100;
+						float guards = (float)rand.nextDouble();
+						String name = "grod"+townId;
+						
+						town1.setNazwa(name);
+						town1.setGuardsActivity(guards);
+						town1.setPopulation(population);
+						
+						Town town2 = new Town();
+						town2.setMapFrame(mapFrames[y][x+1].getId());
+						town2.setNazwa(name);
+						town2.setGuardsActivity(guards);
+						town2.setPopulation(population);
+						
+						Town town3 = new Town();
+						town3.setMapFrame(mapFrames[y+1][x].getId());
+						town3.setNazwa(name);
+						town3.setGuardsActivity(guards);
+						town3.setPopulation(population);
+						
+						Town town4 = new Town();
+						town4.setMapFrame(mapFrames[y+1][x+1].getId());
+						town4.setNazwa(name);
+						town4.setGuardsActivity(guards);
+						town4.setPopulation(population);
+						
+						towns.add(town1);
+						towns.add(town2);
+						towns.add(town3);
+						towns.add(town4);
+						
+						townId++;
+					}
+			
+				}
+			}
+		}
+	}
+	/**
+	 * Na sztywno z placa pisane
+	 */
+	private void loadRoadsFromMap(){
+		
+	}
 	@Override
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
@@ -208,7 +295,7 @@ public class World {
 				}
 				else
 				{
-					
+					continue;
 				}
 			}
 		}

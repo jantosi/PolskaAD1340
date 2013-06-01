@@ -34,13 +34,13 @@ public class InformacjeOSwiecie {
 
         opisyKafelkow.put(1346,"krzewy");
 
-        opisyKafelkow.put(1808,"miasto");
-        opisyKafelkow.put(1840,"miasto");
+        opisyKafelkow.put(1808,"miasto1");
+        opisyKafelkow.put(1840,"miasto2");
 
-        opisyKafelkow.put(1940,"legowisko smoków");
-        opisyKafelkow.put(1941,"legowisko smoków");
-        opisyKafelkow.put(1972,"legowisko smoków");
-        opisyKafelkow.put(1973,"legowisko smoków");
+        opisyKafelkow.put(1940,"legowisko smoków1");
+        opisyKafelkow.put(1941,"legowisko smoków2");
+        opisyKafelkow.put(1972,"legowisko smoków3");
+        opisyKafelkow.put(1973,"legowisko smoków4");
 
     }
     
