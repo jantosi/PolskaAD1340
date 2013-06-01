@@ -2,14 +2,16 @@ package world;
 
 import java.util.ArrayList;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class Town {
 	private String nazwa;
 	private int mapFrame;
 	private int population;
-	private int guardsActivity;
+	private float guardsActivity;
 	
 	
-	public Town(String nazwa, int mapFrame, int population, int guardsActivity) {
+	public Town(String nazwa, int mapFrame, int population, float guardsActivity) {
 		super();
 		this.nazwa = nazwa;
 		this.mapFrame = mapFrame;
@@ -17,7 +19,21 @@ public class Town {
 		this.guardsActivity = guardsActivity;
 	}
 
+	public Town(){
 
+	}
+
+	public void loadFromClips(PrimitiveValue pv){
+		try {
+			this.mapFrame = pv.getFactSlot("idKratki").intValue();
+			this.population = pv.getFactSlot("liczbaMieszkancow").intValue();
+			this.guardsActivity = pv.getFactSlot("wspAktywnosciStrazy").floatValue();
+			this.nazwa = pv.getFactSlot("nazwa").getValue().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	@Override
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
@@ -58,10 +74,10 @@ public class Town {
 	public void setPopulation(int population) {
 		this.population = population;
 	}
-	public int getGuardsActivity() {
+	public float getGuardsActivity() {
 		return guardsActivity;
 	}
-	public void setGuardsActivity(int guardsActivity) {
+	public void setGuardsActivity(float guardsActivity) {
 		this.guardsActivity = guardsActivity;
 	}
 

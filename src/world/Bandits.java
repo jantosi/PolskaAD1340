@@ -1,18 +1,34 @@
 
 package world;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class Bandits {
 	private float packageLoss;
 	private float goldLoss;
 	private int mapFrame;
+
 	
+
 	public Bandits(float packageLoss, float goldLoss, int mapFrame) {
 		super();
 		this.packageLoss = packageLoss;
 		this.goldLoss = goldLoss;
 		this.mapFrame = mapFrame;
 	}
+	public Bandits(){
 
+	}
+	public void loadFromClips(PrimitiveValue pv){
+		try {
+			this.mapFrame= pv.getFactSlot("idKratki").intValue();
+			this.goldLoss = pv.getFactSlot("zabieraniePaczek").floatValue();
+			this.packageLoss = pv.getFactSlot("zabieranieZlota").floatValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	@Override
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
@@ -23,7 +39,7 @@ public class Bandits {
 		sbuf.append(")");
 		return sbuf.toString();
 	}
-	
+
 	public float getPackageLoss() {
 		return packageLoss;
 	}

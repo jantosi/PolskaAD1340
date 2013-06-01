@@ -1,17 +1,32 @@
 
 package world;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class MapFrame {
  private int id;
  private int x;
  private int y;
  
+ public MapFrame(){
+	 
+ }
  public MapFrame(int id, int x, int y) {
 	super();
 	this.id = id;
 	this.x = x;
 	this.y = y;
 }
+ public void loadFromClips(PrimitiveValue pv){
+	 try {
+		this.id= pv.getFactSlot("id").intValue();
+		 this.x = pv.getFactSlot("pozycjaX").intValue();
+		 this.y = pv.getFactSlot("pozycjaY").intValue();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+ }
 @Override
  public String toString() {
  	StringBuffer sbuf = new StringBuffer();

@@ -1,6 +1,8 @@
 
 package world;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class Cataclysm {
 	private int id;
 private int mapFrame;
@@ -18,6 +20,23 @@ public Cataclysm(int id, int mapFrame, float treesDestroy, int energyLoss,
 	this.treesDestroy = treesDestroy;
 	this.energyLoss = energyLoss;
 	this.populationLoss = populationLoss;
+}
+
+public Cataclysm(){
+
+}
+
+public void loadFromClips(PrimitiveValue pv){
+	try {
+		this.mapFrame= pv.getFactSlot("idKratki").intValue();
+		this.id = pv.getFactSlot("id").intValue();
+		this.treesDestroy =  pv.getFactSlot("niszczenieLasu").floatValue();
+		this.energyLoss =  pv.getFactSlot("oslabianieAgentow").intValue();
+		this.populationLoss =  pv.getFactSlot("zabijanieMieszkancow").intValue();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
 }
 
 @Override

@@ -1,5 +1,7 @@
 package world;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class Tree {
 private int worldFrame;
 private int type;
@@ -13,6 +15,21 @@ public Tree(int worldFrame, int type, boolean isCuted) {
 	this.isCuted = isCuted;
 }
 
+public Tree(){
+
+}
+
+public void loadFromClips(PrimitiveValue pv){
+	try {
+		this.worldFrame =  pv.getFactSlot("idKratki").intValue();
+		this.type =  pv.getFactSlot("rodzajDrzewa").intValue();
+		this.isCuted = Boolean.parseBoolean(pv.getFactSlot("stan").getValue().toString());
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
+}
 @Override
 public String toString() {
 	StringBuffer sbuf = new StringBuffer();

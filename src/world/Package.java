@@ -1,19 +1,35 @@
 package world;
 
-public class Package {
-private int id;
-private float weight;
-private int sourceTown;
-private int destinationTown;
+import CLIPSJNI.PrimitiveValue;
 
-public Package (int id,float weight,int sourceTown, int destinationTown){
+public class Package {
+private String id;
+private float weight;
+private String sourceTown;
+private String destinationTown;
+
+public Package (String id,float weight,String sourceTown, String destinationTown){
 	this.id=id;
 	this.weight=weight;
 	this.sourceTown=sourceTown;
 	this.destinationTown = destinationTown;
 }
 
+public Package(){
 
+}
+
+public void loadFromClips(PrimitiveValue pv){
+	try {
+		this.id = pv.getFactSlot("id").getValue().toString();
+		this.weight =  pv.getFactSlot("waga").floatValue();
+		this.sourceTown =  pv.getFactSlot("grodStart").getValue().toString();
+		this.destinationTown =  pv.getFactSlot("grodKoniec").getValue().toString();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
+}
 
 @Override
 public String toString() {
@@ -29,10 +45,10 @@ public String toString() {
 
 
 
-public int getId() {
+public String getId() {
 	return id;
 }
-public void setId(int id) {
+public void setId(String id) {
 	this.id = id;
 }
 public float getWeight() {
@@ -41,16 +57,16 @@ public float getWeight() {
 public void setWeight(float weight) {
 	this.weight = weight;
 }
-public int getSourceTown() {
+public String getSourceTown() {
 	return sourceTown;
 }
-public void setSourceTown(int sourceTown) {
+public void setSourceTown(String sourceTown) {
 	this.sourceTown = sourceTown;
 }
-public int getDestinationTown() {
+public String getDestinationTown() {
 	return destinationTown;
 }
-public void setDestinationTown(int destinationTown) {
+public void setDestinationTown(String destinationTown) {
 	this.destinationTown = destinationTown;
 }
 

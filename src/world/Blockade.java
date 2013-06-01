@@ -1,6 +1,8 @@
 
 package world;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class Blockade {
 private int id;
 private int mapFrame;
@@ -10,6 +12,20 @@ public Blockade(int id, int mapFrame) {
 	this.id = id;
 	this.mapFrame = mapFrame;
 }
+public Blockade(){
+
+}
+public void loadFromClips(PrimitiveValue pv){
+	try {
+		this.mapFrame= pv.getFactSlot("idKratki").intValue();
+		this.id = pv.getFactSlot("id").intValue();
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
+}
+
 @Override
 public String toString() {
 	StringBuffer sbuf = new StringBuffer();

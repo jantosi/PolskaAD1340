@@ -1,19 +1,21 @@
 package world;
 
+import CLIPSJNI.PrimitiveValue;
+
 public class Road {
-	private int id;
+	private String id;
 private int mapFrame;
-private int sourceTown;
-private int destinationTown;
-private int type;
+private String sourceTown;
+private String destinationTown;
+private String type;
 private boolean isFree;
 private int currentPartNo;
 private int maxPartNo;
 
 
 
-public Road(int id, int mapFrame, int sourceTown, int destinationTown,
-		int type, boolean isFree, int currentPartNo, int maxPartNo) {
+public Road(String id, int mapFrame, String sourceTown, String destinationTown,
+		String type, boolean isFree, int currentPartNo, int maxPartNo) {
 	super();
 	this.id = id;
 	this.mapFrame = mapFrame;
@@ -25,6 +27,25 @@ public Road(int id, int mapFrame, int sourceTown, int destinationTown,
 	this.maxPartNo = maxPartNo;
 }
 
+public Road(){
+
+}
+
+public void loadFromClips(PrimitiveValue pv){
+	try {
+		this.id = pv.getFactSlot("id").getValue().toString();
+		this.mapFrame =  pv.getFactSlot("idKratki").intValue();
+		this.sourceTown = pv.getFactSlot("skadGrod").getValue().toString();
+		this.destinationTown =  pv.getFactSlot("dokadGrod").getValue().toString();
+		this.type =  pv.getFactSlot("nawierzchnia").getValue().toString();
+		this.isFree =  Boolean.parseBoolean(pv.getFactSlot("platna").getValue().toString());
+		this.currentPartNo =  pv.getFactSlot("nrOdcinka").intValue();
+		this.maxPartNo =  pv.getFactSlot("maxOdcinek").intValue();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
+}
 @Override
 public String toString() {
 	StringBuffer sbuf = new StringBuffer();
@@ -42,28 +63,52 @@ public String toString() {
 	return sbuf.toString();
 }
 
+public String getId() {
+	return id;
+}
+
+public void setId(String id) {
+	this.id = id;
+}
+
+public int getCurrentPartNo() {
+	return currentPartNo;
+}
+
+public void setCurrentPartNo(int currentPartNo) {
+	this.currentPartNo = currentPartNo;
+}
+
+public int getMaxPartNo() {
+	return maxPartNo;
+}
+
+public void setMaxPartNo(int maxPartNo) {
+	this.maxPartNo = maxPartNo;
+}
+
 public int getMapFrame() {
 	return mapFrame;
 }
 public void setMapFrame(int mapFrame) {
 	this.mapFrame = mapFrame;
 }
-public int getSourceTown() {
+public String getSourceTown() {
 	return sourceTown;
 }
-public void setSourceTown(int sourceTown) {
+public void setSourceTown(String sourceTown) {
 	this.sourceTown = sourceTown;
 }
-public int getDestinationTown() {
+public String getDestinationTown() {
 	return destinationTown;
 }
-public void setDestinationTown(int destinationTown) {
+public void setDestinationTown(String destinationTown) {
 	this.destinationTown = destinationTown;
 }
-public int getType() {
+public String getType() {
 	return type;
 }
-public void setType(int type) {
+public void setType(String type) {
 	this.type = type;
 }
 public boolean isFree() {
