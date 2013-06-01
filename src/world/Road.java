@@ -35,8 +35,8 @@ public String toString() {
 	sbuf.append("(dokadGrod ").append(destinationTown).append(") ");
 	sbuf.append("(platna ").append(String.valueOf(isFree).toUpperCase()).append(") ");
 	sbuf.append("(nawierzchnia ").append(type).append(") ");
-	sbuf.append("(numerOdcinka ").append(currentPartNo).append(") ");
-	sbuf.append("(wszystkichOdcinkow ").append(maxPartNo).append(")");
+	sbuf.append("(nrOdcinka ").append(currentPartNo).append(") ");
+	sbuf.append("(maxOdcinek ").append(maxPartNo).append(")");
 	sbuf.append(")");
 	
 	return sbuf.toString();

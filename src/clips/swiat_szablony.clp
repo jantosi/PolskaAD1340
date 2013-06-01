@@ -5,16 +5,16 @@
 )
 ;chyba nie ma potrzby zeby droga by�a definiowana jako ca�y odcinek
 (deftemplate droga
-	(slot id)
+    (slot id)
 	(slot idKratki) 
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy te� bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
-	(slot numerOdcinka) ;na jakim odcinku drogi jste�my
-	(slot wszystkichOdcinkow) ;max nr odcinka
-)
+    (slot nrOdcinka)
+    (slot maxOdcinek)
 
+)
 
 (deftemplate blokada
 	(slot id)
@@ -22,15 +22,14 @@
 )
 
 (deftemplate grod
-	(slot id) ;to bedzie id grodu
-	(slot kratkaLGR) ;wsp. grodu na mapie - lewy gorny rog
-	(slot kratkaPDR) ;wsp. grodu na mapie - prawy dolny rog
+	(slot nazwa) ;to bedzie id grodu
+	(slot idKratki) ;
 	(slot liczbaMieszkancow)
 	(slot wspAktywnosciStrazy)
 )
 
 (deftemplate paczka
-        (slot id)
+    (slot id)
 	(slot waga)
 	(slot grodStart) ;grod, w ktorym paczka sie znajduje
 	(slot grodKoniec) ;grod, do ktorego paczka jest przeznaczona
@@ -45,6 +44,18 @@
 	(slot cena)
 )
 
+(deftemplate kon
+    (slot id)
+    (slot grod)
+    (slot idAgenta) ;id poslanca, ktory go ew posiada
+    (slot udzwig)
+    (slot predkosc)
+    (slot zmeczenieJezdzcy) ;o ile procent mniejsze sa straty jezdzcy w prownaniu do poruszania sie na pieszo
+    (slot cena)
+    (slot zuzycie)
+    (slot predkoscZuzycia)
+)
+
 ;jako, �e drzewa pokrywaja cala mape, nie ma sensu grupowac tego w lasy
 (deftemplate drzewo
 	(slot rodzajDrzewa)
@@ -54,8 +65,8 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
-	(slot kratkaLGR) ;wsp�rzedne obszaru kleski - lewy gorny rog
-	(slot bokObszaru) ;dlugosc boku kwadratowego obszaru kleski
+	(slot id) 
+	(slot idKratki) ;kratka na której jest klęska
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
 	(slot oslabianieAgentow) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
 	(slot zabijanieMieszkancow) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
@@ -82,6 +93,7 @@
 	(slot zloto)
 	(slot mozliwyRuch)
 	(slot idKratki)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent KUPIEC
@@ -97,6 +109,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent zlodziej
@@ -110,6 +123,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent drwal
@@ -127,6 +141,7 @@
 	(slot strataEnergii)
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent rycerz
@@ -142,6 +157,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent smok
@@ -156,6 +172,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;WYCINEK SWIATA, cyzli widzialna czesc swiata przez kazdego agenta
@@ -167,13 +184,18 @@
 ;AKCJE AGENTOW: wspolne
 (deftemplate akcjaPrzemieszczaniePoDrodze
 	(slot idAgenta)
-	(slot idDrogi)
-	(slot kierunek)	;w ktora strone sie przemieszcza
+	(slot ileKratek)
+    (slot docelowyGrod)
 )
 (deftemplate akcjaPrzemieszczanie
 	(slot idAgenta)
 	(slot ileKratek) ;o ile kratek przemiescic agenta
 	(slot kierunek) ;w ktora strone przemiescic agenta
+)
+(deftemplate akcjaOminiecieBlokady
+       (slot idAgenta)
+       (slot idBlokady)
+       (slot kierunek) ;czy ominiecie z lewej czy z prawej
 )
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala
@@ -197,7 +219,10 @@
 	(slot idAgenta) ;chodzi o id poslanca
 	(slot idPaczki) 
 )
-
+(deftemplate kupienieKonia
+    (slot idAgenta)
+    (slot idKonia)
+)
 ;AKCJE KUPIEC
 
 ;AKCJE Z�ODZIEJ

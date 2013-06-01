@@ -1,18 +1,20 @@
+
 package world;
 
 public class Cataclysm {
-private int upperLeftMapFrame;
-private int range;
+	private int id;
+private int mapFrame;
 private float treesDestroy;
 private int energyLoss;
 private int populationLoss;
 
 
-public Cataclysm(int upperLeftMapFrame, int range, float treesDestroy,
-		int energyLoss, int populationLoss) {
+
+public Cataclysm(int id, int mapFrame, float treesDestroy, int energyLoss,
+		int populationLoss) {
 	super();
-	this.upperLeftMapFrame = upperLeftMapFrame;
-	this.range = range;
+	this.id = id;
+	this.mapFrame = mapFrame;
 	this.treesDestroy = treesDestroy;
 	this.energyLoss = energyLoss;
 	this.populationLoss = populationLoss;
@@ -22,8 +24,8 @@ public Cataclysm(int upperLeftMapFrame, int range, float treesDestroy,
 public String toString() {
 	StringBuffer sbuf = new StringBuffer();
 	sbuf.append("(kleska ");
-	sbuf.append("(kratkaLGR ").append(upperLeftMapFrame).append(") ");
-	sbuf.append("(bokObszaru ").append(range).append(") ");
+	sbuf.append("(id ").append(id).append(") ");
+	sbuf.append("(idKratki ").append(mapFrame).append(") ");
 	sbuf.append("(niszczenieLasu ").append(treesDestroy).append(") ");
 	sbuf.append("(oslabianieAgentow ").append(energyLoss).append(") ");
 	sbuf.append("(zabijanieMieszkancow ").append(populationLoss).append(")");
@@ -31,18 +33,29 @@ public String toString() {
 	return sbuf.toString();
 }
 
+public int getId() {
+	return id;
+}
+
+public void setId(int id) {
+	this.id = id;
+}
+
+public int getMapFrame() {
+	return mapFrame;
+}
+
+public void setMapFrame(int mapFrame) {
+	this.mapFrame = mapFrame;
+}
+
 public int getUpperLeftMapFrame() {
-	return upperLeftMapFrame;
+	return mapFrame;
 }
 public void setUpperLeftMapFrame(int upperLeftMapFrame) {
-	this.upperLeftMapFrame = upperLeftMapFrame;
+	this.mapFrame = upperLeftMapFrame;
 }
-public int getRange() {
-	return range;
-}
-public void setRange(int range) {
-	this.range = range;
-}
+
 public float getTreesDestroy() {
 	return treesDestroy;
 }

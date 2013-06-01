@@ -3,19 +3,16 @@ package world;
 import java.util.ArrayList;
 
 public class Town {
-	private int id;
-	private int upperLeftMapFrame;
-	private int lowerRightMapFrame;
+	private String nazwa;
+	private int mapFrame;
 	private int population;
 	private int guardsActivity;
 	
 	
-	public Town(int id, int upperLeftMapFrame, int lowerRightMapFrame,
-			int population, int guardsActivity) {
+	public Town(String nazwa, int mapFrame, int population, int guardsActivity) {
 		super();
-		this.id = id;
-		this.upperLeftMapFrame = upperLeftMapFrame;
-		this.lowerRightMapFrame = lowerRightMapFrame;
+		this.nazwa = nazwa;
+		this.mapFrame = mapFrame;
 		this.population = population;
 		this.guardsActivity = guardsActivity;
 	}
@@ -25,9 +22,8 @@ public class Town {
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
 		sbuf.append("(grod ");
-		sbuf.append("(id ").append(id).append(") ");
-		sbuf.append("(kratkaLGR ").append(upperLeftMapFrame).append(") ");
-		sbuf.append("(kratkaPDR ").append(lowerRightMapFrame ).append(") ");
+		sbuf.append("(nazwa ").append(nazwa).append(") ");
+		sbuf.append("(idKratki ").append(mapFrame).append(") ");
 		sbuf.append("(liczbaMieszkancow ").append(population).append(") ");
 		sbuf.append("(wspAktywnosciStrazy ").append(guardsActivity).append(")");
 		sbuf.append(")");
@@ -36,24 +32,26 @@ public class Town {
 	}
 
 
-	public int getId() {
-		return id;
+	
+	public int getMapFrame() {
+		return mapFrame;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+
+	public void setMapFrame(int mapFrame) {
+		this.mapFrame = mapFrame;
 	}
-	public int getUpperLeftMapFrame() {
-		return upperLeftMapFrame;
+
+
+	public String getNazwa() {
+		return nazwa;
 	}
-	public void setUpperLeftMapFrame(int upperLeftMapFrame) {
-		this.upperLeftMapFrame = upperLeftMapFrame;
+
+
+	public void setNazwa(String nazwa) {
+		this.nazwa = nazwa;
 	}
-	public int getLowerRightMapFrame() {
-		return lowerRightMapFrame;
-	}
-	public void setLowerRightMapFrame(int lowerRightMapFrame) {
-		this.lowerRightMapFrame = lowerRightMapFrame;
-	}
+
 	public int getPopulation() {
 		return population;
 	}

@@ -102,11 +102,11 @@ public class PolskaAD1340 {
             
             Bandits bandits1 = new Bandits(0.5f, 0.5f, 1);
             Blockade blockade1 = new Blockade(1, 1);
-            Cataclysm cataclysm1 = new Cataclysm(1, 2, 0.5f, 2, 2);
+            Cataclysm cataclysm1 = new Cataclysm(1, 1, 0.5f, 10, 10);
             MapFrame mapFrame1 = new MapFrame(8, 3, 3);
             Package package1 = new Package(1,1.5f,1,2);
             Road road1 = new Road(1, 1, 1, 2, 1, true, 1, 12);
-            Town town1 = new Town(1, 1, 5, 100, 100);
+            Town town1 = new Town("grod2", 1, 100, 100);
             Tree tree1 = new Tree(1, 1, false);
             
             clipsEnv.getWorldEnv().assertString(bandits1.toString());
@@ -118,7 +118,8 @@ public class PolskaAD1340 {
             clipsEnv.getWorldEnv().assertString(town1.toString());
             clipsEnv.getWorldEnv().assertString(tree1.toString());
             clipsEnv.displayFacts();
-
+            
+            
 //            KnightStatistics ks = new KnightStatistics();
 //            ArrayList<Attack> attacks = new ArrayList<Attack>();
 //            attacks.add(new Attack(10, 10, "Attack1"));

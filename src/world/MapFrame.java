@@ -1,3 +1,4 @@
+
 package world;
 
 public class MapFrame {

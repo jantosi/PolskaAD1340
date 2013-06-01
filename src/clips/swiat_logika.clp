@@ -24,11 +24,43 @@
 			then
 				(bind ?widzialnaKratkaId (fact-slot-value (nth$ 1 (find-fact ((?k kratka)) (and (eq ?k:pozycjaX ?x) (eq ?k:pozycjaY ?y)))) id))
 				(assert (widzialnaCzescSwiata (idAgenta ?agentId)(idKratki ?widzialnaKratkaId)))
-				(printout t "Agent o id: " ?agentId " widzi kratke o id: " ?widzialnaKratkaId crlf)
+				;(printout t "Agent o id: " ?agentId " widzi kratke o id: " ?widzialnaKratkaId crlf)
 			)
-			
 		)
 	)
+)
+
+(defrule przemieszczaniePoDrodze
+    (or	
+		?agent <- (poslaniec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (rycerz (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (drwal (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (kupiec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (zlodziej (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (smok (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+	)
+    ?droga <- (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrOdc)(maxOdcinek ?maxOdcinek))    
+    ?akcja <- (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?ileKratek)(docelowyGrod ?cel))
+=>
+    (if (<= ?ileKratek ?mozliwyRuch) 
+    then
+        (bind ?ilePrzesunac ?ileKratek)
+    else
+        (bind ?ilePrzesunac ?mozliwyRuch)
+    )
+        
+    (if (> (+ ?nrOdc ?ilePrzesunac) ?maxOdcinek)
+    then     
+        (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc))
+    )
+    
+    (bind ?nrOdcPoPrzesunieciu (+ ?nrOdc ?ilePrzesunac))
+    (bind ?drogaPoPrzes (nth$ 1 (find-fact ((?d droga))(and (eq ?d:id ?drogaId) (eq ?d:nrOdcinka ?nrOdcPoPrzesunieciu)) )))
+    (bind ?nowaKratkaId (fact-slot-value ?drogaPoPrzes idKratki))
+      
+    (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac)))  
+    (printout t "stara kratka: " ?idKratki " nowa: " ?nowaKratkaId " ile: " ?ilePrzesunac crlf)   
+    (retract ?akcja)
 )
 
 ;przemieszczanie agentow po kratkach
@@ -96,13 +128,75 @@
 	
 		;zamieniamy id kratki, na ktorej stoi agent oraz odejmujemy mu punkty ruchu
 		(modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?ruch ?kratki)))
-		
+
 		(printout t "Przesunieto agenta o id: " ?id " w " ?kierunek ." Nowy x : " ?nowaKratkaX  ", nowy y: " ?nowaKratkaY crlf)
 	)
 	
 	;usuwamy akcje przesuwania
 	(retract ?akcja)
 )
+
+;regula okresla parametry poslanca po zakupieniu konia, czyli
+;po sprawdzeniu istnienia faktu kupienieKonia
+(defrule sprawdzKupienieKoniaPoslaniec
+    ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
+    ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
+=>
+    ;pobieramy index kupionego konia z bazy wiedzy        
+    (bind ?kupionyKon (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kupionyKon))))        
+     
+    ;wyciagamy poszczegolne wartosci pol z obiektu kon o okreslonym wyzej indeksie        
+    (bind ?konId (fact-slot-value ?kupionyKon id))        
+    (bind ?konUdzwig (fact-slot-value ?kupionyKon udzwig))
+    (bind ?konPredkosc (fact-slot-value ?kupionyKon predkosc))        
+    
+     ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
+    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc) (kon ?konId))   
+        
+    ;usuwamy akcje kupienia konia        
+    (retract ?kupienieKonia)
+)
+
+;regula aktualizujaca straty energii poslanca z uwzglednieniem paczek jakie niesie
+(defrule obliczStartyEnergiiPoslanca
+    ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
+    
+    ;sprawdzamy czy poslaniec w danej turze nie byl jeszcze modyfikowany
+    ;jest to fakt kontrolny, ktory na poczatku kazdej tury NIE ISTNIEJE w bazie wiedzy
+    ;jest on wstawiany dopiero po modyfikacji poslanca    
+    (not (modyfikacjaPoslanca ?poslaniecId))
+=>
+    (bind ?sumaWagPaczek 0)
+    (loop-for-count (?i 0 (- (length $?paczki) 1)) do 
+        ;pobieramy id kolejnej, posiadanej przez agenta paczki        
+        (bind ?paczkaId (nth$ (+ ?i 1) $?paczki))
+        
+        ;znajdujemy index faktu paczki w bazie wiedzy
+        (bind ?paczka (nth$ 1 (find-fact ((?p paczka))(eq ?p:id ?paczkaId))))
+                
+        (bind ?paczkaWaga (fact-slot-value ?paczka waga))
+        (bind ?sumaWagPaczek (+ ?sumaWagPaczek ?paczkaWaga))                
+    )
+   
+    (bind ?strataEnergii (round (+ (* ?sumaWagPaczek 0.5) 2)))
+    (if (not (eq ?kon nil))
+    then
+        (bind ?konIndex (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kon))))
+        (bind ?konZmeczenieJezdzcy (fact-slot-value ?konIndex zmeczenieJezdzcy))
+        
+        (bind ?strataEnergii (round (- ?strataEnergii (* ?strataEnergii ?konZmeczenieJezdzcy))))
+    )    
+    
+    (printout t "Poslaniec: " ?poslaniecId " - nowa starta energii: " ?strataEnergii crlf)
+    
+    (modify ?poslaniec (strataEnergii ?strataEnergii))
+    
+    ;fakt kontrolny, za pomoca ktorego oznaczamy, 
+    ;ze dany poslaniec w danej iteracji zostal juz zmodfikowany    
+    (assert (modyfikacjaPoslanca ?poslaniecId))
+    
+)
+
 
 ; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
 (defrule wezPaczke
@@ -120,10 +214,10 @@
 ; TODO: Sprawdzenie, czy ma miejsce w magazynie.
 (defrule kupTowarZGrodu
     ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
-    ?grod <- (grod (id ?idGrodu))
+    ?grod <- (grod (nazwa ?idGrodu))
     ?przedmiot <- (przedmiot (id ?idPrzedmiotu))
     ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
 =>
     (modify ?agent (przedmioty ?przedmioty ?idPrzedmiotu))
-    (printout t "Poslaniec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
+    (printout t "Kupiec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
 )
