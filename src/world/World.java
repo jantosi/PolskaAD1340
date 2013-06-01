@@ -229,7 +229,7 @@ public class World {
 				}
 				else if(InformacjeOSwiecie.getKluczeKafelka("wycięty las").contains(mapLoad.getMap().get(y).get(x))){
 					Tree tree = new Tree();
-					tree.setCuted(true);
+					tree.setState("sciete");
 					tree.setWorldFrame(mf.getId());
 					trees.add(tree);
 				}
