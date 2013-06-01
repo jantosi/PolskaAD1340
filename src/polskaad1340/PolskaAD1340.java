@@ -14,6 +14,7 @@ import world.Package;
 import world.Road;
 import world.Town;
 import world.Tree;
+import world.World;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
 
@@ -50,19 +51,24 @@ public class PolskaAD1340 {
 //
 //            om.drawAllTiles();
 
-            ClipsEnvironment clipsEnv = new ClipsEnvironment();
+        	ClipsEnvironment clipsEnv = new ClipsEnvironment();
+        	World world = new World(clipsEnv);
+        	world.loadFromClips();
+        	clipsEnv.displayFacts();
+ //       	System.out.println(world);
+ //       	clipsEnv.displayFacts();
 
-            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
-            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
-            for (int i = 0; i < pv1.size(); i++) {
-//                System.out.print("KRATKA ");
-//                System.out.print(" id: " + pv1.get(i).getFactSlot("id"));
-//                System.out.print(", X: " + pv1.get(i).getFactSlot("pozycjaX"));
-//                System.out.println(", Y: " + pv1.get(i).getFactSlot("pozycjaY"));
-            	Tree a = new Tree();
-            	a.loadFromClips(pv1.get(i));
-            	System.out.println(a);
-            }
+//            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
+//            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+//            for (int i = 0; i < pv1.size(); i++) {
+////                System.out.print("KRATKA ");
+////                System.out.print(" id: " + pv1.get(i).getFactSlot("id"));
+////                System.out.print(", X: " + pv1.get(i).getFactSlot("pozycjaX"));
+////                System.out.println(", Y: " + pv1.get(i).getFactSlot("pozycjaY"));
+//            	Tree a = new Tree();
+//            	a.loadFromClips(pv1.get(i));
+//            	System.out.println(a);
+//            }
 
 /*            CourierStatistics cs = new CourierStatistics();
             Courier agent = new Courier("poslaniec1", 10, cs);
@@ -79,29 +85,7 @@ public class PolskaAD1340 {
             agent.setGold(500);
             agent.buyAx(new Ax("Ax1", 10, 10, 10));
             agent.buyVehicle(new Vehicle("v1", 10, 10, 10));*/
-          
  
-//            
-//            Bandits bandits1 = new Bandits(0.5f, 0.5f, 1);
-//            Blockade blockade1 = new Blockade(1, 1);
-//            Cataclysm cataclysm1 = new Cataclysm(1, 1, 0.5f, 10, 10);
-//            MapFrame mapFrame1 = new MapFrame(8, 3, 3);
-//            Package package1 = new Package(1,1.5f,1,2);
-//            Road road1 = new Road("dr1", 1, "g1", "g2", "utwardzona", true, 1, 12);
-//            Town town1 = new Town("grod2", 1, 100, 100);
-//            Tree tree1 = new Tree(1, 1, false);
-//            
-//            clipsEnv.getWorldEnv().assertString(bandits1.toString());
-//            clipsEnv.getWorldEnv().assertString(blockade1.toString());
-//            clipsEnv.getWorldEnv().assertString(cataclysm1.toString());
-//            clipsEnv.getWorldEnv().assertString(mapFrame1.toString());
-//            clipsEnv.getWorldEnv().assertString(package1.toString());
- //          clipsEnv.getWorldEnv().assertString(road1.toString());
-//            clipsEnv.getWorldEnv().assertString(town1.toString());
-//            clipsEnv.getWorldEnv().assertString(tree1.toString());
-//            clipsEnv.displayFacts();
-            
-            
 //            KnightStatistics ks = new KnightStatistics();
 //            ArrayList<Attack> attacks = new ArrayList<Attack>();
 //            attacks.add(new Attack(10, 10, "Attack1"));

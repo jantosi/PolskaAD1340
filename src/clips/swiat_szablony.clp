@@ -3,6 +3,7 @@
 	(slot pozycjaX) ;pozycja kratki na mapie
 	(slot pozycjaY)
 )
+
 ;chyba nie ma potrzby zeby droga by�a definiowana jako ca�y odcinek
 (deftemplate droga
     (slot id)
