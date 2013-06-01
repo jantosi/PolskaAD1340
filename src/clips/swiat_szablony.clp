@@ -5,6 +5,7 @@
 )
 ;chyba nie ma potrzby zeby droga by�a definiowana jako ca�y odcinek
 (deftemplate droga
+    (slot id)
 	(slot idKratki) 
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
@@ -39,8 +40,7 @@
 
 (deftemplate grod
 	(slot nazwa) ;to bedzie id grodu
-	(slot kratkaLGR) ;wsp. grodu na mapie - lewy gorny rog
-	(slot kratkaPDR) ;wsp. grodu na mapie - prawy dolny rog
+	(slot idKratki) ;idKratki nalezacej do danego grodu
 	(slot liczbaMieszkancow)
 	(slot wspAktywnosciStrazy)
 )
@@ -111,6 +111,7 @@
 	(slot zloto)
 	(slot mozliwyRuch)
 	(slot idKratki)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent KUPIEC
@@ -126,6 +127,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent zlodziej
@@ -139,6 +141,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent drwal
@@ -156,6 +159,7 @@
 	(slot strataEnergii)
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent rycerz
@@ -171,6 +175,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;agent smok
@@ -185,6 +190,7 @@
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
 	(slot zloto)
+    (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
 
 ;WYCINEK SWIATA, cyzli widzialna czesc swiata przez kazdego agenta
@@ -196,13 +202,18 @@
 ;AKCJE AGENTOW: wspolne
 (deftemplate akcjaPrzemieszczaniePoDrodze
 	(slot idAgenta)
-	(slot idDrogi)
-	(slot kierunek)	;w ktora strone sie przemieszcza
+	(slot ileKratek)
+    (slot docelowyGrod)
 )
 (deftemplate akcjaPrzemieszczanie
 	(slot idAgenta)
 	(slot ileKratek) ;o ile kratek przemiescic agenta
 	(slot kierunek) ;w ktora strone przemiescic agenta
+)
+(deftemplate akcjaOminiecieBlokady
+       (slot idAgenta)
+       (slot idBlokady)
+       (slot kierunek) ;czy ominiecie z lewej czy z prawej
 )
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala

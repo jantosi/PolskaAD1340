@@ -24,10 +24,43 @@
 			then
 				(bind ?widzialnaKratkaId (fact-slot-value (nth$ 1 (find-fact ((?k kratka)) (and (eq ?k:pozycjaX ?x) (eq ?k:pozycjaY ?y)))) id))
 				(assert (widzialnaCzescSwiata (idAgenta ?agentId)(idKratki ?widzialnaKratkaId)))
-				(printout t "Agent o id: " ?agentId " widzi kratke o id: " ?widzialnaKratkaId crlf)
+				;(printout t "Agent o id: " ?agentId " widzi kratke o id: " ?widzialnaKratkaId crlf)
 			)
 		)
 	)
+)
+
+(defrule przemieszczaniePoDrodze
+    (or	
+		?agent <- (poslaniec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (rycerz (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (drwal (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (kupiec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (zlodziej (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (smok (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel))
+	)
+    ?droga <- (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrOdc)(maxOdcinek ?maxOdcinek))    
+    ?akcja <- (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?ileKratek)(docelowyGrod ?cel))
+=>
+    (if (<= ?ileKratek ?mozliwyRuch) 
+    then
+        (bind ?ilePrzesunac ?ileKratek)
+    else
+        (bind ?ilePrzesunac ?mozliwyRuch)
+    )
+        
+    (if (> (+ ?nrOdc ?ilePrzesunac) ?maxOdcinek)
+    then     
+        (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc))
+    )
+    
+    (bind ?nrOdcPoPrzesunieciu (+ ?nrOdc ?ilePrzesunac))
+    (bind ?drogaPoPrzes (nth$ 1 (find-fact ((?d droga))(and (eq ?d:id ?drogaId) (eq ?d:nrOdcinka ?nrOdcPoPrzesunieciu)) )))
+    (bind ?nowaKratkaId (fact-slot-value ?drogaPoPrzes idKratki))
+      
+    (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac)))  
+    (printout t "stara kratka: " ?idKratki " nowa: " ?nowaKratkaId " ile: " ?ilePrzesunac crlf)   
+    (retract ?akcja)
 )
 
 ;przemieszczanie agentow po kratkach
@@ -118,9 +151,7 @@
     (bind ?konPredkosc (fact-slot-value ?kupionyKon predkosc))        
     
      ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
-    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc) (kon ?konId))
-    
-    (printout t "kupienie: " ?kupienieKonia crlf)        
+    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc) (kon ?konId))   
         
     ;usuwamy akcje kupienia konia        
     (retract ?kupienieKonia)
@@ -156,7 +187,7 @@
         (bind ?strataEnergii (round (- ?strataEnergii (* ?strataEnergii ?konZmeczenieJezdzcy))))
     )    
     
-    (printout t "nowa starta energii: " ?strataEnergii crlf)
+    (printout t "Poslaniec: " ?poslaniecId " - nowa starta energii: " ?strataEnergii crlf)
     
     (modify ?poslaniec (strataEnergii ?strataEnergii))
     
