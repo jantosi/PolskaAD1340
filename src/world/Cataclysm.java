@@ -1,7 +1,8 @@
-
 package world;
 
+
 public class Cataclysm {
+
 	private int id;
 private int mapFrame;
 private float treesDestroy;
@@ -74,5 +75,4 @@ public int getPopulationLoss() {
 public void setPopulationLoss(int populationLoss) {
 	this.populationLoss = populationLoss;
 }
-
 }

@@ -17,6 +17,14 @@ import statistics.KnightStatistics;
 import statistics.MerchantStatistics;
 import statistics.ThiefStatistics;
 import statistics.WoodmanStatistics;
+import world.Bandits;
+import world.Blockade;
+import world.Cataclysm;
+import world.MapFrame;
+import world.Package;
+import world.Road;
+import world.Town;
+import world.Tree;
 
 import agents.Agent;
 import agents.Courier;
@@ -89,17 +97,39 @@ public class PolskaAD1340 {
             agent.setGold(500);
             agent.buyAx(new Ax("Ax1", 10, 10, 10));
             agent.buyVehicle(new Vehicle("v1", 10, 10, 10));*/
-            KnightStatistics ks = new KnightStatistics();
-            ArrayList<Attack> attacks = new ArrayList<Attack>();
-            attacks.add(new Attack(10, 10, "Attack1"));
-            attacks.add(new Attack(20, 20, "Attack2"));
-            attacks.add(new Attack(30, 30, "Attack3"));
-            Knight agent = new Knight("Knight1", attacks, ks);
-            agent.setGold(550);
+          
+ 
             
-            System.out.println(agent.toString());
-            clipsEnv.getWorldEnv().assertString(agent.toString());
+            Bandits bandits1 = new Bandits(0.5f, 0.5f, 1);
+            Blockade blockade1 = new Blockade(1, 1);
+            Cataclysm cataclysm1 = new Cataclysm(1, 1, 0.5f, 10, 10);
+            MapFrame mapFrame1 = new MapFrame(8, 3, 3);
+            Package package1 = new Package(1,1.5f,1,2);
+            Road road1 = new Road(1, 1, 1, 2, 1, true, 1, 12);
+            Town town1 = new Town("grod2", 1, 100, 100);
+            Tree tree1 = new Tree(1, 1, false);
             
+            clipsEnv.getWorldEnv().assertString(bandits1.toString());
+            clipsEnv.getWorldEnv().assertString(blockade1.toString());
+            clipsEnv.getWorldEnv().assertString(cataclysm1.toString());
+            clipsEnv.getWorldEnv().assertString(mapFrame1.toString());
+            clipsEnv.getWorldEnv().assertString(package1.toString());
+            clipsEnv.getWorldEnv().assertString(road1.toString());
+            clipsEnv.getWorldEnv().assertString(town1.toString());
+            clipsEnv.getWorldEnv().assertString(tree1.toString());
+            clipsEnv.displayFacts();
+            
+            
+//            KnightStatistics ks = new KnightStatistics();
+//            ArrayList<Attack> attacks = new ArrayList<Attack>();
+//            attacks.add(new Attack(10, 10, "Attack1"));
+//            attacks.add(new Attack(20, 20, "Attack2"));
+//            attacks.add(new Attack(30, 30, "Attack3"));
+//            Knight agent = new Knight("Knight1", attacks, ks);
+//            agent.setGold(550);
+//            
+//           // System.out.println(agent.toString());
+//            clipsEnv.getWorldEnv().assertString(agent.toString());
         } catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
         }
