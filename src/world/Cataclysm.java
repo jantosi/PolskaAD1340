@@ -4,6 +4,7 @@ package world;
 import CLIPSJNI.PrimitiveValue;
 
 public class Cataclysm {
+
 	private int id;
 private int mapFrame;
 private float treesDestroy;
@@ -22,6 +23,7 @@ public Cataclysm(int id, int mapFrame, float treesDestroy, int energyLoss,
 	this.populationLoss = populationLoss;
 }
 
+
 public Cataclysm(){
 
 }
@@ -38,6 +40,7 @@ public void loadFromClips(PrimitiveValue pv){
 	}
 
 }
+
 
 @Override
 public String toString() {
@@ -93,5 +96,4 @@ public int getPopulationLoss() {
 public void setPopulationLoss(int populationLoss) {
 	this.populationLoss = populationLoss;
 }
-
 }

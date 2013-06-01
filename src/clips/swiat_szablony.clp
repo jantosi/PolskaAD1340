@@ -8,6 +8,7 @@
 (deftemplate droga
     (slot id)
 	(slot idKratki) 
+	(slot prawdopodobienstoNapasci)
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy te� bezplatna
@@ -19,6 +20,7 @@
 
 (deftemplate blokada
 	(slot id)
+	(slot nazwa)
 	(slot idKratki) ;id kratki, na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 )
 
@@ -88,6 +90,7 @@
 	(multislot paczki)
 	(slot poleWidzenia) 
 	(slot predkosc) 
+	(slot dodatekPredkosc)
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -106,6 +109,7 @@
 	(slot idKratki)
 	(slot poleWidzenia) 
 	(slot predkosc) 
+	(slot dodatekPredkosc)
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -120,6 +124,7 @@
 	(slot idKratki) 
 	(slot poleWidzenia) 
 	(slot predkosc) 
+	(slot dodatekPredkosc)
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -138,6 +143,7 @@
 	(slot idKratki) 
 	(slot poleWidzenia) 
 	(slot predkosc) 
+	(slot dodatekPredkosc)
 	(slot energia) 
 	(slot strataEnergii)
 	(slot odnawianieEnergii) 
@@ -154,6 +160,7 @@
 	(slot idKratki) 
 	(slot poleWidzenia) 
 	(slot predkosc)
+	(slot dodatekPredkosc)
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -169,6 +176,7 @@
 	(slot idKratki) 
 	(slot poleWidzenia) 
 	(slot predkosc)
+	(slot dodatekPredkosc)
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -194,9 +202,9 @@
 	(slot kierunek) ;w ktora strone przemiescic agenta
 )
 (deftemplate akcjaOminiecieBlokady
-       (slot idAgenta)
-       (slot idBlokady)
-       (slot kierunek) ;czy ominiecie z lewej czy z prawej
+    (slot idAgenta)
+    (slot idBlokady)
+    (slot kierunek) ;czy ominiecie z lewej czy z prawej
 )
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala
@@ -207,7 +215,8 @@
 )
 (deftemplate akcjaOdpoczywanie
 	(slot idAgenta)
-	(slot dlugoscOdpoczynku) ;w liczbie iteracji
+    (slot iteracjaPoczatek);numer iteracji, w ktorej zaczyna odpoczywac
+	(slot iteracjaKoniec) ;numer iteracji, w ktorej konczy odpoczynek
 )
 (deftemplate akcjaSpotkanieWroga
 	(slot idAgenta)
