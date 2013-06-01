@@ -5,7 +5,7 @@ import CLIPSJNI.PrimitiveValue;
 public class Tree {
 	private int worldFrame;
 	private int type;
-	private String state ;
+	private String state;
 
 	public Tree(int worldFrame, int type, String state) {
 		super();

@@ -1,7 +1,5 @@
 package world;
 
-import java.util.ArrayList;
-
 import CLIPSJNI.PrimitiveValue;
 
 public class Town {
@@ -9,8 +7,7 @@ public class Town {
 	private int mapFrame;
 	private int population;
 	private float guardsActivity;
-	
-	
+
 	public Town(String nazwa, int mapFrame, int population, float guardsActivity) {
 		super();
 		this.nazwa = nazwa;
@@ -19,11 +16,11 @@ public class Town {
 		this.guardsActivity = guardsActivity;
 	}
 
-	public Town(){
+	public Town() {
 
 	}
 
-	public void loadFromClips(PrimitiveValue pv){
+	public void loadFromClips(PrimitiveValue pv) {
 		try {
 			this.mapFrame = pv.getFactSlot("idKratki").intValue();
 			this.population = pv.getFactSlot("liczbaMieszkancow").intValue();
@@ -34,6 +31,7 @@ public class Town {
 		}
 
 	}
+
 	@Override
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
@@ -43,26 +41,21 @@ public class Town {
 		sbuf.append("(liczbaMieszkancow ").append(population).append(") ");
 		sbuf.append("(wspAktywnosciStrazy ").append(guardsActivity).append(")");
 		sbuf.append(")");
-		
+
 		return sbuf.toString();
 	}
 
-
-	
 	public int getMapFrame() {
 		return mapFrame;
 	}
-
 
 	public void setMapFrame(int mapFrame) {
 		this.mapFrame = mapFrame;
 	}
 
-
 	public String getNazwa() {
 		return nazwa;
 	}
-
 
 	public void setNazwa(String nazwa) {
 		this.nazwa = nazwa;
@@ -71,12 +64,15 @@ public class Town {
 	public int getPopulation() {
 		return population;
 	}
+
 	public void setPopulation(int population) {
 		this.population = population;
 	}
+
 	public float getGuardsActivity() {
 		return guardsActivity;
 	}
+
 	public void setGuardsActivity(float guardsActivity) {
 		this.guardsActivity = guardsActivity;
 	}
