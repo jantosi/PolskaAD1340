@@ -286,9 +286,8 @@ public class World {
 	@Override
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
-		sbuf.append("(deffacts startup\n");
 		
-		sbuf.append(";kratki\n");
+		//sbuf.append(";kratki\n");
 		for (int i =0; i< height;i++){
 			for(int k =0; k< width;k++){
 				if (mapFrames[k][i] != null){
@@ -301,45 +300,51 @@ public class World {
 			}
 		}
 		
-		sbuf.append(";bandyci\n");
+		//sbuf.append(";bandyci\n");
 		for (Bandits temp:bandits){
 			sbuf.append(temp.toString()).append("\n");
 		}
 		
-		sbuf.append(";blokady\n");
+		//sbuf.append(";blokady\n");
 		for (Blockade temp:blockades){
 			sbuf.append(temp.toString()).append("\n");
 		}
 		
-		sbuf.append(";kleski\n");
+		//sbuf.append(";kleski\n");
 		for (Cataclysm temp:cataclysms){
 			sbuf.append(temp.toString()).append("\n");
 		}
 		
-		sbuf.append(";paczki\n");
+		//sbuf.append(";paczki\n");
 		for (Package temp:packages){
 			sbuf.append(temp.toString()).append("\n");
 		}
 		
-		sbuf.append(";drogi\n");
+		//sbuf.append(";drogi\n");
 		for (Road temp:roads){
 			sbuf.append(temp.toString()).append("\n");
 		}
 		
-		sbuf.append(";grody\n");
+		///sbuf.append(";grody\n");
 		for (Town temp:towns){
 			sbuf.append(temp.toString()).append("\n");
 		}
 
-		sbuf.append(";drzewa\n");
+		//sbuf.append(";drzewa\n");
 		for (Tree temp:trees){
 			sbuf.append(temp.toString()).append("\n");
 		}
 		
-		sbuf.append(")");
 		return sbuf.toString();
 	}
 
+	public void saveToClips(ClipsEnvironment clips) {
+		for (String fact : this.toString().split("\n")) {
+			System.out.println("fact: " + fact);
+			clips.getWorldEnv().assertString(fact);
+		}
+	}
+	
 	public MapFrame[][] getMapFrames() {
 		return mapFrames;
 	}
