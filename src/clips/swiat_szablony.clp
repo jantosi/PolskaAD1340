@@ -13,34 +13,17 @@
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
     (slot nrOdcinka)
     (slot maxOdcinek)
-)
-;template bardziej abstrakcyjny - opisuje polozenie drogi na mapie
-;(deftemplate drogaKratki 
-;	(slot id) ;numer, ktory pozwoli na p�niejsz� referencj� do tej drogi
-;	(slot idKratki) ;id kratki w kt�rej zawiera si� droga
-;	(slot numerOdcinka) ;okresla numer odcinka drogi
-;)
 
-;(deftemplate droga
-;	(slot id) ;odniesienie do id w template drogaKratki
-;	(slot skad) ;id pierwszej klatki na drodze
-;	(slot dokad) ;id ostatniej kratki na drodze
-;	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
-;	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
-;	(slot platna) ;czy droga jest platna czy te� bezplatna
-;	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
-;	(slot dlugosc) ;dlugosc drogi liczona w kratkach
-;)
+)
 
 (deftemplate blokada
-	;(slot droga) ;droga, na kt�rej znajduje sie blokada
-	(slot nazwa)
+	(slot id)
 	(slot idKratki) ;id kratki, na ktorej znajduje sie blokada, ktora nalezy do drogi, do ktorej odnosimy sie poprzez id
 )
 
 (deftemplate grod
 	(slot nazwa) ;to bedzie id grodu
-	(slot idKratki) ;idKratki nalezacej do danego grodu
+	(slot idKratki) ;
 	(slot liczbaMieszkancow)
 	(slot wspAktywnosciStrazy)
 )
@@ -82,8 +65,8 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
-	(slot kratkaLGR) ;wsp�rzedne obszaru kleski - lewy gorny rog
-	(slot bokObszaru) ;dlugosc boku kwadratowego obszaru kleski
+	(slot id) 
+	(slot idKratki) ;kratka na której jest klęska
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
 	(slot oslabianieAgentow) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
 	(slot zabijanieMieszkancow) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
@@ -91,8 +74,7 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate rozbojnicy
-	(slot idDrogi) ;droga, na ktorej sie znajduja
-	(slot odcinekDrogi) ;odcinek drogi, na ktorej sie znajduja
+	(slot idKratki) ;kratka, na ktorej sie znajduja
 	(slot zabieraniePaczek) ;procent paczek, ktore zabieraja poslancom
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom
 )

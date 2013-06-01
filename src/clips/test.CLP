@@ -72,8 +72,8 @@
 	(pozycjaY 10)
 ) 
 (kratka (id 19)
-	(pozycjaX 13)
-	(pozycjaY 10)
+	(pozycjaX 15)
+	(pozycjaY 12)
 )
 (poslaniec (id poslaniec1) 
 	(idKratki 13)
@@ -97,7 +97,7 @@
 )
 (akcjaPrzemieszczanie (idAgenta poslaniec1)
 	(ileKratek 2)
-	(kierunek prawo)
+	(kierunek dol)
 )
 (akcjaPrzemieszczanie (idAgenta rycerz1)
 	(ileKratek 1)
@@ -218,10 +218,10 @@
     (nrOdcinka 7)
     (maxOdcinek 7)
 )
-(akcjaPrzemieszczaniePoDrodze
-    (idAgenta poslaniec1)
-    (ileKratek 2)
-    (docelowyGrod grod2)
+(drzewo
+	(rodzajDrzewa dab)
+	(idKratki 19) ;id kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
+	(stan sciete) ;sciete czy niesciete
 )
 )
 

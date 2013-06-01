@@ -4,6 +4,27 @@ public class Tree {
 private int worldFrame;
 private int type;
 private boolean isCuted;
+
+
+public Tree(int worldFrame, int type, boolean isCuted) {
+	super();
+	this.worldFrame = worldFrame;
+	this.type = type;
+	this.isCuted = isCuted;
+}
+
+@Override
+public String toString() {
+	StringBuffer sbuf = new StringBuffer();
+	sbuf.append("(drzewo ");
+	sbuf.append("(rodzajDrzewa ").append(type).append(") ");
+	sbuf.append("(idKratki ").append(worldFrame).append(") ");
+	sbuf.append("(stan ").append(String.valueOf(isCuted).toUpperCase()).append(")");
+	sbuf.append(")");
+	
+	return sbuf.toString();
+}
+
 public int getWorldFrame() {
 	return worldFrame;
 }
