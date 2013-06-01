@@ -7,15 +7,15 @@
 (deftemplate droga
     (slot id)
 	(slot idKratki) 
-    (slot prawdopodobienstwoNapasci) ;z przedzialu (0 ; 1)
+	(slot prawdopodobienstoNapasci)
 	(slot skadGrod) ;nazwa grodu, z ktorego zaczyna sie dana droga
 	(slot dokadGrod) ;nazwa grodu, do ktorego prowadzi dana droga
 	(slot platna) ;czy droga jest platna czy te� bezplatna
 	(slot nawierzchnia) ;rodzaj nawierzchni drogi: utwardzona lub nieutwardzona
     (slot nrOdcinka)
     (slot maxOdcinek)
-)
 
+)
 
 (deftemplate blokada
 	(slot id)
@@ -25,7 +25,7 @@
 
 (deftemplate grod
 	(slot nazwa) ;to bedzie id grodu
-	(slot idKratki) ;idKratki nalezacej do danego grodu
+	(slot idKratki) ;
 	(slot liczbaMieszkancow)
 	(slot wspAktywnosciStrazy)
 )
@@ -67,8 +67,8 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
-	(slot id)
-	(slot idKratki) ;wsp�rzedne obszaru kleski - lewy gorny rog
+	(slot id) 
+	(slot idKratki) ;kratka na której jest klęska
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
 	(slot oslabianieAgentow) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
 	(slot zabijanieMieszkancow) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
@@ -76,8 +76,7 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate rozbojnicy
-	(slot idKratki) ;droga, na ktorej sie znajduja
-	(slot odcinekDrogi) ;odcinek drogi, na ktorej sie znajduja
+	(slot idKratki) ;kratka, na ktorej sie znajduja
 	(slot zabieraniePaczek) ;procent paczek, ktore zabieraja poslancom
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom
 )
@@ -89,8 +88,7 @@
 	(slot id) 
 	(multislot paczki)
 	(slot poleWidzenia) 
-	(slot predkosc)
-    (slot dodatekPredkosc) ;dodatek wynikajacy z tego po jakiej powierzchni sie porusza 
+	(slot predkosc) 
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -109,7 +107,6 @@
 	(slot idKratki)
 	(slot poleWidzenia) 
 	(slot predkosc) 
-    (slot dodatekPredkosc) ;dodatek wynikajacy z tego po jakiej powierzchni sie porusza 
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -123,8 +120,7 @@
 	(slot mozliwyRuch) 
 	(slot idKratki) 
 	(slot poleWidzenia) 
-	(slot predkosc)
-    (slot dodatekPredkosc) ;dodatek wynikajacy z tego po jakiej powierzchni sie porusza 
+	(slot predkosc) 
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -142,8 +138,7 @@
 	(slot mozliwyRuch) 
 	(slot idKratki) 
 	(slot poleWidzenia) 
-	(slot predkosc)
-    (slot dodatekPredkosc) ;dodatek wynikajacy z tego po jakiej powierzchni sie porusza 
+	(slot predkosc) 
 	(slot energia) 
 	(slot strataEnergii)
 	(slot odnawianieEnergii) 
@@ -160,7 +155,6 @@
 	(slot idKratki) 
 	(slot poleWidzenia) 
 	(slot predkosc)
-    (slot dodatekPredkosc) ;dodatek wynikajacy z tego po jakiej powierzchni sie porusza 
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
@@ -176,7 +170,6 @@
 	(slot idKratki) 
 	(slot poleWidzenia) 
 	(slot predkosc)
-    (slot dodatekPredkosc) ;dodatek wynikajacy z tego po jakiej powierzchni sie porusza 
 	(slot energia) 
 	(slot strataEnergii) 
 	(slot odnawianieEnergii) 
