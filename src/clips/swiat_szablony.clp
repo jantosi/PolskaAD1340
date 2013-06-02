@@ -201,10 +201,10 @@
 	(slot ileKratek) ;o ile kratek przemiescic agenta
 	(slot kierunek) ;w ktora strone przemiescic agenta
 )
-(deftemplate akcjaOminiecieBlokady
+(deftemplate akcjaZobaczenieBlokady
     (slot idAgenta)
     (slot idBlokady)
-    (slot kierunek) ;czy ominiecie z lewej czy z prawej
+    (slot podjetaAkcja) ;ominiecie lub postoj
 )
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala
@@ -223,7 +223,6 @@
 	(slot idWroga)
 	(slot podjetaAkcja) ;czyli co robi agent jak zobaczy wroga, mozliwe opcje: ucieczka, walka
 )
-
 ;AKCJE POSLANIEC
 (deftemplate akcjaWezPaczke
 	(slot idAgenta) ;chodzi o id poslanca
