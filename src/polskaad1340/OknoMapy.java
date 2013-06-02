@@ -6,6 +6,7 @@ package polskaad1340;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -432,12 +433,13 @@ public final class OknoMapy extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        d.height *= 0.8;
-        d.width *= 0.8;
+        //Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        //d.height *= 0.8;
+        //d.width *= 0.8;
 
-        this.setSize(d);
-        this.resizeContentsTo(d);
+        //this.setSize(d);
+        //this.resizeContentsTo(d);
+        this.setExtendedState(Frame.MAXIMIZED_BOTH);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
