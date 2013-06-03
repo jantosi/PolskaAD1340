@@ -322,6 +322,7 @@ public final class OknoMapy extends javax.swing.JFrame {
         tileInfoPanel.setLayout(new java.awt.CardLayout());
 
         tileInfoPanelLabel1.setText("jLabel1");
+        tileInfoPanelLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         tileInfoPanel.add(tileInfoPanelLabel1, "card2");
 
         contextPanel.add(tileInfoPanel);
@@ -452,8 +453,6 @@ public final class OknoMapy extends javax.swing.JFrame {
     }
     
     private void foregroundPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundPanelMouseClicked
-        System.out.println(evt);
-
         if (evt.getButton() == MouseEvent.BUTTON1) { //LMB
 
             contextPanel.setVisible(false);
@@ -465,9 +464,11 @@ public final class OknoMapy extends javax.swing.JFrame {
             int tileY = pointClicked.y / this.tileSize;
 
             JLabel clickedTile = this.backgroundTileGrid.get(tileY).get(tileX);
-
+            JLabel clickedFgTile = this.foregroundTileGrid.get(tileY).get(tileX);
+            
             int tileNum = getTileIDFromColor(clickedTile);
-
+            int tileFgNum = getTileIDFromColor(clickedFgTile);
+            
             Rectangle rect = new Rectangle(pointClicked.x, pointClicked.y, contextPanel.getWidth(),contextPanel.getHeight());
             if (rect.y > this.getContentPane().getHeight() - rect.height) {
                 rect.y -= rect.height;
@@ -479,18 +480,34 @@ public final class OknoMapy extends javax.swing.JFrame {
             contextPanel.setBounds(rect);
 
             JLabel iconForContextPanel = tileFromNumber(tileNum);
-            iconForContextPanel.setBorder(new LineBorder(Color.lightGray, 2));
+            JLabel iconFgForContextPanel = tileFromNumber(tileFgNum);
+            
             iconForContextPanel.setHorizontalAlignment(JLabel.CENTER);
             iconForContextPanel.setVerticalAlignment(JLabel.CENTER);
             
+            iconFgForContextPanel.setHorizontalAlignment(JLabel.CENTER);
+            iconFgForContextPanel.setVerticalAlignment(JLabel.CENTER);
+            
+            
             ((JPanel) contextPanel.getComponent(0)).add(iconForContextPanel);
+            ((JPanel) contextPanel.getComponent(0)).add(iconFgForContextPanel);
             
             JLabel opisIkony;
-            opisIkony = new JLabel(tileNum+": "+InformacjeOSwiecie.getOpisKafelka(tileNum));
+            opisIkony = new JLabel("<html><h3>Informacje o polu</h3></html>");
             opisIkony.setBorder(new EmptyBorder(0,8,0,0));
             
             iconDisplayPanel.add(opisIkony);
-            tileInfoPanelLabel1.setText("X: " + tileX + " Y: " + tileY);
+            
+            StringBuilder sb = new StringBuilder("<html>");
+            sb.append("Kliknięte pole: <pre>X: <b>").append(tileX).append("</b> Y: <b>").append(tileY).append("</b></pre>");
+            sb.append("<br/> ");
+            sb.append("Warstwa obiektów:<br/>");
+            sb.append(tileFgNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileFgNum)).append("</b>");
+            sb.append("<br/>Warstwa tła:<br/>");
+            sb.append(tileNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileNum)).append("</b>");
+            sb.append("</html>");
+            
+            tileInfoPanelLabel1.setText(sb.toString());
             contextPanel.setVisible(true);
         } else if (evt.getButton() == MouseEvent.BUTTON3) { //RMB
             contextPanel.setVisible(false);

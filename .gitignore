@@ -1,6 +1,7 @@
 *.png
 
 # NetBeans specific #
+project.properties
 nbproject/private/
 build/
 nbbuild/
