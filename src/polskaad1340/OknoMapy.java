@@ -35,56 +35,48 @@ public final class OknoMapy extends javax.swing.JFrame {
     private boolean isResizedNow = false;
     public BasicBorders.FieldBorder defaultBorder;
     private boolean isTileBordered = false;
-
     ArrayList<ObiektPierwszegoPlanu> foregroundList = new ArrayList<>();
-    
-    public int addObjectToForegroundList(ObiektPierwszegoPlanu opp)
-    {
+
+    public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
         this.foregroundList.add(opp);
-        
+
         opp.om = this;
         opp.OknoMapyListHandler = index;
         return index;
     }
-    
-    public void removeObjectFromForegroundList(ObiektPierwszegoPlanu opp)
-    {
+
+    public void removeObjectFromForegroundList(ObiektPierwszegoPlanu opp) {
         opp.om = null;
         opp.OknoMapyListHandler = -1;
         this.foregroundList.remove(opp);
     }
-    
-    public int isValidCoords(Point p)
-    {
-        if(p.x>=foregroundTileGrid.size() || p.x<0 || p.y>=foregroundTileGrid.get(0).size() || p.y<0)
-        {
+
+    public int isValidCoords(Point p) {
+        if (p.x >= foregroundTileGrid.size() || p.x < 0 || p.y >= foregroundTileGrid.get(0).size() || p.y < 0) {
             return -1; // out of bounds;
-        }
-        else if(getTileIDFromColor(foregroundTileGrid.get(p.y).get(p.x))!=0)
-        {
+        } else if (getTileIDFromColor(foregroundTileGrid.get(p.y).get(p.x)) != 0) {
             return 0; // tile taken
         }
         return 1;
     }
-    
-    public void moveForegroundObject(int x, int y, int dx, int dy)
-    {
-        if(isValidCoords(new Point(x+dx, y+dy))!=1) {
+
+    public void moveForegroundObject(int x, int y, int dx, int dy) {
+        if (isValidCoords(new Point(x + dx, y + dy)) != 1) {
             return;
         }
-        
+
         JLabel jl = this.foregroundTileGrid.get(y).get(x);
-        JLabel target = this.foregroundTileGrid.get(y+dy).get(x+dx);
-        
+        JLabel target = this.foregroundTileGrid.get(y + dy).get(x + dx);
+
         JLabel tmp = target;
-        this.foregroundTileGrid.get(y+dy).set(x+dx,jl);
+        this.foregroundTileGrid.get(y + dy).set(x + dx, jl);
         this.foregroundTileGrid.get(y).set(x, tmp);
-        
+
         this.drawAllTiles();
         this.repaint();
     }
-    
+
     public JLabel tileFromNumber(int num) {
         String path = "/images/" + num + ".png";
 
@@ -126,7 +118,19 @@ public final class OknoMapy extends javax.swing.JFrame {
         drawAllTiles();
         bulkPanel.setPreferredSize(this.getSize());
         contextPanel.setVisible(false);
+
+    }
+
+    public ObiektPierwszegoPlanu nowyObiektPierwszegoPlanu(int x, int y, int tileID) {
+        if(isValidCoords(new Point(x, y))!=1) {
+            return null;
+        }
+        this.getForegroundTileGrid().get(y).set(x, this.tileFromNumber(tileID));
+
+        ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(x, y);
+        this.addObjectToForegroundList(opp);
         
+        return opp;
     }
 
     public JLabel getTileAt(ArrayList<ArrayList<JLabel>> tileGrid, int tiledX, int tiledY) {
@@ -261,7 +265,7 @@ public final class OknoMapy extends javax.swing.JFrame {
     public JPanel getForegroundPanel() {
         return foregroundPanel;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -413,23 +417,19 @@ public final class OknoMapy extends javax.swing.JFrame {
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
 //        demo eventu       
-        if(evt.getKeyCode() == KeyEvent.VK_DOWN)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             this.foregroundList.get(0).move(0, 1);
         }
-        if(evt.getKeyCode() == KeyEvent.VK_UP)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
             this.foregroundList.get(0).move(0, -1);
         }
-        if(evt.getKeyCode() == KeyEvent.VK_LEFT)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
             this.foregroundList.get(0).move(-1, 0);
         }
-        if(evt.getKeyCode() == KeyEvent.VK_RIGHT)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
             this.foregroundList.get(0).move(1, 0);
         }
-        
+
         this.revalidate();
     }//GEN-LAST:event_formKeyReleased
 
@@ -447,17 +447,16 @@ public final class OknoMapy extends javax.swing.JFrame {
         //TODO
     }//GEN-LAST:event_formMouseClicked
 
-    public int getTileIDFromColor(JLabel tile)
-    {
+    public int getTileIDFromColor(JLabel tile) {
         return (tile.getBackground().getRGB() & 0xFFFFFF);
     }
-    
+
     private void foregroundPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundPanelMouseClicked
         if (evt.getButton() == MouseEvent.BUTTON1) { //LMB
 
             contextPanel.setVisible(false);
             ((JPanel) contextPanel.getComponent(0)).removeAll();
-            
+
 
             Point pointClicked = evt.getPoint();
             int tileX = pointClicked.x / this.tileSize;
@@ -465,11 +464,11 @@ public final class OknoMapy extends javax.swing.JFrame {
 
             JLabel clickedTile = this.backgroundTileGrid.get(tileY).get(tileX);
             JLabel clickedFgTile = this.foregroundTileGrid.get(tileY).get(tileX);
-            
+
             int tileNum = getTileIDFromColor(clickedTile);
             int tileFgNum = getTileIDFromColor(clickedFgTile);
-            
-            Rectangle rect = new Rectangle(pointClicked.x, pointClicked.y, contextPanel.getWidth(),contextPanel.getHeight());
+
+            Rectangle rect = new Rectangle(pointClicked.x, pointClicked.y, contextPanel.getWidth(), contextPanel.getHeight());
             if (rect.y > this.getContentPane().getHeight() - rect.height) {
                 rect.y -= rect.height;
             }
@@ -481,23 +480,23 @@ public final class OknoMapy extends javax.swing.JFrame {
 
             JLabel iconForContextPanel = tileFromNumber(tileNum);
             JLabel iconFgForContextPanel = tileFromNumber(tileFgNum);
-            
+
             iconForContextPanel.setHorizontalAlignment(JLabel.CENTER);
             iconForContextPanel.setVerticalAlignment(JLabel.CENTER);
-            
+
             iconFgForContextPanel.setHorizontalAlignment(JLabel.CENTER);
             iconFgForContextPanel.setVerticalAlignment(JLabel.CENTER);
-            
-            
+
+
             ((JPanel) contextPanel.getComponent(0)).add(iconForContextPanel);
             ((JPanel) contextPanel.getComponent(0)).add(iconFgForContextPanel);
-            
+
             JLabel opisIkony;
             opisIkony = new JLabel("<html><h3>Informacje o polu</h3></html>");
-            opisIkony.setBorder(new EmptyBorder(0,8,0,0));
-            
+            opisIkony.setBorder(new EmptyBorder(0, 8, 0, 0));
+
             iconDisplayPanel.add(opisIkony);
-            
+
             StringBuilder sb = new StringBuilder("<html>");
             sb.append("Kliknięte pole: <pre>X: <b>").append(tileX).append("</b> Y: <b>").append(tileY).append("</b></pre>");
             sb.append("<br/> ");
@@ -506,7 +505,7 @@ public final class OknoMapy extends javax.swing.JFrame {
             sb.append("<br/>Warstwa tła:<br/>");
             sb.append(tileNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileNum)).append("</b>");
             sb.append("</html>");
-            
+
             tileInfoPanelLabel1.setText(sb.toString());
             contextPanel.setVisible(true);
         } else if (evt.getButton() == MouseEvent.BUTTON3) { //RMB

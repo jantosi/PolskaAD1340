@@ -39,26 +39,20 @@ public class PolskaAD1340 {
             om.importBackgroundTileGrid(lm.getMap());
 
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
-            om.drawAllTiles();
 
-
-            //test
-            om.getForegroundTileGrid().get(0).set(0, om.tileFromNumber(1895));
-
-            ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(0, 0);
-            om.addObjectToForegroundList(opp);
-           // opp.move(20, 20);
+            ObiektPierwszegoPlanu opp;
+            opp = om.nowyObiektPierwszegoPlanu(0, 0, 1895);
 
             om.drawAllTiles();
 
-        	ClipsEnvironment clipsEnv = new ClipsEnvironment();
-        	World world = new World(clipsEnv);
-        	//world.loadFromClips();
-        	world.loadFromMap(lm);
-        	//clipsEnv.displayFacts();
-        	//System.out.println(world);
-        	world.saveToClips(clipsEnv);
-        	clipsEnv.displayFacts();
+            ClipsEnvironment clipsEnv = new ClipsEnvironment();
+            World world = new World(clipsEnv);
+            //world.loadFromClips();
+            world.loadFromMap(lm);
+            //clipsEnv.displayFacts();
+            //System.out.println(world);
+            world.saveToClips(clipsEnv);
+            clipsEnv.displayFacts();
 
 //            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
 //            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
@@ -72,22 +66,22 @@ public class PolskaAD1340 {
 //            	System.out.println(a);
 //            }
 
-/*            CourierStatistics cs = new CourierStatistics();
-            Courier agent = new Courier("poslaniec1", 10, cs);
-            agent.setCapacity(500);
-            agent.addPackage(new Pack("Pack1", 10));
-            agent.addPackage(new Pack("Pack2", 10));*/
-            
-           /* MerchantStatistics ms = new MerchantStatistics();
-            Merchant agent = new Merchant("kupiec1", 100, ms);*/
-          /*  ThiefStatistics ts = new ThiefStatistics();
-            Thief agent = new Thief("Thief1", ts);*/
-    /*        WoodmanStatistics ws = new WoodmanStatistics();
-            Woodman agent = new Woodman("Woodman1", 100, ws);
-            agent.setGold(500);
-            agent.buyAx(new Ax("Ax1", 10, 10, 10));
-            agent.buyVehicle(new Vehicle("v1", 10, 10, 10));*/
- 
+            /*            CourierStatistics cs = new CourierStatistics();
+             Courier agent = new Courier("poslaniec1", 10, cs);
+             agent.setCapacity(500);
+             agent.addPackage(new Pack("Pack1", 10));
+             agent.addPackage(new Pack("Pack2", 10));*/
+
+            /* MerchantStatistics ms = new MerchantStatistics();
+             Merchant agent = new Merchant("kupiec1", 100, ms);*/
+            /*  ThiefStatistics ts = new ThiefStatistics();
+             Thief agent = new Thief("Thief1", ts);*/
+            /*        WoodmanStatistics ws = new WoodmanStatistics();
+             Woodman agent = new Woodman("Woodman1", 100, ws);
+             agent.setGold(500);
+             agent.buyAx(new Ax("Ax1", 10, 10, 10));
+             agent.buyVehicle(new Vehicle("v1", 10, 10, 10));*/
+
 //            KnightStatistics ks = new KnightStatistics();
 //            ArrayList<Attack> attacks = new ArrayList<Attack>();
 //            attacks.add(new Attack(10, 10, "Attack1"));
