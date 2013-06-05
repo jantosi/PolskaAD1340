@@ -1,5 +1,8 @@
 package items;
 
+import CLIPSJNI.PrimitiveValue;
+import clips.ClipsEnvironment;
+
 /**
  * Klasa definiująca konie.
  * 
@@ -7,11 +10,11 @@ package items;
  */
 public class Horse extends Item {
 	
-	/**
-	 * Ułamek z przedzaiłu (0,1) określający o ile mniej energii na ruch zużywał będzie agent
-	 * w porównaniu do poruszania się pieszo
-	 */
-	protected double riderTiredness;
+    /**
+     * Ułamek z przedziału (0,1) określający o ile mniej energii na ruch zużywał będzie agent
+     * w porównaniu do poruszania się pieszo
+     */
+    protected double riderTiredness;
 	
     /**
      * Prędkość konia.
@@ -25,11 +28,16 @@ public class Horse extends Item {
      */
     protected int _capacity;
     
-    /**s
-     * Zmniejszenie zmęczenia agenta w procentach wyrażonych jako liczba np. 0.3 dla 30%.
-     * @var float
-     */
-    protected float _agentEnergyLossDecrease;
+    public Horse(PrimitiveValue pv, int agentId, ClipsEnvironment clipsEnv) {        
+        super.loadFromClips(pv, agentId, clipsEnv);
+        
+        try {
+            this.setVelocity(pv.getFactSlot("predkosc").intValue());
+            this.setCapacity(pv.getFactSlot("udzwig").intValue());
+        } catch (Exception e) {
+		e.printStackTrace();
+	}
+    }
     
     /**
      * Konstruktor. Ustawienie domyślnej prędkości, udźwigu, zmiejszenia zmęczenia agenta, 
@@ -40,12 +48,21 @@ public class Horse extends Item {
      * @param int price 
      * @param int wearSpeed 
      */
-    public Horse(String id, int velocity, int capacity, int agentEnergyLossDecrease, int price, int wearSpeed) {
+    public Horse(String id, int velocity, int capacity, int price, int wearSpeed) {
     	super(price, wearSpeed, id);
     	
     	this._velocity = velocity;
         this._capacity = capacity;
-        this._agentEnergyLossDecrease = agentEnergyLossDecrease;
+    }
+    
+    public Horse setAgentId(int agentId) {
+        this._agentId = agentId;
+        
+        return this;
+    }
+    
+    public int getAgentId() {
+        return this._agentId;
     }
     
     /**
@@ -85,31 +102,28 @@ public class Horse extends Item {
         
         return this;
     }
-    
-    /**
-     * Getter dla zmniejszenia zużycia agenta.
-     * @return float
-     */
-    public float getAgentEnergyLossDecrease() {
-        return this._agentEnergyLossDecrease;
-    }
-    
-    /**
-     * Setter dla zmniejszenia zużycia agenta.
-     * @param float agentEnergyLossDecrease
-     * @return Horse
-     */
-    public Horse setAgentEnergyLossDecrease(float agentEnergyLossDecrease) {
-        this._agentEnergyLossDecrease = agentEnergyLossDecrease;
-        
-        return this;
+
+    public double getRiderTiredness() {
+	return riderTiredness;
     }
 
-	public double getRiderTiredness() {
-		return riderTiredness;
-	}
-
-	public void setRiderTiredness(double riderTiredness) {
-		this.riderTiredness = riderTiredness;
-	}
+    public void setRiderTiredness(double riderTiredness) {
+	this.riderTiredness = riderTiredness;
+    }
+    
+    @Override
+    public String toString() {
+	StringBuffer sbuf = new StringBuffer();
+	sbuf.append("(kon ");
+	sbuf.append("(id ").append(this.getId()).append(") ");
+	sbuf.append("(grod ").append(this.getTown().getNazwa()).append(") ");
+	sbuf.append("(udzwig ").append(this.getCapacity()).append(") ");
+	sbuf.append("(predkosc ").append(this.getVelocity()).append(") ");
+	sbuf.append("(zmeczenieJezdzcy ").append(this.getRiderTiredness()).append(") ");
+	sbuf.append("(cena ").append(this.getPrice()).append(") ");
+	sbuf.append("(zuzycie ").append(this.getLevelOfWear()).append(") ");
+	sbuf.append("(predkoscZuzycia ").append(this.getWearSpeed()).append(") ");
+	sbuf.append(")");
+	return sbuf.toString();
+    }
 }

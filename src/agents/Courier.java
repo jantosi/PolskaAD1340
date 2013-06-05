@@ -3,6 +3,8 @@ package agents;
 import java.util.ArrayList;
 import items.*;
 import statistics.*;
+import CLIPSJNI.PrimitiveValue;
+import clips.ClipsEnvironment;
 
 /**
  * Klasa definiująca posłańca.
@@ -35,11 +37,15 @@ public class Courier extends Agent {
      */
     protected Horse _horse;
     
+    protected int mapFrame;
+    
+    protected ClipsEnvironment clipsEnv;
+    
     /**
      * Konstruktor. Nadanie domyślnego udźwigu.
      * @param capacity 
      */
-    public Courier(String id, int capacity, CourierStatistics_Interface stat) {
+    public Courier(String id, int capacity, CourierStatistics_Interface stat, int mapFrame, ClipsEnvironment clipsEnv) {
         super(id);
         
         this.setCapacity(capacity);
@@ -47,8 +53,72 @@ public class Courier extends Agent {
         this.setHorse(null);
         this._statistics = stat;
         this.setGold(0);
+        this.setMapFrame(mapFrame);
+        this.clipsEnv = clipsEnv;
     }
     
+    public Courier setMapFrame(int mapFrame) {
+        this.mapFrame = mapFrame;
+        
+        return this;
+    }
+    
+    public int getMapFrame() {
+        return this.mapFrame;
+    }
+    
+    
+    public void loadFromClips(PrimitiveValue pv){
+	try {
+		this.mapFrame = pv.getFactSlot("idKratki").intValue();
+		this.setVelocity(pv.getFactSlot("predkosc").intValue() + pv.getFactSlot("dodatekPredkosci").intValue());
+		this.setEnergy(pv.getFactSlot("energia").intValue());
+                this.setEnergyLoss(pv.getFactSlot("strataEnergii").intValue());
+                this.setEnergyRecovery(pv.getFactSlot("odnawianieEnergii").intValue());
+                this.setGold(pv.getFactSlot("zloto").intValue());
+                this.setFieldOfView(pv.getFactSlot("poleWidzenia").intValue());
+                this.setCapacity(pv.getFactSlot("udzwig").intValue());
+                
+                String horseFind = "(find-fact ((?k kon)) (eq ?k:id "+pv.getFactSlot("kon").intValue()+"))";
+                PrimitiveValue horsePv = this.clipsEnv.getWorldEnv().eval(horseFind);
+                Horse courierHourse = new Horse(horsePv, pv.getFactSlot("idAgenta").intValue(), this.clipsEnv);
+                this.setHorse(courierHourse);
+                
+                String packFind = "(find-all-facts ((?k paczka))) (eq ?k:id "+pv.getFactSlot("paczki").stringValue()+")";
+                PrimitiveValue packPv = this.clipsEnv.getWorldEnv().eval(packFind);
+                for(int i = 0; i < packPv.size(); i++) {
+                    Pack pack = new Pack();
+                    pack.loadFromClips(packPv.get(i));
+                    
+                    this.addPackage(pack);
+                }
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+    }
+	@Override
+	public String toString() {
+            StringBuffer packages = new StringBuffer();
+            for(int i = 0; i < this.getPackages().size(); i++) {
+                packages.append(" ").append(this.getPackages().get(i).getId());
+            }
+		StringBuffer sbuf = new StringBuffer();
+		sbuf.append("(poslaniec ");
+		sbuf.append("(idKratki ").append(this.getMapFrame()).append(") ");
+		sbuf.append("(udzwig ").append(this.getCapacity()).append(") ");
+		sbuf.append("(paczki").append(packages).append(") ");
+		sbuf.append("(id ").append(this.getId()).append(") ");
+		sbuf.append("(kon ").append((this.getHorse() != null ? this.getHorse().getId() : 0)).append(") ");
+		sbuf.append("(poleWidzenia ").append(this.getFieldOfView()).append(") ");
+		sbuf.append("(predkosc ").append(this.getVelocity()).append(") ");
+		sbuf.append("(dodatekPredkosci ").append((this.getHorse() != null ? this.getHorse().getVelocity() : 0)).append(") ");
+		sbuf.append("(energia ").append(this.getEnergy()).append(") ");
+		sbuf.append("(strataEnergii ").append(this.getEnergyLoss()).append(") ");
+		sbuf.append("(odnawianieEnergii ").append(this.getEnergyRecovery()).append(") ");
+		sbuf.append("(zloto ").append(this.getGold()).append(") ");
+		sbuf.append(")");
+		return sbuf.toString();
+	}
 
     
     

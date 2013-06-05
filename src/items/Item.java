@@ -1,4 +1,7 @@
 package items;
+import world.Town;
+import CLIPSJNI.PrimitiveValue;
+import clips.ClipsEnvironment;
 
 /**
  * Klasa abstrakcyjna definiująca narzędnia przedawane przez kupca.
@@ -7,10 +10,11 @@ package items;
  */
 abstract public class Item {
     
-	/**
-	 * Identyfikator paczki
-	 */
-	protected String _id;
+    /**
+     * Identyfikator przedmiotu
+     * @var int
+     */
+    protected String _id;
 	
     /**
      * Cena narzędnia.
@@ -31,20 +35,30 @@ abstract public class Item {
     protected int _wearSpeed;
     
     /**
+     * Identyfikator agenta.
+     * @var int
+     */
+    protected int _agentId;
+    
+    protected Town _town;
+    
+    /**
      * Konstruktor. Ustawienie domyślnej ceny i szybkości zużycia narzędzia.
-     * @param id TODO
+     * @param int id
      * @param int price
      * @param int wearSpeed 
      */
     public Item(int price, int wearSpeed, String id) {
-        this._price = price;
-        this._wearSpeed = wearSpeed;
-        this._id = id;
+        this.setPrice(price);
+        this.setWearSpeed(wearSpeed);
+        this.setId(id);
     }
     
     public Item(int price) {
-    	this._price = price;
+    	this.setPrice(price);
     }
+    
+    public Item() {}
     
     /**
      * Getter dla ceny.
@@ -111,11 +125,55 @@ abstract public class Item {
         this.setLevelOfWear(this.getLevelOfWear()-this.getWearSpeed());
     }
 
-	public String getId() {
-		return _id;
-	}
+    public String getId() {
+	return _id;
+    }
 
-	public void setId(String _id) {
-		this._id = _id;
+    public Item setId(String id) {
+	this._id = id;
+        return this;
+    }
+    
+    public int getAgentId() {
+        return this._agentId;
+    }
+    
+    public Item setAgentId(int agentId) {
+        this._agentId = agentId;
+        
+        return this;
+    }
+    
+    public Town getTown() {
+        return this._town;
+    }
+    
+    public Item setTown(Town town) {
+        this._town = town;
+        
+        return this;
+    }
+    
+    public void loadFromClips(PrimitiveValue pv, int agentId, ClipsEnvironment clipsEnv) {
+        try {
+            this.setPrice(pv.getFactSlot("cena").intValue());
+            this.setId(pv.getFactSlot("id").stringValue());
+            this.setWearSpeed(pv.getFactSlot("predkoscZuzycia").intValue());
+            this.setLevelOfWear(pv.getFactSlot("zuzycie").intValue());
+            
+            if(agentId > 0) {
+                this.setAgentId(agentId);
+            }
+            
+            if(clipsEnv != null) {
+                String townFind = "(find-fact ((?k grod)) (eq ?k:nazwa "+pv.getFactSlot("grod").stringValue()+"))";
+                PrimitiveValue townPv = clipsEnv.getWorldEnv().eval(townFind);
+                Town itemTown = new Town();
+                itemTown.loadFromClips(townPv);
+                this.setTown(itemTown);
+            }
+        } catch (Exception e) {
+		e.printStackTrace();
 	}
+    }
 }

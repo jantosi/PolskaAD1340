@@ -1,5 +1,7 @@
 package items;
 
+import CLIPSJNI.PrimitiveValue;
+
 /**
  * Klasa definiująca paczki posłańców.
  * 
@@ -25,6 +27,9 @@ public class Pack extends Item {
      */
     protected boolean _deliveried;
     
+    private String sourceTown;
+	private String destinationTown;
+    
     /**
      * Konstruktor. Nadanie paczce masy.
      * @param mass 
@@ -35,6 +40,56 @@ public class Pack extends Item {
     	this._mass = mass;
         this._deliveried = false;
     }
+    
+    public Pack(String id, int mass, String sourceTown, String destinationTown) {
+		this._id = id;
+		this._mass = mass;
+		this.sourceTown = sourceTown;
+		this.destinationTown = destinationTown;
+	}
+
+	public Pack() {
+
+	}
+	public void loadFromClips(PrimitiveValue pv) {
+		try {
+                    super.loadFromClips(pv, 0, null);
+			this._id = pv.getFactSlot("id").getValue().toString();
+			this._mass = pv.getFactSlot("waga").intValue();
+			this.sourceTown = pv.getFactSlot("grodStart").stringValue();
+			this.destinationTown = pv.getFactSlot("grodKoniec").stringValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	@Override
+	public String toString() {
+		StringBuffer sbuf = new StringBuffer();
+		sbuf.append("(paczka ");
+		sbuf.append("(id ").append(_id).append(") ");
+		sbuf.append("(waga ").append(_mass).append(") ");
+		sbuf.append("(grodStart ").append(sourceTown).append(") ");
+		sbuf.append("(grodKoniec ").append(destinationTown).append(")");
+		sbuf.append(")");
+		return sbuf.toString();
+	}
+	
+	public String getSourceTown() {
+		return sourceTown;
+	}
+
+	public void setSourceTown(String sourceTown) {
+		this.sourceTown = sourceTown;
+	}
+
+	public String getDestinationTown() {
+		return destinationTown;
+	}
+
+	public void setDestinationTown(String destinationTown) {
+		this.destinationTown = destinationTown;
+	}
     
     /**
      * Getter dla masy paczki.
