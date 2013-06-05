@@ -58,8 +58,9 @@ abstract public class Item {
     	this.setPrice(price);
     }
     
-    public Item() {}
-    
+    public Item(){
+    	
+    }
     /**
      * Getter dla ceny.
      * @return int

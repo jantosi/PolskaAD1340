@@ -4,13 +4,13 @@ import CLIPSJNI.PrimitiveValue;
 
 public class Cataclysm {
 
-	private int id;
+	private String id;
 	private int mapFrame;
 	private float treesDestroy;
 	private int energyLoss;
 	private int populationLoss;
 
-	public Cataclysm(int id, int mapFrame, float treesDestroy, int energyLoss, int populationLoss) {
+	public Cataclysm(String id, int mapFrame, float treesDestroy, int energyLoss, int populationLoss) {
 		super();
 		this.id = id;
 		this.mapFrame = mapFrame;
@@ -26,7 +26,7 @@ public class Cataclysm {
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
 			this.mapFrame = pv.getFactSlot("idKratki").intValue();
-			this.id = pv.getFactSlot("id").intValue();
+			this.id = pv.getFactSlot("id").getValue().toString();
 			this.treesDestroy = pv.getFactSlot("niszczenieLasu").floatValue();
 			this.energyLoss = pv.getFactSlot("oslabianieAgentow").intValue();
 			this.populationLoss = pv.getFactSlot("zabijanieMieszkancow").intValue();
@@ -49,11 +49,11 @@ public class Cataclysm {
 		return sbuf.toString();
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

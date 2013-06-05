@@ -4,13 +4,15 @@
  */
 package polskaad1340;
 
+import items.Pack;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import world.Blockade;
 import world.Cataclysm;
 import world.MapFrame;
-import world.Package;
+
 import world.Road;
 import world.Town;
 import world.Tree;
@@ -49,10 +51,12 @@ public class PolskaAD1340 {
             World world = new World(clipsEnv);
             //world.loadFromClips();
             world.loadFromMap(lm);
+            world.getPackages().add(new Pack("paczka1", 1, "Grod1", "Grod2"));
+           
             //clipsEnv.displayFacts();
-            //System.out.println(world);
+           // System.out.println(world);
             world.saveToClips(clipsEnv);
-            clipsEnv.displayFacts();
+           clipsEnv.displayFacts();
 
 //            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
 //            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
