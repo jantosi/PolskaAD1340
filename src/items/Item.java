@@ -46,6 +46,9 @@ abstract public class Item {
     	this._price = price;
     }
     
+    public Item(){
+    	
+    }
     /**
      * Getter dla ceny.
      * @return int

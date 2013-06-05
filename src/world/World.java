@@ -1,5 +1,7 @@
 package world;
 
+import items.Pack;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,7 +17,7 @@ public class World {
 	private ArrayList<Bandits> bandits = new ArrayList<Bandits>();
 	private ArrayList<Blockade> blockades = new ArrayList<Blockade>();
 	private ArrayList<Cataclysm> cataclysms = new ArrayList<Cataclysm>();
-	private ArrayList<Package> packages = new ArrayList<Package>();
+	private ArrayList<Pack> packages = new ArrayList<Pack>();
 	private ArrayList<Road> roads = new ArrayList<Road>();
 	private ArrayList<Town> towns = new ArrayList<Town>();
 	private ArrayList<Tree> trees = new ArrayList<Tree>();
@@ -136,7 +138,7 @@ public class World {
 			PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
 
 			for (int i = 0; i < pv1.size(); i++) {
-				Package temp = new Package();
+				Pack temp = new Pack();
 				temp.loadFromClips(pv1.get(i));
 				this.packages.add(temp);
 			}
@@ -313,7 +315,7 @@ public class World {
 		}
 
 		// sbuf.append(";paczki\n");
-		for (Package temp : packages) {
+		for (Pack temp : packages) {
 			sbuf.append(temp.toString()).append("\n");
 		}
 
@@ -324,6 +326,7 @@ public class World {
 
 		// /sbuf.append(";grody\n");
 		for (Town temp : towns) {
+
 			sbuf.append(temp.toString()).append("\n");
 		}
 
@@ -337,7 +340,7 @@ public class World {
 
 	public void saveToClips(ClipsEnvironment clips) {
 		for (String fact : this.toString().split("\n")) {
-			System.out.println("fact: " + fact);
+			//System.out.println("fact: " + fact);
 			clips.getWorldEnv().assertString(fact);
 		}
 	}
@@ -374,11 +377,11 @@ public class World {
 		this.cataclysms = cataclysms;
 	}
 
-	public ArrayList<Package> getPackages() {
+	public ArrayList<Pack> getPackages() {
 		return packages;
 	}
 
-	public void setPackages(ArrayList<Package> packages) {
+	public void setPackages(ArrayList<Pack> packages) {
 		this.packages = packages;
 	}
 

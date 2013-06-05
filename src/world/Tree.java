@@ -4,10 +4,10 @@ import CLIPSJNI.PrimitiveValue;
 
 public class Tree {
 	private int worldFrame;
-	private int type;
+	private String type;
 	private String state;
 
-	public Tree(int worldFrame, int type, String state) {
+	public Tree(int worldFrame, String type, String state) {
 		super();
 		this.worldFrame = worldFrame;
 		this.type = type;
@@ -21,7 +21,7 @@ public class Tree {
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
 			this.worldFrame = pv.getFactSlot("idKratki").intValue();
-			this.type = pv.getFactSlot("rodzajDrzewa").intValue();
+			this.type = pv.getFactSlot("rodzajDrzewa").getValue().toString();
 			this.state = pv.getFactSlot("stan").getValue().toString();
 
 		} catch (Exception e) {
@@ -50,11 +50,11 @@ public class Tree {
 		this.worldFrame = worldFrame;
 	}
 
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

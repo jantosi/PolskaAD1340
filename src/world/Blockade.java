@@ -3,10 +3,10 @@ package world;
 import CLIPSJNI.PrimitiveValue;
 
 public class Blockade {
-	private int id;
+	private String id;
 	private int mapFrame;
 
-	public Blockade(int id, int mapFrame) {
+	public Blockade(String id, int mapFrame) {
 		super();
 		this.id = id;
 		this.mapFrame = mapFrame;
@@ -19,7 +19,7 @@ public class Blockade {
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
 			this.mapFrame = pv.getFactSlot("idKratki").intValue();
-			this.id = pv.getFactSlot("id").intValue();
+			this.id = pv.getFactSlot("id").getValue().toString();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,11 +37,11 @@ public class Blockade {
 		return sbuf.toString();
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
