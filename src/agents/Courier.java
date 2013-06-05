@@ -96,29 +96,6 @@ public class Courier extends Agent {
 		e.printStackTrace();
 	}
     }
-	@Override
-	public String toString() {
-            StringBuffer packages = new StringBuffer();
-            for(int i = 0; i < this.getPackages().size(); i++) {
-                packages.append(" ").append(this.getPackages().get(i).getId());
-            }
-		StringBuffer sbuf = new StringBuffer();
-		sbuf.append("(poslaniec ");
-		sbuf.append("(idKratki ").append(this.getMapFrame()).append(") ");
-		sbuf.append("(udzwig ").append(this.getCapacity()).append(") ");
-		sbuf.append("(paczki").append(packages).append(") ");
-		sbuf.append("(id ").append(this.getId()).append(") ");
-		sbuf.append("(kon ").append((this.getHorse() != null ? this.getHorse().getId() : 0)).append(") ");
-		sbuf.append("(poleWidzenia ").append(this.getFieldOfView()).append(") ");
-		sbuf.append("(predkosc ").append(this.getVelocity()).append(") ");
-		sbuf.append("(dodatekPredkosci ").append((this.getHorse() != null ? this.getHorse().getVelocity() : 0)).append(") ");
-		sbuf.append("(energia ").append(this.getEnergy()).append(") ");
-		sbuf.append("(strataEnergii ").append(this.getEnergyLoss()).append(") ");
-		sbuf.append("(odnawianieEnergii ").append(this.getEnergyRecovery()).append(") ");
-		sbuf.append("(zloto ").append(this.getGold()).append(") ");
-		sbuf.append(")");
-		return sbuf.toString();
-	}
 
     
     
@@ -250,7 +227,7 @@ public class Courier extends Agent {
         int energyLoss = super.getEnergyLoss() + (int)Math.round(this._packages.getTotalWeight() * 0.5);
         
         if(this.getHorse() != null) {
-            energyLoss = Math.round(energyLoss * this.getHorse().getAgentEnergyLossDecrease());
+            energyLoss = Math.round(energyLoss * (float)this.getHorse().getRiderTiredness());
         }
         
         return energyLoss;
