@@ -13,6 +13,7 @@ import clips.ClipsEnvironment;
 public class World {
 	public int height = 40;
 	public int width = 40;
+	public int iteration;
 	private MapFrame[][] mapFrames;
 	private ArrayList<Bandits> bandits = new ArrayList<Bandits>();
 	private ArrayList<Blockade> blockades = new ArrayList<Blockade>();
@@ -45,6 +46,7 @@ public class World {
 		loadRoads();
 		loadTowns();
 		loadTrees();
+		
 	}
 
 	public void printoutMapFrames() {
@@ -335,6 +337,7 @@ public class World {
 			sbuf.append(temp.toString()).append("\n");
 		}
 
+		sbuf.append("(itearcja "+iteration+")");
 		return sbuf.toString();
 	}
 
