@@ -25,10 +25,47 @@ public class World {
 
 	private ClipsEnvironment clipsEnv;
 
-	public World(ClipsEnvironment clipsEnv) {
+	public World(ClipsEnvironment clipsEnv, LadowanieMapy ladowanieMapy) {
 		this.clipsEnv = clipsEnv;
+		this.loadFromMap(ladowanieMapy);
 	}
 
+	public void randomBlockades() {
+		this.blockades = new ArrayList<Blockade>();
+		
+		Random random = new Random();
+		int blockades = random.nextInt(6) + 1;
+		for (int i = 0; i < blockades; i++) {
+			//TODO blokady maja byc  losowane na drogach - bedzie to mozliwe po wczytaniu drog
+			//this.blockades.add(new Blockade("blockade" + (i+1), mapFrame)
+		}
+	}
+	
+	public void randomCataclysms() {
+		this.cataclysms = new ArrayList<Cataclysm>();
+		Random random = new Random();
+		int cataclysmsNum = random.nextInt(6) + 1;
+		int size = random.nextInt(3) + 3;
+			
+		for (int i = 0; i < cataclysmsNum; i++) {
+			int frameStartX = random.nextInt(this.width);
+			int frameStartY = random.nextInt(this.height);
+			
+			double randomizedTreesDestroy = random.nextDouble();
+			int randomizedEnergyLoss = random.nextInt(20) + 4;
+			int randomizedPopulationLoss = random.nextInt(10) + 4;
+			
+			for (int x = frameStartX; x < (frameStartX + size); x++) {
+				for (int y = frameStartY; y < (frameStartY + size); y++) {
+					if (x < this.width && x >= 0 && y < this.height && y >= 0) {
+						Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i+1), this.mapFrames[x][y].getId(), randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss);
+						this.cataclysms.add(tmpCataclysm);
+					}
+				}
+			}			
+		}
+	}
+	
 	public void loadFromClips() {
 		bandits.clear();
 		blockades.clear();
@@ -46,7 +83,6 @@ public class World {
 		loadRoads();
 		loadTowns();
 		loadTrees();
-		
 	}
 
 	public void printoutMapFrames() {

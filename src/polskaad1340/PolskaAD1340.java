@@ -48,9 +48,9 @@ public class PolskaAD1340 {
             om.drawAllTiles();
 
             ClipsEnvironment clipsEnv = new ClipsEnvironment();
-            World world = new World(clipsEnv);
+            World world = new World(clipsEnv, lm);
+            world.randomCataclysms();
             //world.loadFromClips();
-            world.loadFromMap(lm);
             world.getPackages().add(new Pack("paczka1", 1, "Grod1", "Grod2"));
            
             //clipsEnv.displayFacts();
