@@ -56,7 +56,7 @@ public class PolskaAD1340 {
             //clipsEnv.displayFacts();
             // System.out.println(world);
             world.saveToClips(clipsEnv);
-            clipsEnv.displayFacts();
+            //clipsEnv.displayFacts();
 
 //            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
 //            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
