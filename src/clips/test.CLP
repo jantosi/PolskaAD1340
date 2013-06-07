@@ -231,11 +231,7 @@
     (nrOdcinka 7)
     (maxOdcinek 7)
 )
-(drzewo
-	(rodzajDrzewa dab)
-	(idKratki 19) ;id kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
-	(stan sciete) ;sciete czy niesciete
-)
+
 (iteracja 11)
 (akcjaOdpoczywanie (idAgenta poslaniec1)(iteracjaKoniec 10))
 (blokada 
@@ -247,6 +243,38 @@
     (idBlokady blokada1)
     (podjetaAkcja ominiecie)
 )
+(drzewo
+	(rodzajDrzewa buk)
+	(idKratki 19) ;id kratki, na ktorej sie znajduje - zajmuje tylko 1 kratke
+	(stan niesciete) ;sciete czy niesciete
+)
+( woz
+    ( id woz1)
+    ( udzwig 20)
+    ( cena 20)
+)
+( siekiera
+    (id siekiera1)
+    (typ tytanowa)
+    (cena 20)   
+    (zuzycie 90 )
+) 
+( drwal 
+	(id drwal1)  
+	(idKratki 19) 
+    (predkosc 1)
+    (scieteDrewno drewno1)
+    (siekiera siekiera1)
+    (woz woz1) 
+    (udzwig 10)
+    (maxUdzwig 100)
+    (energia 100)
+    (strataEnergii 5)
+)
+( akcjaZetnijDrzewo
+	(idAgenta drwal1) ;chodzi oczywi�cie o id drwala
+)
+
 )
 
 

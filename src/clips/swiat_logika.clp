@@ -512,7 +512,166 @@
 
     (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
 )
+;regula do sciecia drzew
+(defrule zetnijDrzewo
+    ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) 
+     (siekiera ?idSiekiery) (udzwig ?udzwig) ( maxUdzwig ?maxUdzwig) (energia ?energia) (strataEnergii ?strataEnergii))
+    ?drzewo <- (drzewo (idKratki ?idKratki) (stan ?stanDrzewa) (rodzajDrzewa ?rodzajDrzewa)) 
+    ?siekiera <- (siekiera (id ?idSiekiery) (typ ?typSiekiery) (zuzycie ?zuzycie))
+    ?akcja <- (akcjaZetnijDrzewo (idAgenta ?id))
+    (iteracja ?iteracja)
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
+=>
+    
 
+     (if (eq ?stanDrzewa sciete)
+    then 
+        (printout t "Drwal: " ?id " chcial sciac sciete drzewo" crlf)  
+    else  
+       
+        (if ( eq ?rodzajDrzewa dab)
+        then
+            (bind ?cenaDrewna 100)
+            (bind ?wagaDrewna 30)
+        )
+        (if ( eq ?rodzajDrzewa buk) 
+        then
+        
+            (bind ?cenaDrewna 70)
+            (bind ?wagaDrewna 20)
+        )
+        (if ( eq ?rodzajDrzewa sosna) 
+        then
+        
+            (bind ?cenaDrewna 40)
+            (bind ?wagaDrewna 10)
+        )
+       
+         (if ( eq ?typSiekiery zelazna)
+        then
+            (if  ( >= ?maxUdzwig (+ ?udzwig ?wagaDrewna) )
+            then
+                (if ( >= (- ?energia (* 2 ?strataEnergii)) 0 )
+                then
+                (bind ?idDrewna_a (str-cat ?id "_" ?iteracja a))
+                (assert (drewno (id ?idDrewna_a) (cena ?cenaDrewna) ( waga ?wagaDrewna) ) )
+                
+                (modify ?drzewo  (stan sciete) )
+                 ;zuzycie siekiery
+                (if ( >= ( + ?zuzycie 10) 100) 
+                then
+                    ;tracimy siekierę
+                    (retract ?siekiera)
+                    (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a)
+                            (udzwig  (+ ?udzwig ?wagaDrewna))
+                            (energia ( - ?energia (* 2 ?strataEnergii)))
+                            (siekiera nil)
+                    )
+                 (printout t "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
+                else
+                    (modify ?siekiera (zuzycie (+ ?zuzycie 10)))
+                
+                    (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a)
+                            (udzwig  (+ ?udzwig ?wagaDrewna))
+                            (energia ( - ?energia (* 2 ?strataEnergii)))
+                    )
+                )
+                (printout t "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
+                else
+                (printout t "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
+           )
+            else
+            (printout t "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
+            )
+         )
+         (if ( eq ?typSiekiery zlota)
+        then
+            (if  ( >= ?maxUdzwig (+ ?udzwig ?wagaDrewna ?wagaDrewna) )
+            then
+                (if ( >= (- ?energia (* 2 ?strataEnergii)) 0 )
+                then
+                (bind ?idDrewna_a (str-cat ?id "_" ?iteracja a))
+                (assert (drewno (id ?idDrewna_a) (cena ?cenaDrewna) ( waga ?wagaDrewna) ) )
+                
+                 (bind ?idDrewna_b (str-cat ?id "_" ?iteracja b))
+                (assert (drewno (id ?idDrewna_b) (cena ?cenaDrewna) ( waga ?wagaDrewna) ) )
+                
+        
+                (modify ?drzewo  (stan sciete) )
+                 ;zuzycie siekiery
+                (if ( >= ( + ?zuzycie 10) 100) 
+                then
+                    ;tracimy siekierę
+                    (retract ?siekiera)
+                    (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b)
+                            (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna))
+                            (energia ( - ?energia (* 2 ?strataEnergii)))
+                            (siekiera nil)
+                    )
+                 (printout t "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
+                else
+                    (modify ?siekiera (zuzycie (+ ?zuzycie 10)))
+                
+                    (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b)
+                            (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna))
+                            (energia ( - ?energia (* 2 ?strataEnergii)))
+                    )
+                )
+                (printout t "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
+                else
+                (printout t "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
+           )
+            else
+            (printout t "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
+            )
+         )
+            (if ( eq ?typSiekiery tytanowa)
+        then
+            (if  ( >= ?maxUdzwig (+ ?udzwig ?wagaDrewna ?wagaDrewna ?wagaDrewna) )
+            then
+                (if ( >= (- ?energia (* 2 ?strataEnergii)) 0 )
+                then
+                (bind ?idDrewna_a (str-cat ?id "_" ?iteracja a))
+                (assert (drewno (id ?idDrewna_a) (cena ?cenaDrewna) ( waga ?wagaDrewna) ) )
+                
+                 (bind ?idDrewna_b (str-cat ?id "_" ?iteracja b))
+                (assert (drewno (id ?idDrewna_b) (cena ?cenaDrewna) ( waga ?wagaDrewna) ) )
+                
+                 (bind ?idDrewna_c (str-cat ?id "_" ?iteracja c))
+                (assert (drewno (id ?idDrewna_c) (cena ?cenaDrewna) ( waga ?wagaDrewna) ) )
+                
+                (modify ?drzewo  (stan sciete) )
+                 ;zuzycie siekiery
+                (if ( >= ( + ?zuzycie 10) 100) 
+                then
+                    ;tracimy siekierę
+                    (retract ?siekiera)
+                    (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b ?idDrewna_c)
+                            (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna ?wagaDrewna))
+                            (energia ( - ?energia (* 2 ?strataEnergii)))
+                            (siekiera nil)
+                    )
+                 (printout t "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
+                else
+                    (modify ?siekiera (zuzycie (+ ?zuzycie 10)))
+                
+                    (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b ?idDrewna_c )
+                            (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna ?wagaDrewna))
+                            (energia ( - ?energia (* 2 ?strataEnergii)))
+                    )
+                )
+                (printout t "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
+                else
+                (printout t "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
+           )
+            else
+            (printout t "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
+            )
+         )
+    ) 
+   
+    (retract ?akcja)
+) 
 ; TODO: Sprawdzenie, czy ma miejsce w magazynie.
 (defrule kupTowarZGrodu
     ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
@@ -554,3 +713,26 @@
 		)
 	)
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -131,13 +131,31 @@
 	(slot zloto)
     (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
 )
-
+;drewno które pozyskuje drwal z drzew
+(deftemplate drewno
+    (slot id)
+    (slot waga)
+    (slot cena)
+)
+;woz dla drwala
+(deftemplate woz
+    (slot id)
+    (slot udzwig)
+    (slot cena)
+)
+(deftemplate siekiera
+    (slot typ )
+    (slot cena)
+    (slot id)
+    (slot zuzycie)
+) 
 ;agent drwal
 (deftemplate drwal 
 	(slot udzwig)  
+    (slot maxUdzwig)
 	(slot siekiera) 
 	(slot woz) 
-	(slot scieteDrewno) 
+	(multislot scieteDrewno) 
 	(slot id) 
 	(slot mozliwyRuch) 
 	(slot idKratki) 
@@ -241,7 +259,7 @@
 )
 
 ;AKCJE DRWAL
-(deftemplate akcjaScinanieDrzew
+(deftemplate akcjaZetnijDrzewo
 	(slot idAgenta) ;chodzi oczywi�cie o id drwala
 )
 
