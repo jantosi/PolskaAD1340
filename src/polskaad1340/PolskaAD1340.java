@@ -52,11 +52,11 @@ public class PolskaAD1340 {
             world.randomCataclysms();
             //world.loadFromClips();
             world.getPackages().add(new Pack("paczka1", 1, "Grod1", "Grod2"));
-           
+
             //clipsEnv.displayFacts();
-           // System.out.println(world);
+            // System.out.println(world);
             world.saveToClips(clipsEnv);
-           clipsEnv.displayFacts();
+            clipsEnv.displayFacts();
 
 //            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
 //            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
