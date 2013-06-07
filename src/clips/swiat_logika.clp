@@ -672,6 +672,71 @@
    
     (retract ?akcja)
 ) 
+; kupowanie wozu z grodu przez drwala
+(defrule kupWozZGrodu
+    ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (zloto ?zlotoDrwala))
+    ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
+    ?nowyWoz <-(woz (id ?idWozu) (cena ?cenaWozu)(udzwig ?udzwigNowegoWozu) 
+               (idGrodu ?nazwaGrodu))
+    ?akcja <- (akcjaKupWoz (idAgenta ?id) (idWozu ?idWozu))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
+=>
+    (if (>= ?zlotoDrwala ?cenaWozu)
+    then
+        (modify ?drwal (woz ?idWozu)(zloto (- ?zlotoDrwala ?cenaWozu))
+         (maxUdzwig ?udzwigNowegoWozu)  
+        )    
+        (printout t "Drwal: " ?id " kupil woz o udzwigu " ?udzwigNowegoWozu " za " ?cenaWozu " sztuk zlota." crlf)
+    else
+    (printout t "Drwal: " ?id "ma za malo zlota zeby kupić woz. " crlf)
+    ) 
+   (retract ?akcja)
+)
+; drwal kupuje siekiere z grodu
+(defrule kupSiekiereZGrodu
+    ?drwal <- (drwal (id ?id) (idKratki ?idKratki)   (zloto ?zlotoDrwala) )
+    ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
+    ?nowaSiekiera <-(siekiera (id ?idSiekiery) (cena ?cenaSiekiery) 
+                (typ ?typSiekiery) (zuzycie ?zuzycieSiekiery)
+               (idGrodu ?nazwaGrodu))
+    ?akcja <- (akcjaKupSiekiere (idAgenta ?id) (idSiekiery ?idSiekiery))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
+=>
+    (if (>= ?zlotoDrwala ?cenaSiekiery)
+    then
+        (modify ?drwal (siekiera ?idSiekiery)
+        (zloto (- ?zlotoDrwala ?cenaSiekiery))  
+        )    
+        ;naprawiamy siekierę. Przecież musi być nowa :)
+        (modify ?nowaSiekiera (zuzycie 0))
+        (printout t "Drwal: " ?id " kupil siekiere typu " ?typSiekiery " za " ?cenaSiekiery " sztuk zlota." crlf)
+    else
+        (printout t "Drwal: " ?id "ma za malo zlota zeby kupić siekiere. " crlf)
+    ) 
+   (retract ?akcja)
+)
+;drwal zawsze sprzedaje całe drewno jakie ma
+(defrule sprzedajDrewnoWGrodzie
+?drwal <- (drwal (id ?id) (idKratki ?idKratki)   (zloto ?zlotoDrwala) (scieteDrewno $?drewno) )
+    ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
+    ?akcja <- (akcjaSprzedajDrewno (idAgenta ?id) )
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
+=>
+
+(bind ?zysk 0)
+(loop-for-count (?i 0 (- (length $?drewno) 1)) do
+    
+    (bind ?drewnoId (nth$ (+ ?i 1) $?drewno))
+ 
+    (bind ?cena (fact-slot-value (nth$ 1 (find-fact ((?d drewno))(eq ?d:id ?drewnoId))) cena ) )
+    (bind ?zysk (+ ?zysk ?cena))
+
+   (retract (nth$ 1(find-fact ((?d drewno))(eq ?d:id ?drewnoId))))
+)
+    (modify ?drwal(scieteDrewno nil) (udzwig 0) (zloto (+ ?zlotoDrwala ?zysk)))
+    (printout t "Akcja sprzedaj drewno" crlf)
+    (retract ?akcja)
+)
 ; TODO: Sprawdzenie, czy ma miejsce w magazynie.
 (defrule kupTowarZGrodu
     ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))

@@ -250,31 +250,68 @@
 )
 ( woz
     ( id woz1)
-    ( udzwig 20)
+    ( udzwig 120)
     ( cena 20)
+    (idGrodu grod1)
+)
+( woz
+    ( id woz2)
+    ( udzwig 150)
+    ( cena 50)
+    ( idGrodu grod1)
 )
 ( siekiera
     (id siekiera1)
     (typ tytanowa)
     (cena 20)   
     (zuzycie 90 )
+    (idGrodu grod1)
+) 
+( siekiera
+    (id siekiera2)
+    (typ zlota)
+    (cena 20)   
+    (zuzycie 0 )
+    (idGrodu grod1)
 ) 
 ( drwal 
 	(id drwal1)  
-	(idKratki 19) 
+	(idKratki 10) 
     (predkosc 1)
-    (scieteDrewno drewno1)
-    (siekiera siekiera1)
-    (woz woz1) 
+    (scieteDrewno "drewno1" "drewno2")
+   ; (siekiera siekiera1)
+    ;(woz woz1) 
+    (zloto 100)
     (udzwig 10)
     (maxUdzwig 100)
     (energia 100)
     (strataEnergii 5)
 )
-( akcjaZetnijDrzewo
-	(idAgenta drwal1) ;chodzi oczywi�cie o id drwala
-)
+;( akcjaZetnijDrzewo
+;	(idAgenta drwal1) ;chodzi oczywi�cie o id drwala
+;)
+;( akcjaKupWoz
+;    (idAgenta drwal1)
+;    (idWozu woz2)
+;)
 
+;( akcjaKupSiekiere
+;    (idAgenta drwal1)
+;    (idSiekiery siekiera2)
+;)
+(drewno 
+     (id "drewno1")
+    ( waga 10)
+    ( cena 10)
+)
+(drewno 
+     (id "drewno2")
+    ( waga 10)
+    ( cena 10)
+)
+( akcjaSprzedajDrewno
+    (idAgenta drwal1)
+)
 )
 
 

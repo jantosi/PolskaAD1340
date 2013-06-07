@@ -142,12 +142,14 @@
     (slot id)
     (slot udzwig)
     (slot cena)
+    (slot idGrodu)
 )
 (deftemplate siekiera
     (slot typ )
     (slot cena)
     (slot id)
     (slot zuzycie)
+    (slot idGrodu)
 ) 
 ;agent drwal
 (deftemplate drwal 
@@ -263,6 +265,18 @@
 	(slot idAgenta) ;chodzi oczywi�cie o id drwala
 )
 
+( deftemplate akcjaKupWoz
+    (slot idAgenta)
+    (slot idWozu)
+)
+
+( deftemplate akcjaKupSiekiere
+    (slot idAgenta)
+    (slot idSiekiery)
+)
+( deftemplate akcjaSprzedajDrewno
+    (slot idAgenta)
+)
 ;tylko agenci : RYCERZ i SMOK
 (deftemplate akcjaAtak
 	(slot idAgenta) ;agent atakujacy
