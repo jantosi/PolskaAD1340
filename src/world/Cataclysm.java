@@ -6,11 +6,11 @@ public class Cataclysm {
 
 	private String id;
 	private int mapFrame;
-	private float treesDestroy;
+	private double treesDestroy;
 	private int energyLoss;
 	private int populationLoss;
 
-	public Cataclysm(String id, int mapFrame, float treesDestroy, int energyLoss, int populationLoss) {
+	public Cataclysm(String id, int mapFrame, double treesDestroy, int energyLoss, int populationLoss) {
 		super();
 		this.id = id;
 		this.mapFrame = mapFrame;
@@ -73,11 +73,11 @@ public class Cataclysm {
 		this.mapFrame = upperLeftMapFrame;
 	}
 
-	public float getTreesDestroy() {
+	public double getTreesDestroy() {
 		return treesDestroy;
 	}
 
-	public void setTreesDestroy(float treesDestroy) {
+	public void setTreesDestroy(double treesDestroy) {
 		this.treesDestroy = treesDestroy;
 	}
 
