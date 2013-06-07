@@ -373,7 +373,8 @@ public class World {
             //lacz drogi poki mozesz.
             boolean changesMade = true;
             while (changesMade) {
-                System.out.println("setów: " + wykryteDrogi.size());
+                //rozwiazanie jest nieoptymalne, ale mapa nigdy nie jest duza, a deadline blisko
+                //FIXME: zamiast brute-force Dijkstra albo A*
                 changesMade = false;
                 for (int i = 0; i < wykryteDrogi.size(); i++) {
                     Set<Point> setA = wykryteDrogi.get(i);
@@ -398,8 +399,46 @@ public class World {
                 }
             }
         }
-        
-        System.out.println("NP:"+wykryteDrogiNieplatne.size()+" P:"+wykryteDrogiPlatne.size());
+
+        System.out.println("NP:" + wykryteDrogiNieplatne.size() + " P:" + wykryteDrogiPlatne.size());
+        System.out.println(wykryteDrogiNieplatne.get(0));
+
+        for (int i = 0; i < wykryteDrogiNieplatne.size(); i++) {
+            ArrayList<Point> punktyKoncowe = new ArrayList<>();
+            Set<Point> pojedynczaDroga = wykryteDrogiNieplatne.get(i);
+            //szukaj punktów początkowych w drodze - czyli
+            //punktów, które mają tylko jednego sąsiada
+            for (Point kawalekDrogi : pojedynczaDroga) {
+
+                int neighbours = 0;
+
+                Point[] neighs = new Point[4]; //neigh1, neigh2, neigh3, neigh4;
+                neighs[0] = (Point) kawalekDrogi.clone();
+                neighs[1] = (Point) kawalekDrogi.clone();
+                neighs[2] = (Point) kawalekDrogi.clone();
+                neighs[3] = (Point) kawalekDrogi.clone();
+
+                neighs[0].translate(-1, 0);
+                neighs[1].translate(1, 0);
+                neighs[2].translate(0, -1);
+                neighs[3].translate(0, 1);
+                //czterech sąsiadów punktu; lewo, prawo, góra, dół.
+
+                for (int j = 0; j < neighs.length; j++) {
+                    Point sasiad = neighs[j];
+                    if (pojedynczaDroga.contains(sasiad)) {
+                        neighbours++;
+                    }
+                }
+                if (neighbours == 1) {
+                    punktyKoncowe.add(kawalekDrogi);
+                }
+            }
+            
+            System.out.println(punktyKoncowe);
+        }
+
+
     }
 
     /**
