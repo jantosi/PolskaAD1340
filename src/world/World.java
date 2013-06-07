@@ -9,6 +9,10 @@ import polskaad1340.InformacjeOSwiecie;
 import polskaad1340.LadowanieMapy;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
+import java.awt.Point;
+import java.util.AbstractSet;
+import java.util.HashSet;
+import java.util.Set;
 
 public class World {
 	public int height = 40;
@@ -18,7 +22,7 @@ public class World {
 	private ArrayList<Bandits> bandits = new ArrayList<Bandits>();
 	private ArrayList<Blockade> blockades = new ArrayList<Blockade>();
 	private ArrayList<Cataclysm> cataclysms = new ArrayList<Cataclysm>();
-	private ArrayList<Pack> packages = new ArrayList<Pack>();
+	private ArrayList<Package> packages = new ArrayList<Package>();
 	private ArrayList<Road> roads = new ArrayList<Road>();
 	private ArrayList<Town> towns = new ArrayList<Town>();
 	private ArrayList<Tree> trees = new ArrayList<Tree>();
@@ -46,7 +50,6 @@ public class World {
 		loadRoads();
 		loadTowns();
 		loadTrees();
-		
 	}
 
 	public void printoutMapFrames() {
@@ -140,7 +143,7 @@ public class World {
 			PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
 
 			for (int i = 0; i < pv1.size(); i++) {
-				Pack temp = new Pack();
+				Package temp = new Package();
 				temp.loadFromClips(pv1.get(i));
 				this.packages.add(temp);
 			}
@@ -277,6 +280,75 @@ public class World {
 				}
 			}
 		}
+        //drogi nieplatne
+        Set drogiNieplatne = InformacjeOSwiecie.getKluczeKafelka("droga");
+        int idKafelkaDrogiNieplatnej = (int) drogiNieplatne.iterator().next();
+        System.out.println(idKafelkaDrogiNieplatnej);
+        //znajdz polaczone ze soba kratki drog
+        ArrayList<Point> listaKratekDrogNieplatnych = new ArrayList<>();
+
+        ArrayList<ArrayList<Integer>> mapa = mapLoad.getMap();
+
+        for (int i = 0; i < mapa.size(); i++) {
+            ArrayList<Integer> arrayList = mapa.get(i);
+            for (int j = 0; j < arrayList.size(); j++) {
+                Integer integer = arrayList.get(j);
+                //System.out.print(integer);
+                if (integer == idKafelkaDrogiNieplatnej) {
+                    listaKratekDrogNieplatnych.add(new Point(j, i));
+                }
+            }
+        }
+        //utworz z nich obiekty drog
+
+        ArrayList<Set<Point>> wykryteDrogi = new ArrayList<>();
+        int currSet = -1;
+        Point prevKratkaDrogi = null;
+        for (int i = 0; i < listaKratekDrogNieplatnych.size(); i++) {
+            Point kratkaDrogi = listaKratekDrogNieplatnych.get(i);
+            if (prevKratkaDrogi == null || !InformacjeOSwiecie.arePointsAdjacent(kratkaDrogi, prevKratkaDrogi)) {//znaleziono nowa droge, nowy set
+                Set<Point> nowaDroga = new HashSet<>();
+                nowaDroga.add(kratkaDrogi);
+
+                currSet++;
+                wykryteDrogi.add(nowaDroga);
+            } else {//kratka jest przystajaca do poprzedniej, dodaj do starej drogi.
+                wykryteDrogi.get(currSet).add(kratkaDrogi);
+            }
+
+            prevKratkaDrogi = kratkaDrogi;
+        }
+
+        //poszukaj pofragmentowanych drog - setow do polaczenia. jesli takie znajdziesz - polacz w jedna droge.
+
+        //FIXME: lacz drogi poki mozesz.
+        //MAGIC JUJU HERE
+        for (int i = 0; i < wykryteDrogi.size(); i++) {
+            Set<Point> setA = wykryteDrogi.get(i);
+            nextset:
+            for (int j = 0; j < wykryteDrogi.size(); j++) {
+                Set<Point> setB = wykryteDrogi.get(j);
+                for (Point pointA : setA) {
+                    for (Point pointB : setB) {
+                        //dla kazdych dwoch setow, szukaj przystajacych punktow. jesli takie istnieja, polacz sety.
+                        if (InformacjeOSwiecie.arePointsAdjacent(pointA, pointB)) {
+                            setA.addAll(setB);
+                            wykryteDrogi.remove(j);
+                            break nextset;
+                        }
+                    }
+                }
+            }
+        }
+        //END MAGIC JUJU
+
+        for (int i = 0; i < wykryteDrogi.size(); i++) {
+            Set<Point> set = wykryteDrogi.get(i);
+            System.out.println(set);
+        }
+
+        //TODO: to samo dla platnych...
+        //Set drogiPlatne = InformacjeOSwiecie.getKluczeKafelka("droga płatna");        
 	}
 
 	/**
@@ -317,7 +389,7 @@ public class World {
 		}
 
 		// sbuf.append(";paczki\n");
-		for (Pack temp : packages) {
+		for (Package temp : packages) {
 			sbuf.append(temp.toString()).append("\n");
 		}
 
@@ -328,7 +400,6 @@ public class World {
 
 		// /sbuf.append(";grody\n");
 		for (Town temp : towns) {
-
 			sbuf.append(temp.toString()).append("\n");
 		}
 
@@ -337,13 +408,12 @@ public class World {
 			sbuf.append(temp.toString()).append("\n");
 		}
 
-		sbuf.append("(itearcja "+iteration+")");
 		return sbuf.toString();
 	}
 
 	public void saveToClips(ClipsEnvironment clips) {
 		for (String fact : this.toString().split("\n")) {
-			//System.out.println("fact: " + fact);
+			System.out.println("fact: " + fact);
 			clips.getWorldEnv().assertString(fact);
 		}
 	}
@@ -380,11 +450,11 @@ public class World {
 		this.cataclysms = cataclysms;
 	}
 
-	public ArrayList<Pack> getPackages() {
+	public ArrayList<Package> getPackages() {
 		return packages;
 	}
 
-	public void setPackages(ArrayList<Pack> packages) {
+	public void setPackages(ArrayList<Package> packages) {
 		this.packages = packages;
 	}
 

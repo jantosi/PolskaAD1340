@@ -4,6 +4,7 @@
  */
 package polskaad1340;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -76,5 +77,19 @@ public class InformacjeOSwiecie {
         }
         
         return matches;
+    }
+    
+    public static boolean arePointsAdjacent(Point a, Point b)
+    {
+        int dx = a.x - b.x;
+        int dy = a.y - b.y;
+        
+        if((Math.abs(dx)==1 && dy==0)||(Math.abs(dy)==1 && dx==0))
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
