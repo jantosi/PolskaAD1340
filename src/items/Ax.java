@@ -7,11 +7,7 @@ package items;
  */
 public class Ax extends Item {
     
-    /**
-     * Ilość ścinanych drzew na iterację.
-     * @var int
-     */
-    protected int _numberOfShearWoods;
+    private String type;
     
     /**
      * Konstruktor. Ustawienie domyślnej ilości ścinanych drzew, ceny i szybkości zużycia.
@@ -19,28 +15,41 @@ public class Ax extends Item {
      * @param int price
      * @param int wearSpeed 
      */
-    public Ax(String id, int numberOfShearWoods, int price, int wearSpeed) {
+    public Ax(String id, String type, int price, int wearSpeed, String townId) {
         super(price, wearSpeed, id);
         
-        this.setNumberOfShearWoods(numberOfShearWoods);
+        this.type = type;
+        this.townId = townId;
     }
-    
-    /**
-     * Getter dla ilości ścinanych drzew.
-     * @return int
-     */
-    public int getNumberOfShearWoods() {
-        return this._numberOfShearWoods;
-    }
-    
-    /**
-     * Setter dla ilości ścinanych drzew.
-     * @param int numberOfShearWoods
-     * @return Ax
-     */
-    public Ax setNumberOfShearWoods(int numberOfShearWoods) {
-        this._numberOfShearWoods = numberOfShearWoods;
-        
-        return this;
-    }
+ 
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("(siekiera (");
+		builder.append("typ ");
+		builder.append(type);
+		builder.append(") (");
+		builder.append("id ");
+		builder.append(_id);
+		builder.append(") (");
+		builder.append("cena ");
+		builder.append(_price);
+		builder.append(") (zuzycie ");
+		builder.append(_levelOfWear);
+		builder.append(") (");
+		builder.append("idGrodu ");
+		builder.append(townId);
+		builder.append("))");
+		return builder.toString();
+	}
 }

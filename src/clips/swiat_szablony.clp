@@ -46,11 +46,18 @@
 	(slot zuzycie) ;procentowy wskaznik zuzycia
 	(slot cena)
 )
-
+(deftemplate zbroja
+    (slot id)
+	(slot idAgenta)
+	(slot grod) ;grod, w ktorego magazynie sie znajduje
+	(slot zuzycie) ;procentowy wskaznik zuzycia
+	(slot cena)
+    (slot wytrzymalosc)
+    (slot szybkoscZuzycia)
+)
 (deftemplate kon
     (slot id)
     (slot grod)
-    (slot idAgenta) ;id poslanca, ktory go ew posiada
     (slot udzwig)
     (slot predkosc)
     (slot zmeczenieJezdzcy) ;o ile procent mniejsze sa straty jezdzcy w prownaniu do poruszania sie na pieszo

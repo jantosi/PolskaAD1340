@@ -14,7 +14,7 @@ public class Horse extends Item {
      * Ułamek z przedziału (0,1) określający o ile mniej energii na ruch zużywał będzie agent
      * w porównaniu do poruszania się pieszo
      */
-    protected double riderTiredness;
+    protected int riderTiredness;
 	
     /**
      * Prędkość konia.
@@ -48,21 +48,11 @@ public class Horse extends Item {
      * @param int price 
      * @param int wearSpeed 
      */
-    public Horse(String id, int velocity, int capacity, int price, int wearSpeed) {
+    public Horse(String id, int velocity, int capacity, int price, int wearSpeed, int riderTiredness) {
     	super(price, wearSpeed, id);
     	
     	this._velocity = velocity;
         this._capacity = capacity;
-    }
-    
-    public Horse setAgentId(int agentId) {
-        this._agentId = agentId;
-        
-        return this;
-    }
-    
-    public int getAgentId() {
-        return this._agentId;
     }
     
     /**
@@ -103,27 +93,27 @@ public class Horse extends Item {
         return this;
     }
 
-    public double getRiderTiredness() {
-	return riderTiredness;
+    public int getRiderTiredness() {
+    	return riderTiredness;
     }
 
-    public void setRiderTiredness(double riderTiredness) {
-	this.riderTiredness = riderTiredness;
+    public void setRiderTiredness(int riderTiredness) {
+    	this.riderTiredness = riderTiredness;
     }
     
-    @Override
-    public String toString() {
-	StringBuffer sbuf = new StringBuffer();
-	sbuf.append("(kon ");
-	sbuf.append("(id ").append(this.getId()).append(") ");
-	sbuf.append("(grod ").append(this.getTown().getNazwa()).append(") ");
-	sbuf.append("(udzwig ").append(this.getCapacity()).append(") ");
-	sbuf.append("(predkosc ").append(this.getVelocity()).append(") ");
-	sbuf.append("(zmeczenieJezdzcy ").append(this.getRiderTiredness()).append(") ");
-	sbuf.append("(cena ").append(this.getPrice()).append(") ");
-	sbuf.append("(zuzycie ").append(this.getLevelOfWear()).append(") ");
-	sbuf.append("(predkoscZuzycia ").append(this.getWearSpeed()).append(") ");
-	sbuf.append(")");
-	return sbuf.toString();
-    }
+	@Override
+	public String toString() {
+		StringBuffer sbuf = new StringBuffer();
+		sbuf.append("(kon ");
+		sbuf.append("(id ").append(this.getId()).append(") ");
+		sbuf.append("(grod ").append(this.getTownId()).append(") ");
+		sbuf.append("(udzwig ").append(this.getCapacity()).append(") ");
+		sbuf.append("(predkosc ").append(this.getVelocity()).append(") ");
+		sbuf.append("(zmeczenieJezdzcy ").append(this.getRiderTiredness()).append(") ");
+		sbuf.append("(cena ").append(this.getPrice()).append(") ");
+		sbuf.append("(zuzycie ").append(this.getLevelOfWear()).append(") ");
+		sbuf.append("(predkoscZuzycia ").append(this.getWearSpeed()).append(") ");
+		sbuf.append(")");
+		return sbuf.toString();
+	}
 }

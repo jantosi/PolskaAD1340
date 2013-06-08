@@ -64,17 +64,6 @@ public class Woodman extends Agent {
     }
     
     /**
-     * Getter dla ilości ścinanych drzew.
-     * @return int
-     */
-    public int getNumberOfShearWoods() {
-        if(this.getAx() != null) {
-            return this.getAx().getNumberOfShearWoods();
-        }
-        return this._numberOfShearWoods;
-    }
-    
-    /**
      * Setter dla ilości ścinanych drzew.
      * @param int numberOfShearWoods
      * @return Woodman

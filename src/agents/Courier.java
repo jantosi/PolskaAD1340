@@ -163,22 +163,20 @@ public class Courier extends Agent {
      * @return Courier
      * @TODO Obsługa przypadku, w którym próbujemy dostarczyć przesyłkę, której nie ma przy sobie.
      */
-    public Courier deliveryPackage(Pack pack) {
-        if(this._packages.deliveryPackage(pack)) {
-            //Zwiększenie wielkości mieszka.
-            this.setGold(this.getGold() + pack.getPrice());
-            //Zwiększenie przychodu.
-            this.getStatistics().setIncome(this.getStatistics().getIncome() + pack.getPrice());
-            //Zwiększenie zysku.
-            this.getStatistics().setProfit(this.getStatistics().getProfit() + pack.getPrice());
-            //Zwiększenie liczby dostarczonych przesyłek.
-            this.getStatistics().setNumberOfDeliveriedPacks(this.getStatistics().getNumberOfDeliveriedPacks() + 1);
-            //Zwiększenie całkowitego czasy dostawy.
-            this.getStatistics().setTotalDeliveryTime(this.getStatistics().getTotalDeliveryTime() + pack.getDeliveryTime());
-        }
-        
-        return this;
-    }
+	public Courier deliveryPackage(Pack pack) {
+		// Zwiększenie wielkości mieszka.
+		this.setGold(this.getGold() + pack.getPrice());
+		// Zwiększenie przychodu.
+		this.getStatistics().setIncome(this.getStatistics().getIncome() + pack.getPrice());
+		// Zwiększenie zysku.
+		this.getStatistics().setProfit(this.getStatistics().getProfit() + pack.getPrice());
+		// Zwiększenie liczby dostarczonych przesyłek.
+		this.getStatistics().setNumberOfDeliveriedPacks(this.getStatistics().getNumberOfDeliveriedPacks() + 1);
+		// Zwiększenie całkowitego czasy dostawy.
+		this.getStatistics().setTotalDeliveryTime(this.getStatistics().getTotalDeliveryTime() + pack.getDeliveryTime());
+
+		return this;
+	}
     
     /**
      * Getter dla konia.

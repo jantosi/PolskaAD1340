@@ -1,18 +1,18 @@
 package world;
 
+import items.Item;
 import items.Pack;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import polskaad1340.InformacjeOSwiecie;
 import polskaad1340.LadowanieMapy;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
-import java.awt.Point;
-import java.util.AbstractSet;
-import java.util.HashSet;
-import java.util.Set;
 
 public class World {
 
@@ -34,7 +34,21 @@ public class World {
         this.loadFromMap(ladowanieMapy);
     }
 
-    public void randomBlockades() {
+    public void initializeWorld() {
+    	//randomBlockades();
+    	randomCataclysms();
+    	
+    	Set<String> visited = new HashSet<String>();
+    	for (Town town : this.towns) {
+    		if (!visited.contains(town.getNazwa())) {
+    			visited.add(town.getNazwa());
+    			town.randomItems();
+    		}
+    	}
+    	
+    }
+    
+    private void randomBlockades() {
         this.blockades = new ArrayList<Blockade>();
 
         Random random = new Random();
@@ -45,7 +59,7 @@ public class World {
         }
     }
 
-    public void randomCataclysms() {
+    private void randomCataclysms() {
         this.cataclysms = new ArrayList<Cataclysm>();
         Random random = new Random();
         int cataclysmsNum = random.nextInt(6) + 1;
@@ -69,7 +83,7 @@ public class World {
             }
         }
     }
-
+    
     public void loadFromClips() {
         bandits.clear();
         blockades.clear();
@@ -214,8 +228,7 @@ public class World {
             PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
 
             for (int i = 0; i < pv1.size(); i++) {
-                Town temp = new Town();
-                temp.loadFromClips(pv1.get(i));
+                Town temp = new Town(pv1.get(i));
                 this.towns.add(temp);
             }
 
@@ -243,6 +256,7 @@ public class World {
     }
 
     public void loadFromMap(LadowanieMapy mapLoad) {
+    	Random random = new Random();
         height = mapLoad.getMapSize();
         width = mapLoad.getMapSize();
         mapFrames = new MapFrame[height][width];
@@ -261,6 +275,7 @@ public class World {
         // obiekty
         int townId = 1;
 
+        String[] woodTypes = {"buk", "dab", "sosna"};
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 MapFrame mf = mapFrames[y][x];
@@ -268,6 +283,7 @@ public class World {
                 if (InformacjeOSwiecie.getKluczeKafelka("las").contains(mapLoad.getMap().get(y).get(x))) {
                     Tree tree = new Tree();
                     tree.setWorldFrame(mf.getId());
+                    tree.setType(woodTypes[random.nextInt(woodTypes.length)]);
                     trees.add(tree);
                 } else if (InformacjeOSwiecie.getKluczeKafelka("wycięty las").contains(mapLoad.getMap().get(y).get(x))) {
                     Tree tree = new Tree();
@@ -278,33 +294,17 @@ public class World {
 
                     if (!InformacjeOSwiecie.getKluczeKafelka("miasto1").contains(mapLoad.getMap().get(y).get(x - 1))) {
                         Random rand = new Random();
-                        Town town1 = new Town();
-                        town1.setMapFrame(mf.getId());
                         int population = rand.nextInt(900) + 100;
                         float guards = (float) rand.nextDouble();
                         String name = "grod" + townId;
+                        
+                        Town town1 = new Town(name, mf.getId(), population, guards);
 
-                        town1.setNazwa(name);
-                        town1.setGuardsActivity(guards);
-                        town1.setPopulation(population);
+                        Town town2 = new Town(name, mapFrames[y][x + 1].getId(), population, guards);
 
-                        Town town2 = new Town();
-                        town2.setMapFrame(mapFrames[y][x + 1].getId());
-                        town2.setNazwa(name);
-                        town2.setGuardsActivity(guards);
-                        town2.setPopulation(population);
+                        Town town3 = new Town(name, mapFrames[y + 1][x].getId(), population, guards);
 
-                        Town town3 = new Town();
-                        town3.setMapFrame(mapFrames[y + 1][x].getId());
-                        town3.setNazwa(name);
-                        town3.setGuardsActivity(guards);
-                        town3.setPopulation(population);
-
-                        Town town4 = new Town();
-                        town4.setMapFrame(mapFrames[y + 1][x + 1].getId());
-                        town4.setNazwa(name);
-                        town4.setGuardsActivity(guards);
-                        town4.setPopulation(population);
+                        Town town4 = new Town(name, mapFrames[y + 1][x + 1].getId(), population, guards);
 
                         towns.add(town1);
                         towns.add(town2);
@@ -497,12 +497,16 @@ public class World {
             sbuf.append(temp.toString()).append("\n");
         }
 
+        for (Town town : this.towns) {
+        	for (Item item : town.getItems()) {
+        		sbuf.append(item.toString()).append("\n");
+        	}
+        }
         return sbuf.toString();
     }
 
     public void saveToClips(ClipsEnvironment clips) {
         for (String fact : this.toString().split("\n")) {
-            System.out.println("fact: " + fact);
             clips.getWorldEnv().assertString(fact);
         }
     }

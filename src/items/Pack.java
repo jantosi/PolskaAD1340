@@ -21,12 +21,6 @@ public class Pack extends Item {
      */
     protected int _deliveryTime;
     
-    /**
-     * Dostarczona?
-     * @TODO Sprawdzić potrzebność tego parametru.
-     */
-    protected boolean _deliveried;
-    
     private String sourceTown;
 	private String destinationTown;
     
@@ -38,7 +32,6 @@ public class Pack extends Item {
     	super(mass * 5, 0, id);
     	
     	this._mass = mass;
-        this._deliveried = false;
     }
     
     public Pack(String id, int mass, String sourceTown, String destinationTown) {
@@ -53,7 +46,7 @@ public class Pack extends Item {
 	}
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
-                    super.loadFromClips(pv, 0, null);
+            super.loadFromClips(pv, 0, null);
 			this._id = pv.getFactSlot("id").getValue().toString();
 			this._mass = pv.getFactSlot("waga").intValue();
 			this.sourceTown = pv.getFactSlot("grodStart").stringValue();
@@ -106,25 +99,6 @@ public class Pack extends Item {
      */
     public Pack setMass(int mass) {
         this._mass = mass;
-        
-        return this;
-    }
-    
-    /**
-     * Getter dla flagi dostarczona.
-     * @return boolean
-     */
-    public boolean getIsDeliveried() {
-        return this._deliveried;
-    }
-    
-    /**
-     * Setter dla flagi dostarczona.
-     * @param deliveried
-     * @return Pack
-     */
-    public Pack setIsDeliveried(boolean deliveried) {
-        this._deliveried = deliveried;
         
         return this;
     }

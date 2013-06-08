@@ -5,8 +5,8 @@ package items;
  * @author Piotrek
  */
 public class Wood extends Item {
+	
 	public Wood(int price) {
 		super(price);
 	}
-	
 }

@@ -39,31 +39,13 @@ public class PackCollection {
     }
     
     /**
-     * Dostarczanie paczki. Zwraca TRUE jeżeli paczka istnieje w kontenerze i można ją dostarczyć,
-     * w przeciwnym wypadku FALSE.
-     * @param Pack pack
-     * @return boolean
-     */
-    public boolean deliveryPackage(Pack pack) {
-        if(this._packages.indexOf(pack) != -1) {
-            this._packages.get(this._packages.indexOf(pack)).setIsDeliveried(true);
-            
-            return true;
-        }
-        
-        return false;
-    }
-    
-    /**
      * Całkowita waga paczek w kontenerze.
      * @return int
      */
     public int getTotalWeight() {
         int weight = 0;
         for(int i = 0; i < this._packages.size(); i++) {
-            if(!this._packages.get(i).getIsDeliveried()) {
-                weight += this._packages.get(i).getMass();
-            }
+            weight += this._packages.get(i).getMass();
         }
         
         return weight;
@@ -79,9 +61,7 @@ public class PackCollection {
     
     public void run() {
         for(int i = 0; i < this._packages.size(); i++) {
-            if(!this._packages.get(i).getIsDeliveried()) {
-                this._packages.get(i).setDeliveryTime(this._packages.get(i).getDeliveryTime() + 1);
-            }
+            this._packages.get(i).setDeliveryTime(this._packages.get(i).getDeliveryTime() + 1);
         }
     }
 }

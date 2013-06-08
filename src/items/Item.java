@@ -34,13 +34,7 @@ abstract public class Item {
      */
     protected int _wearSpeed;
     
-    /**
-     * Identyfikator agenta.
-     * @var int
-     */
-    protected int _agentId;
-    
-    protected Town _town;
+    protected String townId;
     
     /**
      * Konstruktor. Ustawienie domyślnej ceny i szybkości zużycia narzędzia.
@@ -51,6 +45,11 @@ abstract public class Item {
     public Item(int price, int wearSpeed, String id) {
         this.setPrice(price);
         this.setWearSpeed(wearSpeed);
+        this.setId(id);
+    }
+    
+    public Item(int price, String id) {
+        this.setPrice(price);
         this.setId(id);
     }
     
@@ -135,26 +134,6 @@ abstract public class Item {
         return this;
     }
     
-    public int getAgentId() {
-        return this._agentId;
-    }
-    
-    public Item setAgentId(int agentId) {
-        this._agentId = agentId;
-        
-        return this;
-    }
-    
-    public Town getTown() {
-        return this._town;
-    }
-    
-    public Item setTown(Town town) {
-        this._town = town;
-        
-        return this;
-    }
-    
     public void loadFromClips(PrimitiveValue pv, int agentId, ClipsEnvironment clipsEnv) {
         try {
             this.setPrice(pv.getFactSlot("cena").intValue());
@@ -162,19 +141,22 @@ abstract public class Item {
             this.setWearSpeed(pv.getFactSlot("predkoscZuzycia").intValue());
             this.setLevelOfWear(pv.getFactSlot("zuzycie").intValue());
             
-            if(agentId > 0) {
-                this.setAgentId(agentId);
-            }
-            
             if(clipsEnv != null) {
                 String townFind = "(find-fact ((?k grod)) (eq ?k:nazwa "+pv.getFactSlot("grod").stringValue()+"))";
                 PrimitiveValue townPv = clipsEnv.getWorldEnv().eval(townFind);
-                Town itemTown = new Town();
-                itemTown.loadFromClips(townPv);
-                this.setTown(itemTown);
+                Town itemTown = new Town(townPv);
+                this.setTownId(itemTown.getNazwa());
             }
         } catch (Exception e) {
 		e.printStackTrace();
 	}
     }
+
+	public String getTownId() {
+		return townId;
+	}
+
+	public void setTownId(String townId) {
+		this.townId = townId;
+	}
 }

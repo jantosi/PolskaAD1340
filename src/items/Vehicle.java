@@ -18,8 +18,8 @@ public class Vehicle extends Item {
      * @param int price
      * @param int wearSpeed 
      */
-    public Vehicle(String id, int capacity, int price, int wearSpeed) {
-        super(price, wearSpeed, id);
+    public Vehicle(String id, int capacity, int price) {
+        super(price, id);
         
         this.setCapacity(capacity);
     }
@@ -42,4 +42,22 @@ public class Vehicle extends Item {
         
         return this;
     }
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("(woz (udzwig ");
+		builder.append(_capacity);
+		builder.append(") (");
+		builder.append("id ");
+		builder.append(_id);
+		builder.append(") (");
+		builder.append("cena ");
+		builder.append(_price);
+		builder.append(") (idGrodu ");
+		builder.append(townId);
+		builder.append("))");
+		
+		return builder.toString();
+	}
 }
