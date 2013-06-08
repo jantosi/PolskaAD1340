@@ -330,6 +330,9 @@ public class World {
         height = mapLoad.getMapSize();
         width = mapLoad.getMapSize();
         mapFrames = new MapFrame[height][width];
+        
+        ArrayList<Point> pozycjeGrodow = new ArrayList<>();
+        pozycjeGrodow.add(new Point(-1,-1)); //WAŻNE: grody numerowane od 1. zero to placeholder.
         // kratki
         int frameID = 0;
         for (int y = 0; y < height; y++) {
@@ -380,6 +383,8 @@ public class World {
                         towns.add(town2);
                         towns.add(town3);
                         towns.add(town4);
+                        
+                        pozycjeGrodow.add(new Point(x,y));
 
                         townId++;
                     }
@@ -481,18 +486,8 @@ public class World {
             for (Point kawalekDrogi : pojedynczaDroga) {
 
                 int neighbours = 0;
-
-                Point[] neighs = new Point[4]; //neigh1, neigh2, neigh3, neigh4;
-                neighs[0] = (Point) kawalekDrogi.clone();
-                neighs[1] = (Point) kawalekDrogi.clone();
-                neighs[2] = (Point) kawalekDrogi.clone();
-                neighs[3] = (Point) kawalekDrogi.clone();
-
-                neighs[0].translate(-1, 0);
-                neighs[1].translate(1, 0);
-                neighs[2].translate(0, -1);
-                neighs[3].translate(0, 1);
-                //czterech sąsiadów punktu; lewo, prawo, góra, dół.
+                Point[] neighs = InformacjeOSwiecie.getNeighboursOfPoint(kawalekDrogi);
+                
 
                 for (int j = 0; j < neighs.length; j++) {
                     Point sasiad = neighs[j];
@@ -506,6 +501,20 @@ public class World {
             }
             
             System.out.println(punktyKoncowe);
+            //punkty koncowe sa znane; teraz nalezy przejsc cala droge tworzac kratki drogi.
+            Point[] sasiedziMogacyBycGrodem = InformacjeOSwiecie.getNeighboursOfPoint(punktyKoncowe.get(0));
+            int grodID=-1;
+            for (int j = 0; j < sasiedziMogacyBycGrodem.length; j++) {    
+                Point point = sasiedziMogacyBycGrodem[j];
+                int find = pozycjeGrodow.indexOf(point);
+                if(find!=-1)
+                {
+                    grodID = find;
+                    break;
+                }
+            System.out.println("grodid: "+grodID);
+            }
+            
         }
 
 

@@ -92,4 +92,22 @@ public class InformacjeOSwiecie {
             return false;
         }
     }
+    
+    public static Point[] getNeighboursOfPoint(Point p)
+    {
+        Point[] neighs = new Point[4]; //neigh1, neigh2, neigh3, neigh4;
+        
+        neighs[0] = (Point) p.clone();
+        neighs[1] = (Point) p.clone();
+        neighs[2] = (Point) p.clone();
+        neighs[3] = (Point) p.clone();
+
+        neighs[0].translate(-1, 0);
+        neighs[1].translate(1, 0);
+        neighs[2].translate(0, -1);
+        neighs[3].translate(0, 1);
+        //czterech sąsiadów punktu; lewo, prawo, góra, dół.
+        
+        return neighs;
+    }
 }
