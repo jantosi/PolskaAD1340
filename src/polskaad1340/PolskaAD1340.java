@@ -4,6 +4,8 @@
  */
 package polskaad1340;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +46,13 @@ public class PolskaAD1340 {
             world.saveToClips(clipsEnv);
             //clipsEnv.displayWorldFacts();
             clipsEnv.getWorldEnv().run();
-            world.loadVisibleWorld(null);
+            ArrayList<Object> visibleObjects = world.getVisibleWorld("poslaniec1");
+            System.out.println("widzialny swiat dla poslanca1: ");
+            for (int i = 0; i < visibleObjects.size(); i++) {
+            	System.out.println(visibleObjects.get(i).toString());
+            }
+            
+            //clipsEnv.displayWorldFacts();
             
 //            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
 //            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);

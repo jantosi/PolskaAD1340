@@ -1,15 +1,12 @@
 package world;
 
 import items.Item;
-import items.Pack;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
-import agents.Agent;
 
 import polskaad1340.InformacjeOSwiecie;
 import polskaad1340.LadowanieMapy;
@@ -25,7 +22,6 @@ public class World {
     private ArrayList<Bandits> bandits = new ArrayList<Bandits>();
     private ArrayList<Blockade> blockades = new ArrayList<Blockade>();
     private ArrayList<Cataclysm> cataclysms = new ArrayList<Cataclysm>();
-    private ArrayList<Pack> packages = new ArrayList<Pack>();
     private ArrayList<Road> roads = new ArrayList<Road>();
     private ArrayList<Town> towns = new ArrayList<Town>();
     private ArrayList<Tree> trees = new ArrayList<Tree>();
@@ -90,7 +86,6 @@ public class World {
         bandits.clear();
         blockades.clear();
         cataclysms.clear();
-        packages.clear();
         roads.clear();
         towns.clear();
         trees.clear();
@@ -99,16 +94,50 @@ public class World {
         loadBandits();
         loadBlockades();
         loadCataclysms();
-        loadPackages();
         loadRoads();
         loadTowns();
         loadTrees();
     }
 
-    public void loadVisibleWorld(Agent agent) throws Exception {
-    	String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) TRUE)";
+    public ArrayList<Object> getVisibleWorld(String agentId) throws Exception {
+    	String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) (eq ?w:idAgenta " + agentId + "))";
     	PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);
-    	System.out.println(pv.size());
+    	
+    	ArrayList<Object> visibleObjects = new ArrayList<Object>();
+    	
+    	for (int i = 0; i < pv.size(); i++) {
+    		int visibleFrameId = pv.get(i).getFactSlot("idKratki").intValue();
+
+    		for (Town town : this.towns) {
+    			if (town.getMapFrame() == visibleFrameId) {
+    				visibleObjects.add(town);
+    				
+    				for (Item item : town.getItems()) {
+    					visibleObjects.add(item);
+    				}
+    			}
+    		}
+    		
+    		for (Blockade blockade : this.blockades) {
+    			if (blockade.getMapFrame() == visibleFrameId) {
+    				visibleObjects.add(blockade);
+    			}
+    		}
+    		
+    		for (Tree tree : this.trees) {
+    			if (tree.getWorldFrame() == visibleFrameId) {
+    				visibleObjects.add(tree);
+    			}
+    		}
+    		
+    		for (Road road : this.roads) {
+    			if (road.getMapFrame() == visibleFrameId) {
+    				visibleObjects.add(road);
+    			}
+    		}
+    	}
+    	
+    	return visibleObjects;
     }
     
     public void printoutMapFrames() {
@@ -188,23 +217,6 @@ public class World {
                 Cataclysm temp = new Cataclysm();
                 temp.loadFromClips(pv1.get(i));
                 this.cataclysms.add(temp);
-            }
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    private void loadPackages() {
-        try {
-            String evalString = "(find-all-facts ((?k paczka)) TRUE)";
-            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
-
-            for (int i = 0; i < pv1.size(); i++) {
-                Pack temp = new Pack();
-                temp.loadFromClips(pv1.get(i));
-                this.packages.add(temp);
             }
 
         } catch (Exception e) {
@@ -485,11 +497,6 @@ public class World {
             sbuf.append(temp.toString()).append("\n");
         }
 
-        // sbuf.append(";paczki\n");
-        for (Pack temp : packages) {
-            sbuf.append(temp.toString()).append("\n");
-        }
-
         // sbuf.append(";drogi\n");
         for (Road temp : roads) {
             sbuf.append(temp.toString()).append("\n");
@@ -549,14 +556,6 @@ public class World {
 
     public void setCataclysms(ArrayList<Cataclysm> cataclysms) {
         this.cataclysms = cataclysms;
-    }
-
-    public ArrayList<Pack> getPackages() {
-        return packages;
-    }
-
-    public void setPackages(ArrayList<Pack> packages) {
-        this.packages = packages;
     }
 
     public ArrayList<Road> getRoads() {
