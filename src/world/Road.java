@@ -11,6 +11,7 @@ public class Road {
 	private boolean isFree;
 	private int currentPartNo;
 	private int maxPartNo;
+	private double robberyProbability;
 
 	public Road(String id, int mapFrame, String sourceTown, String destinationTown, String type, boolean isFree, int currentPartNo, int maxPartNo) {
 		super();
@@ -41,7 +42,6 @@ public class Road {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -123,6 +123,14 @@ public class Road {
 
 	public void setFree(boolean isFree) {
 		this.isFree = isFree;
+	}
+
+	public double getRobberyProbability() {
+		return robberyProbability;
+	}
+
+	public void setRobberyProbability(double robberyProbability) {
+		this.robberyProbability = robberyProbability;
 	}
 
 }

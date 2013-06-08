@@ -4,13 +4,13 @@ package world;
 import CLIPSJNI.PrimitiveValue;
 
 public class Bandits {
-	private float packageLoss;
-	private float goldLoss;
+	private double packageLoss;
+	private double goldLoss;
 	private int mapFrame;
 
 	
 
-	public Bandits(float packageLoss, float goldLoss, int mapFrame) {
+	public Bandits(double packageLoss, double goldLoss, int mapFrame) {
 		super();
 		this.packageLoss = packageLoss;
 		this.goldLoss = goldLoss;
@@ -40,16 +40,16 @@ public class Bandits {
 		return sbuf.toString();
 	}
 
-	public float getPackageLoss() {
+	public double getPackageLoss() {
 		return packageLoss;
 	}
-	public void setPackageLoss(float packageLoss) {
+	public void setPackageLoss(double packageLoss) {
 		this.packageLoss = packageLoss;
 	}
-	public float getGoldLoss() {
+	public double getGoldLoss() {
 		return goldLoss;
 	}
-	public void setGoldLoss(float goldLoss) {
+	public void setGoldLoss(double goldLoss) {
 		this.goldLoss = goldLoss;
 	}
 	public int getMapFrame() {

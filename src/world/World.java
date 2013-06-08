@@ -3,8 +3,11 @@ package world;
 import items.Item;
 
 import java.awt.Point;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -46,7 +49,7 @@ public class World {
     	
     }
     
-    private void randomBlockades() {
+    public void randomBlockades() {
         this.blockades = new ArrayList<Blockade>();
 
         Random random = new Random();
@@ -57,7 +60,37 @@ public class World {
         }
     }
 
-    private void randomCataclysms() {
+    //TODO prztestowac jak beda drogi
+    public void randomBandits() {
+    	this.bandits = new ArrayList<Bandits>();
+    	
+    	Random random = new Random();
+    	Set<String> roadIds = new HashSet<String>();
+    	for (Road road : this.roads) {
+    		roadIds.add(road.getId());
+    	}
+    	
+    	for (String roadId : roadIds) {
+    		ArrayList<Road> actualRoad = new ArrayList<Road>();
+    		for (Road road : this.roads) {
+    			if (road.getId().equalsIgnoreCase(roadId)) {
+    				actualRoad.add(road);
+    			}
+    		}
+    		
+    		int numberOfBandits = 0;
+    		double packageLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
+    		double goldLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
+    		
+    		while (numberOfBandits < (actualRoad.get(0).getMaxPartNo() * actualRoad.get(0).getRobberyProbability())) {
+    			int frame = actualRoad.get(random.nextInt(actualRoad.size())).getMapFrame();
+    			Bandits bandits = new Bandits(packageLoss, goldLoss, frame);
+    			this.bandits.add(bandits);
+    		}
+    	}
+    }
+    
+    public void randomCataclysms() {
         this.cataclysms = new ArrayList<Cataclysm>();
         Random random = new Random();
         int cataclysmsNum = random.nextInt(6) + 1;
@@ -98,7 +131,7 @@ public class World {
         loadTowns();
         loadTrees();
     }
-
+    
     public ArrayList<Object> getVisibleWorld(String agentId) throws Exception {
     	String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) (eq ?w:idAgenta " + agentId + "))";
     	PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);

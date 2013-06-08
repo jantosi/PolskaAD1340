@@ -4,7 +4,6 @@
  */
 package polskaad1340;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
