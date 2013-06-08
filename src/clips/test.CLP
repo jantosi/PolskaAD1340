@@ -144,9 +144,9 @@
 (kupienieKonia (idAgenta poslaniec1)
     (idKonia kon1)
 )
-(kupienieKonia (idAgenta poslaniec1)
-    (idKonia kon2)
-)
+;(kupienieKonia (idAgenta poslaniec1)
+;    (idKonia kon2)
+;)
 (grod
 	(nazwa grod1) 
 	(idKratki 10)
@@ -288,10 +288,10 @@
 ;( akcjaZetnijDrzewo
 ;	(idAgenta drwal1) ;chodzi oczywi�cie o id drwala
 ;)
-;( akcjaKupWoz
-;    (idAgenta drwal1)
-;    (idWozu woz2)
-;)
+( akcjaKupWoz
+    (idAgenta drwal1)
+    (idWozu woz2)
+)
 
 ;( akcjaKupSiekiere
 ;    (idAgenta drwal1)

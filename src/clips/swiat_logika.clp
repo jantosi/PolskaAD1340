@@ -9,6 +9,7 @@
 (defrule sprawdzKupienieKoniaPoslaniec
     ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
     ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
+    ?konik <- (kon(id ?kupionyKon))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
     ;pobieramy index kupionego konia z bazy wiedzy        
@@ -25,6 +26,9 @@
     (printout t "Poslaniec: " ?poslaniecId " kupil konia o predkosci: " ?konPredkosc crlf)
     ;usuwamy akcje kupienia konia        
     (retract ?kupienieKonia)
+    
+    ;kupiony kon nie posiada juz idGrodu
+    (modify ?konik (grod nil))
     
     ;jak poslaniec kupi konia to nalezy jeszcze raz wywolac regule obliczajaca straty energii
     ;co robimy poprzez usuniecie akcji blokujacej: modyfikacjaStratEnergiiPoslanca
@@ -522,8 +526,6 @@
     (iteracja ?iteracja)
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    
-
      (if (eq ?stanDrzewa sciete)
     then 
         (printout t "Drwal: " ?id " chcial sciac sciete drzewo" crlf)  
@@ -691,6 +693,7 @@
     (printout t "Drwal: " ?id "ma za malo zlota zeby kupić woz. " crlf)
     ) 
    (retract ?akcja)
+   (modify ?nowyWoz (idGrodu nil))
 )
 ; drwal kupuje siekiere z grodu
 (defrule kupSiekiereZGrodu
@@ -714,6 +717,7 @@
         (printout t "Drwal: " ?id "ma za malo zlota zeby kupić siekiere. " crlf)
     ) 
    (retract ?akcja)
+   (modify ?nowaSiekiera (idGrodu nil))
 )
 ;drwal zawsze sprzedaje całe drewno jakie ma
 (defrule sprzedajDrewnoWGrodzie
