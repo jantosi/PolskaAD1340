@@ -38,6 +38,7 @@ public class World {
     public void initializeWorld() {
     	//randomBlockades();
     	randomCataclysms();
+    	randomBandits();
     	
     	Set<String> visited = new HashSet<String>();
     	for (Town town : this.towns) {
@@ -47,6 +48,22 @@ public class World {
     		}
     	}
     	
+    }
+    
+    public void changeItemPrices() {
+    	Random random = new Random();
+    	
+    	for (Town town : this.towns) {
+    		for (Item item : town.getItems()) {
+    			int change = random.nextInt(15) - 7;
+    			int newPrice = item.getPrice() + change;
+    			if (newPrice < 0) {
+    				newPrice = 0;
+    			}
+    			
+    			item.setPrice(newPrice);
+    		}
+    	}
     }
     
     public void randomBlockades() {

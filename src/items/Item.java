@@ -18,7 +18,7 @@ abstract public class Item {
 	
     /**
      * Cena narzędnia.
-     * @var int
+     * @var double
      */
     protected int _price;
     
@@ -71,12 +71,9 @@ abstract public class Item {
     /**
      * Setter dla ceny
      * @param int price
-     * @return Item
      */
-    public Item setPrice(int price) {
+    public void setPrice(int price) {
         this._price = price;
-        
-        return this;
     }
     
     /**

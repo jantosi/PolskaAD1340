@@ -50,6 +50,12 @@ public class PolskaAD1340 {
             for (int i = 0; i < visibleObjects.size(); i++) {
             	System.out.println(visibleObjects.get(i).toString());
             }
+           
+            System.out.println("przed: ");
+            System.out.println(world);
+            world.changeItemPrices();
+            System.out.println("po: ");
+            System.out.println(world);
             
             //clipsEnv.displayWorldFacts();
             
