@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import agents.Agent;
+
 import polskaad1340.InformacjeOSwiecie;
 import polskaad1340.LadowanieMapy;
 import CLIPSJNI.PrimitiveValue;
@@ -103,6 +105,12 @@ public class World {
         loadTrees();
     }
 
+    public void loadVisibleWorld(Agent agent) throws Exception {
+    	String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) TRUE)";
+    	PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);
+    	System.out.println(pv.size());
+    }
+    
     public void printoutMapFrames() {
         for (int i = 0; i < height; i++) {
             for (int k = 0; k < width; k++) {

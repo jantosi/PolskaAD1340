@@ -2,11 +2,12 @@
 (deftemplate modyfikacjaStratEnergiiPoslanca (slot idPoslanca))
 (deftemplate modyfikacjaPredkosciAgenta (slot idAgenta))
 (deftemplate zregenerowanoAgenta (slot idAgenta))
+(deftemplate okreslonoWidocznosc (slot idAgenta))
 
 ;REGULY
 ;regula okresla parametry poslanca po zakupieniu konia, czyli
 ;po sprawdzeniu istnienia faktu kupienieKonia
-(defrule sprawdzKupienieKoniaPoslaniec
+(defrule sprawdzKupienieKoniaPoslaniec (declare (salience 4))
     ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
     ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
     ?konik <- (kon(id ?kupionyKon))
@@ -41,7 +42,7 @@
 )
 
 ;regula aktualizujaca straty energii poslanca z uwzglednieniem paczek jakie niesie
-(defrule obliczStartyEnergiiPoslanca
+(defrule obliczStartyEnergiiPoslanca (declare (salience 2))
     ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
     
     ;sprawdzamy czy poslaniec w danej turze nie byl jeszcze modyfikowany
@@ -83,7 +84,7 @@
 )
 
 ;regula okreslajaca dodatki predkosci zwiazane z tym po jakiej nawierzchni się on porusza
-(defrule okreslDodatekPredkosciRuchuAgenta
+(defrule okreslDodatekPredkosciRuchuAgenta (declare (salience 3)) 
     (or	
 		?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
 		?agent <- (rycerz (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
@@ -109,19 +110,19 @@
         
         (if (eq ?czyDrzewo TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))            
+            (bind ?dodatPredkosc (- ?dodatPredkosc 2))            
         )
         (if (eq ?czyScieteDrzewo TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 2))     
+            (bind ?dodatPredkosc (- ?dodatPredkosc 1))     
         ) 
         (if (eq ?czyDrogaBezplatna TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 3))      
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 0))      
         ) 
         (if (eq ?czyDrogaPlatna TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 4))      
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))      
         ) 
         (if (eq ?czyDrogaUtwardzona TRUE)
         then
@@ -130,7 +131,12 @@
         (if (eq ?czyDrogaNieutwardzona TRUE)
         then
             (bind ?dodatPredkosc (+ ?dodatPredkosc 0))        
-        )         
+        )       
+        
+        (if (< ?dodatPredkosc 0)
+        then
+            (bind ?dodatPredkosc 0)
+        )  
     else ;chyba, ze jest to smok, ktory niezaleznie od nawierzchni porusza sie z ta sama predkoscia
         (bind ?dodatPredkosc 5)    
     )    
@@ -143,7 +149,7 @@
     (assert (modyfikacjaPredkosciAgenta (idAgenta ?id)))
 )
 ;regula pozwalajaca przmieszczac agentow wzdluz danej drogi
-(defrule przemieszczaniePoDrodze
+(defrule przemieszczaniePoDrodze (declare (salience 1))
     (or	
 		(and 
             ?agent <- (poslaniec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
@@ -220,7 +226,7 @@
 )
 
 ;przemieszczanie agentow po kratkach
-(defrule przemieszczanie
+(defrule przemieszczanie (declare (salience 1))
 	(or	
 		(and
             ?agent <- (poslaniec (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
@@ -370,7 +376,7 @@
 
 ;regula realizujaca akcje podjete przez agentow w momencie natrafienia na blokade
 ;moga oni albo ja przeskoczyc albo odpoczac i poczekac az zostanie usunieta
-(defrule omijaniePrzeszkod
+(defrule omijaniePrzeszkod (declare (salience 1))
     (or	
 		(and
             ?agent <- (poslaniec (id ?id)(energia ?energia)(strataEnergii ?strE)(cel ?cel)(mozliwyRuch ?mozliwyRuch)(idKratki ?agentKratka))
@@ -475,7 +481,7 @@
 )
 
 ;regula realizujaca odpoczynek agentów, regenerujac im przy tym energie
-(defrule odpoczywanie
+(defrule odpoczywanie (declare (salience 1))
     (or	
 		?agent <- (poslaniec (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
 		?agent <- (rycerz (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
@@ -505,7 +511,7 @@
 )
 
 ; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
-(defrule wezPaczke
+(defrule wezPaczke (declare (salience 3))
     ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki ?paczki))
     ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
     ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
@@ -517,7 +523,7 @@
     (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
 )
 ;regula do sciecia drzew
-(defrule zetnijDrzewo
+(defrule zetnijDrzewo (declare (salience 3))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) 
      (siekiera ?idSiekiery) (udzwig ?udzwig) ( maxUdzwig ?maxUdzwig) (energia ?energia) (strataEnergii ?strataEnergii))
     ?drzewo <- (drzewo (idKratki ?idKratki) (stan ?stanDrzewa) (rodzajDrzewa ?rodzajDrzewa)) 
@@ -675,7 +681,7 @@
     (retract ?akcja)
 ) 
 ; kupowanie wozu z grodu przez drwala
-(defrule kupWozZGrodu
+(defrule kupWozZGrodu (declare (salience 4))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (zloto ?zlotoDrwala))
     ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
     ?nowyWoz <-(woz (id ?idWozu) (cena ?cenaWozu)(udzwig ?udzwigNowegoWozu) 
@@ -696,7 +702,7 @@
    (modify ?nowyWoz (idGrodu nil))
 )
 ; drwal kupuje siekiere z grodu
-(defrule kupSiekiereZGrodu
+(defrule kupSiekiereZGrodu (declare (salience 4))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki)   (zloto ?zlotoDrwala) )
     ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
     ?nowaSiekiera <-(siekiera (id ?idSiekiery) (cena ?cenaSiekiery) 
@@ -720,7 +726,7 @@
    (modify ?nowaSiekiera (idGrodu nil))
 )
 ;drwal zawsze sprzedaje całe drewno jakie ma
-(defrule sprzedajDrewnoWGrodzie
+(defrule sprzedajDrewnoWGrodzie (declare (salience 2))
 ?drwal <- (drwal (id ?id) (idKratki ?idKratki)   (zloto ?zlotoDrwala) (scieteDrewno $?drewno) )
     ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
     ?akcja <- (akcjaSprzedajDrewno (idAgenta ?id) )
@@ -742,7 +748,7 @@
     (retract ?akcja)
 )
 ; TODO: Sprawdzenie, czy ma miejsce w magazynie.
-(defrule kupTowarZGrodu
+(defrule kupTowarZGrodu (declare (salience 4))
     ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
     ?grod <- (grod (nazwa ?idGrodu))
     ?przedmiot <- (przedmiot (id ?idPrzedmiotu))
@@ -753,7 +759,7 @@
 )
 
 ;regula, ktora okresla jakie kratki widzi dany agent
-(defrule okreslanieWidocznosci
+(defrule okreslanieWidocznosci (declare (salience 0))
 	(or 
 		(poslaniec (id ?agentId)(idKratki ?idKratki)(poleWidzenia ?poleWidzenia))
 		(kupiec (id ?agentId)(idKratki ?idKratki)(poleWidzenia ?poleWidzenia))
@@ -763,9 +769,14 @@
 		(smok (id ?agentId)(idKratki ?idKratki)(poleWidzenia ?poleWidzenia))
 	)
 	(kratka (id ?idKratki)(pozycjaX ?kX)(pozycjaY ?kY))
+    (not (akcjaPrzemieszczaniePoDrodze (idAgenta ?agentId)))
+    (not (akcjaPrzemieszczanie (idAgenta ?agentId)))
+    (not (okreslonoWidocznosc (idAgenta ?agentId)))
 =>	
+    
 	;kazdy agent widzi kwadratowy obszar o dlugosci boku rownej wartosci poleWidzenia
-	(loop-for-count (?i (- 0 ?poleWidzenia) ?poleWidzenia) do
+    (bind ?kratki 0)	
+     (loop-for-count (?i (- 0 ?poleWidzenia) ?poleWidzenia) do
 		(loop-for-count (?j (- 0 ?poleWidzenia) ?poleWidzenia) do
 			(bind ?x (+ ?kX ?i))
 			(bind ?y (+ ?kY ?j))
@@ -777,10 +788,14 @@
 			then
 				(bind ?widzialnaKratkaId (fact-slot-value (nth$ 1 (find-fact ((?k kratka)) (and (eq ?k:pozycjaX ?x) (eq ?k:pozycjaY ?y)))) id))
 				(assert (widzialnaCzescSwiata (idAgenta ?agentId)(idKratki ?widzialnaKratkaId)))
-				;(printout t "Agent o id: " ?agentId " widzi kratke o id: " ?widzialnaKratkaId crlf)
-			)
+			
+                (bind ?kratki (+ ?kratki 1))			
+            )
 		)
 	)
+ 
+    (assert (okreslonoWidocznosc (idAgenta ?agentId))) 
+    (printout t "Agent: " ?agentId " widzi " ?kratki " kratek" crlf)
 )
 
 
