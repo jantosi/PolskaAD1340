@@ -3,134 +3,145 @@ package world;
 import CLIPSJNI.PrimitiveValue;
 
 public class Road {
-	private String id;
-	private int mapFrame;
-	private String sourceTown;
-	private String destinationTown;
-	private String type;
-	private boolean isFree;
-	private int currentPartNo;
-	private int maxPartNo;
-	private double robberyProbability;
 
-	public Road(String id, int mapFrame, String sourceTown, String destinationTown, String type, boolean isFree, int currentPartNo, int maxPartNo) {
-		super();
-		this.id = id;
-		this.mapFrame = mapFrame;
-		this.sourceTown = sourceTown;
-		this.destinationTown = destinationTown;
-		this.type = type;
-		this.isFree = isFree;
-		this.currentPartNo = currentPartNo;
-		this.maxPartNo = maxPartNo;
-	}
+    private String id;
+    private int mapFrame;
+    private String sourceTown;
+    private String destinationTown;
+    private String type;
+    private boolean isFree;
+    private int currentPartNo;
+    private int maxPartNo;
+    private double robberyProbability;
 
-	public Road() {
+    public Road(String id, int mapFrame, String sourceTown, String destinationTown, String type, boolean isFree, int currentPartNo, int maxPartNo) {
+        super();
+        this.id = id;
+        this.mapFrame = mapFrame;
+        this.sourceTown = sourceTown;
+        this.destinationTown = destinationTown;
+        this.type = type;
+        this.isFree = isFree;
+        this.currentPartNo = currentPartNo;
+        this.maxPartNo = maxPartNo;
+    }
 
-	}
+    public Road() {
+    }
 
-	public void loadFromClips(PrimitiveValue pv) {
-		try {
-			this.id = pv.getFactSlot("id").getValue().toString();
-			this.mapFrame = pv.getFactSlot("idKratki").intValue();
-			this.sourceTown = pv.getFactSlot("skadGrod").getValue().toString();
-			this.destinationTown = pv.getFactSlot("dokadGrod").getValue().toString();
-			this.type = pv.getFactSlot("nawierzchnia").getValue().toString();
-			this.isFree = Boolean.parseBoolean(pv.getFactSlot("platna").getValue().toString());
-			this.currentPartNo = pv.getFactSlot("nrOdcinka").intValue();
-			this.maxPartNo = pv.getFactSlot("maxOdcinek").intValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public Road(Road other) {
+        super();
+        this.id = other.id;
+        this.mapFrame = other.mapFrame;
+        this.sourceTown = other.sourceTown;
+        this.destinationTown = other.destinationTown;
+        this.type = other.type;
+        this.isFree = other.isFree;
+        this.currentPartNo = other.currentPartNo;
+        this.maxPartNo = other.maxPartNo;
+    }
 
-	@Override
-	public String toString() {
-		StringBuffer sbuf = new StringBuffer();
-		sbuf.append("(droga ");
-		sbuf.append("(id ").append(id).append(") ");
-		sbuf.append("(idKratki ").append(mapFrame).append(") ");
-		sbuf.append("(skadGrod ").append(sourceTown).append(") ");
-		sbuf.append("(dokadGrod ").append(destinationTown).append(") ");
-		sbuf.append("(platna ").append(String.valueOf(isFree).toUpperCase()).append(") ");
-		sbuf.append("(nawierzchnia ").append(type).append(") ");
-		sbuf.append("(nrOdcinka ").append(currentPartNo).append(") ");
-		sbuf.append("(maxOdcinek ").append(maxPartNo).append(")");
-		sbuf.append(")");
+    public void loadFromClips(PrimitiveValue pv) {
+        try {
+            this.id = pv.getFactSlot("id").getValue().toString();
+            this.mapFrame = pv.getFactSlot("idKratki").intValue();
+            this.sourceTown = pv.getFactSlot("skadGrod").getValue().toString();
+            this.destinationTown = pv.getFactSlot("dokadGrod").getValue().toString();
+            this.type = pv.getFactSlot("nawierzchnia").getValue().toString();
+            this.isFree = Boolean.parseBoolean(pv.getFactSlot("platna").getValue().toString());
+            this.currentPartNo = pv.getFactSlot("nrOdcinka").intValue();
+            this.maxPartNo = pv.getFactSlot("maxOdcinek").intValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		return sbuf.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuffer sbuf = new StringBuffer();
+        sbuf.append("(droga ");
+        sbuf.append("(id ").append(id).append(") ");
+        sbuf.append("(idKratki ").append(mapFrame).append(") ");
+        sbuf.append("(skadGrod ").append(sourceTown).append(") ");
+        sbuf.append("(dokadGrod ").append(destinationTown).append(") ");
+        sbuf.append("(platna ").append(String.valueOf(isFree).toUpperCase()).append(") ");
+        sbuf.append("(nawierzchnia ").append(type).append(") ");
+        sbuf.append("(nrOdcinka ").append(currentPartNo).append(") ");
+        sbuf.append("(maxOdcinek ").append(maxPartNo).append(")");
+        sbuf.append(")");
 
-	public String getId() {
-		return id;
-	}
+        return sbuf.toString();
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public int getCurrentPartNo() {
-		return currentPartNo;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setCurrentPartNo(int currentPartNo) {
-		this.currentPartNo = currentPartNo;
-	}
+    public int getCurrentPartNo() {
+        return currentPartNo;
+    }
 
-	public int getMaxPartNo() {
-		return maxPartNo;
-	}
+    public void setCurrentPartNo(int currentPartNo) {
+        this.currentPartNo = currentPartNo;
+    }
 
-	public void setMaxPartNo(int maxPartNo) {
-		this.maxPartNo = maxPartNo;
-	}
+    public int getMaxPartNo() {
+        return maxPartNo;
+    }
 
-	public int getMapFrame() {
-		return mapFrame;
-	}
+    public void setMaxPartNo(int maxPartNo) {
+        this.maxPartNo = maxPartNo;
+    }
 
-	public void setMapFrame(int mapFrame) {
-		this.mapFrame = mapFrame;
-	}
+    public int getMapFrame() {
+        return mapFrame;
+    }
 
-	public String getSourceTown() {
-		return sourceTown;
-	}
+    public void setMapFrame(int mapFrame) {
+        this.mapFrame = mapFrame;
+    }
 
-	public void setSourceTown(String sourceTown) {
-		this.sourceTown = sourceTown;
-	}
+    public String getSourceTown() {
+        return sourceTown;
+    }
 
-	public String getDestinationTown() {
-		return destinationTown;
-	}
+    public void setSourceTown(String sourceTown) {
+        this.sourceTown = sourceTown;
+    }
 
-	public void setDestinationTown(String destinationTown) {
-		this.destinationTown = destinationTown;
-	}
+    public String getDestinationTown() {
+        return destinationTown;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setDestinationTown(String destinationTown) {
+        this.destinationTown = destinationTown;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public boolean isFree() {
-		return isFree;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setFree(boolean isFree) {
-		this.isFree = isFree;
-	}
+    public boolean isFree() {
+        return isFree;
+    }
 
-	public double getRobberyProbability() {
-		return robberyProbability;
-	}
+    public void setFree(boolean isFree) {
+        this.isFree = isFree;
+    }
 
-	public void setRobberyProbability(double robberyProbability) {
-		this.robberyProbability = robberyProbability;
-	}
+    public double getRobberyProbability() {
+        return robberyProbability;
+    }
 
+    public void setRobberyProbability(double robberyProbability) {
+        this.robberyProbability = robberyProbability;
+    }
 }

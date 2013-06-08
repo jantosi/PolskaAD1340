@@ -36,36 +36,36 @@ public class World {
     }
 
     public void initializeWorld() {
-    	//randomBlockades();
-    	randomCataclysms();
-    	randomBandits();
-    	
-    	Set<String> visited = new HashSet<String>();
-    	for (Town town : this.towns) {
-    		if (!visited.contains(town.getNazwa())) {
-    			visited.add(town.getNazwa());
-    			town.randomItems();
-    		}
-    	}
-    	
+        //randomBlockades();
+        randomCataclysms();
+        randomBandits();
+
+        Set<String> visited = new HashSet<String>();
+        for (Town town : this.towns) {
+            if (!visited.contains(town.getNazwa())) {
+                visited.add(town.getNazwa());
+                town.randomItems();
+            }
+        }
+
     }
-    
+
     public void changeItemPrices() {
-    	Random random = new Random();
-    	
-    	for (Town town : this.towns) {
-    		for (Item item : town.getItems()) {
-    			int change = random.nextInt(15) - 7;
-    			int newPrice = item.getPrice() + change;
-    			if (newPrice < 0) {
-    				newPrice = 0;
-    			}
-    			
-    			item.setPrice(newPrice);
-    		}
-    	}
+        Random random = new Random();
+
+        for (Town town : this.towns) {
+            for (Item item : town.getItems()) {
+                int change = random.nextInt(15) - 7;
+                int newPrice = item.getPrice() + change;
+                if (newPrice < 0) {
+                    newPrice = 0;
+                }
+
+                item.setPrice(newPrice);
+            }
+        }
     }
-    
+
     public void randomBlockades() {
         this.blockades = new ArrayList<Blockade>();
 
@@ -79,34 +79,34 @@ public class World {
 
     //TODO prztestowac jak beda drogi
     public void randomBandits() {
-    	this.bandits = new ArrayList<Bandits>();
-    	
-    	Random random = new Random();
-    	Set<String> roadIds = new HashSet<String>();
-    	for (Road road : this.roads) {
-    		roadIds.add(road.getId());
-    	}
-    	
-    	for (String roadId : roadIds) {
-    		ArrayList<Road> actualRoad = new ArrayList<Road>();
-    		for (Road road : this.roads) {
-    			if (road.getId().equalsIgnoreCase(roadId)) {
-    				actualRoad.add(road);
-    			}
-    		}
-    		
-    		int numberOfBandits = 0;
-    		double packageLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
-    		double goldLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
-    		
-    		while (numberOfBandits < (actualRoad.get(0).getMaxPartNo() * actualRoad.get(0).getRobberyProbability())) {
-    			int frame = actualRoad.get(random.nextInt(actualRoad.size())).getMapFrame();
-    			Bandits bandits = new Bandits(packageLoss, goldLoss, frame);
-    			this.bandits.add(bandits);
-    		}
-    	}
+        this.bandits = new ArrayList<Bandits>();
+
+        Random random = new Random();
+        Set<String> roadIds = new HashSet<String>();
+        for (Road road : this.roads) {
+            roadIds.add(road.getId());
+        }
+
+        for (String roadId : roadIds) {
+            ArrayList<Road> actualRoad = new ArrayList<Road>();
+            for (Road road : this.roads) {
+                if (road.getId().equalsIgnoreCase(roadId)) {
+                    actualRoad.add(road);
+                }
+            }
+
+            int numberOfBandits = 0;
+            double packageLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
+            double goldLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
+
+            while (numberOfBandits < (actualRoad.get(0).getMaxPartNo() * actualRoad.get(0).getRobberyProbability())) {
+                int frame = actualRoad.get(random.nextInt(actualRoad.size())).getMapFrame();
+                Bandits bandits = new Bandits(packageLoss, goldLoss, frame);
+                this.bandits.add(bandits);
+            }
+        }
     }
-    
+
     public void randomCataclysms() {
         this.cataclysms = new ArrayList<Cataclysm>();
         Random random = new Random();
@@ -131,7 +131,7 @@ public class World {
             }
         }
     }
-    
+
     public void loadFromClips() {
         bandits.clear();
         blockades.clear();
@@ -148,48 +148,48 @@ public class World {
         loadTowns();
         loadTrees();
     }
-    
-    public ArrayList<Object> getVisibleWorld(String agentId) throws Exception {
-    	String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) (eq ?w:idAgenta " + agentId + "))";
-    	PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);
-    	
-    	ArrayList<Object> visibleObjects = new ArrayList<Object>();
-    	
-    	for (int i = 0; i < pv.size(); i++) {
-    		int visibleFrameId = pv.get(i).getFactSlot("idKratki").intValue();
 
-    		for (Town town : this.towns) {
-    			if (town.getMapFrame() == visibleFrameId) {
-    				visibleObjects.add(town);
-    				
-    				for (Item item : town.getItems()) {
-    					visibleObjects.add(item);
-    				}
-    			}
-    		}
-    		
-    		for (Blockade blockade : this.blockades) {
-    			if (blockade.getMapFrame() == visibleFrameId) {
-    				visibleObjects.add(blockade);
-    			}
-    		}
-    		
-    		for (Tree tree : this.trees) {
-    			if (tree.getWorldFrame() == visibleFrameId) {
-    				visibleObjects.add(tree);
-    			}
-    		}
-    		
-    		for (Road road : this.roads) {
-    			if (road.getMapFrame() == visibleFrameId) {
-    				visibleObjects.add(road);
-    			}
-    		}
-    	}
-    	
-    	return visibleObjects;
+    public ArrayList<Object> getVisibleWorld(String agentId) throws Exception {
+        String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) (eq ?w:idAgenta " + agentId + "))";
+        PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);
+
+        ArrayList<Object> visibleObjects = new ArrayList<Object>();
+
+        for (int i = 0; i < pv.size(); i++) {
+            int visibleFrameId = pv.get(i).getFactSlot("idKratki").intValue();
+
+            for (Town town : this.towns) {
+                if (town.getMapFrame() == visibleFrameId) {
+                    visibleObjects.add(town);
+
+                    for (Item item : town.getItems()) {
+                        visibleObjects.add(item);
+                    }
+                }
+            }
+
+            for (Blockade blockade : this.blockades) {
+                if (blockade.getMapFrame() == visibleFrameId) {
+                    visibleObjects.add(blockade);
+                }
+            }
+
+            for (Tree tree : this.trees) {
+                if (tree.getWorldFrame() == visibleFrameId) {
+                    visibleObjects.add(tree);
+                }
+            }
+
+            for (Road road : this.roads) {
+                if (road.getMapFrame() == visibleFrameId) {
+                    visibleObjects.add(road);
+                }
+            }
+        }
+
+        return visibleObjects;
     }
-    
+
     public void printoutMapFrames() {
         for (int i = 0; i < height; i++) {
             for (int k = 0; k < width; k++) {
@@ -326,13 +326,13 @@ public class World {
     }
 
     public void loadFromMap(LadowanieMapy mapLoad) {
-    	Random random = new Random();
+        Random random = new Random();
         height = mapLoad.getMapSize();
         width = mapLoad.getMapSize();
         mapFrames = new MapFrame[height][width];
-        
+
         ArrayList<Point> pozycjeGrodow = new ArrayList<>();
-        pozycjeGrodow.add(new Point(-1,-1)); //WAŻNE: grody numerowane od 1. zero to placeholder.
+        pozycjeGrodow.add(new Point(-1, -1)); //WAŻNE: grody numerowane od jedynki. Element zerowy to placeholder.
         // kratki
         int frameID = 0;
         for (int y = 0; y < height; y++) {
@@ -370,7 +370,7 @@ public class World {
                         int population = rand.nextInt(900) + 100;
                         float guards = (float) rand.nextDouble();
                         String name = "grod" + townId;
-                        
+
                         Town town1 = new Town(name, mf.getId(), population, guards);
 
                         Town town2 = new Town(name, mapFrames[y][x + 1].getId(), population, guards);
@@ -383,8 +383,12 @@ public class World {
                         towns.add(town2);
                         towns.add(town3);
                         towns.add(town4);
-                        
-                        pozycjeGrodow.add(new Point(x,y));
+
+                        pozycjeGrodow.add(new Point(x, y));
+                        pozycjeGrodow.add(new Point(x, y + 1));
+                        pozycjeGrodow.add(new Point(x + 1, y));
+                        pozycjeGrodow.add(new Point(x + 1, y + 1));
+
 
                         townId++;
                     }
@@ -476,47 +480,123 @@ public class World {
         }
 
         System.out.println("NP:" + wykryteDrogiNieplatne.size() + " P:" + wykryteDrogiPlatne.size());
-        System.out.println(wykryteDrogiNieplatne.get(0));
 
-        for (int i = 0; i < wykryteDrogiNieplatne.size(); i++) {
-            ArrayList<Point> punktyKoncowe = new ArrayList<>();
-            Set<Point> pojedynczaDroga = wykryteDrogiNieplatne.get(i);
-            //szukaj punktów początkowych w drodze - czyli
-            //punktów, które mają tylko jednego sąsiada
-            for (Point kawalekDrogi : pojedynczaDroga) {
+        ArrayList<ArrayList<Set<Point>>> typyDrog = new ArrayList<>();
+        typyDrog.add(wykryteDrogiNieplatne);
+        typyDrog.add(wykryteDrogiPlatne);
 
-                int neighbours = 0;
-                Point[] neighs = InformacjeOSwiecie.getNeighboursOfPoint(kawalekDrogi);
-                
+        for (int typ = 0; typ < typyDrog.size(); typ++) {
+            ArrayList<Set<Point>> wykryteDrogiDanegoTypu = typyDrog.get(typ);
 
-                for (int j = 0; j < neighs.length; j++) {
-                    Point sasiad = neighs[j];
-                    if (pojedynczaDroga.contains(sasiad)) {
-                        neighbours++;
+            for (int i = 0; i < wykryteDrogiDanegoTypu.size(); i++) {
+                ArrayList<Point> punktyKoncowe = new ArrayList<>();
+                ArrayList<Integer> grodyPunktowKoncowych = new ArrayList<>();
+
+                Set<Point> aktualnaDroga = wykryteDrogiDanegoTypu.get(i);
+                //szukaj punktów początkowych w drodze - czyli
+                //punktów, które mają tylko jednego sąsiada
+                for (Point kawalekDrogi : aktualnaDroga) {
+
+                    int neighbours = 0;
+                    Point[] neighs = InformacjeOSwiecie.getNeighboursOfPoint(kawalekDrogi);
+
+
+                    for (int j = 0; j < neighs.length; j++) {
+                        Point sasiad = neighs[j];
+                        if (aktualnaDroga.contains(sasiad)) {
+                            neighbours++;
+                        }
+                    }
+                    if (neighbours == 1) {
+                        punktyKoncowe.add(kawalekDrogi);
                     }
                 }
-                if (neighbours == 1) {
-                    punktyKoncowe.add(kawalekDrogi);
-                }
-            }
-            
-            System.out.println(punktyKoncowe);
-            //punkty koncowe sa znane; teraz nalezy przejsc cala droge tworzac kratki drogi.
-            Point[] sasiedziMogacyBycGrodem = InformacjeOSwiecie.getNeighboursOfPoint(punktyKoncowe.get(0));
-            int grodID=-1;
-            for (int j = 0; j < sasiedziMogacyBycGrodem.length; j++) {    
-                Point point = sasiedziMogacyBycGrodem[j];
-                int find = pozycjeGrodow.indexOf(point);
-                if(find!=-1)
-                {
-                    grodID = find;
-                    break;
-                }
-            System.out.println("grodid: "+grodID);
-            }
-            
-        }
 
+                //punkty koncowe sa znane; teraz nalezy przejsc cala droge tworzac kratki drogi.
+                for (int j = 0; j < punktyKoncowe.size(); j++) {
+                    Point[] sasiedziMogacyBycGrodem = InformacjeOSwiecie.getNeighboursOfPoint(punktyKoncowe.get(j));
+                    int grodID = -1;
+                    for (int k = 0; k < sasiedziMogacyBycGrodem.length; k++) {
+                        Point point = sasiedziMogacyBycGrodem[k];
+
+                        int find = pozycjeGrodow.indexOf(point);
+
+                        if (find != -1) {
+                            grodID = find;
+                            break;
+                        }
+
+                    }
+
+                    if (grodID == -1) {
+                        System.err.println("Droga nie ma zakonczenia w grodzie!");
+                    }
+
+                    grodyPunktowKoncowych.add(grodID);
+                }
+
+                //mamy punkty koncowe i ich grody. trawersuj droge od pierwszego do drugiego punktu koncowego.
+                Point aktualnyPunkt = punktyKoncowe.get(0);
+                Point poprzedniPunkt = null;
+                ArrayList<Road> roadForwards = new ArrayList<>();
+
+                int iteration = 1;
+
+                while (aktualnyPunkt != punktyKoncowe.get(1)) {
+                    Road aktualnyKawalekDrogi; //max zostanie wypelniony pozniej
+                    String nazwatypu;
+                    if(typ==0)
+                    {
+                        nazwatypu = "nieplatna";
+                    }
+                    else
+                    {
+                        nazwatypu = "platna";
+                    }
+                    aktualnyKawalekDrogi = new Road(nazwatypu + i, frameID, grodyPunktowKoncowych.get(0).toString(), grodyPunktowKoncowych.get(1).toString(), "road type", true, iteration, -1);
+                    roadForwards.add(aktualnyKawalekDrogi);
+                    //szukaj nastepnego kawalka drogi
+                    for (Point potencjalnyKrok : aktualnaDroga) {
+                        if (InformacjeOSwiecie.arePointsAdjacent(aktualnyPunkt, potencjalnyKrok) && (poprzedniPunkt == null || poprzedniPunkt != potencjalnyKrok)) {
+                            //wykonaj krok
+                            poprzedniPunkt = aktualnyPunkt;
+                            aktualnyPunkt = potencjalnyKrok;
+                            break;
+                        }
+                    }
+                    iteration++;
+                }
+
+                for (int j = 0; j < roadForwards.size(); j++) {
+                    Road road = roadForwards.get(j);
+                    road.setMaxPartNo(iteration);
+                }
+
+                ArrayList<Road> roadBackwards = new ArrayList<>();
+                //droga w tyl to droga w przod z zamieniona kolejnoscia.
+                for (int j = 0; j < roadForwards.size(); j++) {
+                    Road roadFwdPart = roadForwards.get(j);
+                    Road roadBackPart = new Road(roadFwdPart);
+
+                    roadBackPart.setId(roadBackPart.getId() + "_wstecz");
+                    //swap source and destination.
+                    String sourceTown = roadBackPart.getSourceTown();
+                    roadBackPart.setSourceTown(roadBackPart.getDestinationTown());
+                    roadBackPart.setDestinationTown(sourceTown);
+
+                    //change progress accordingly
+                    roadBackPart.setCurrentPartNo(roadForwards.size() - j);
+
+                    //add newly created part
+                    roadBackwards.add(roadBackPart);
+                }
+
+                this.roads.addAll(roadForwards);
+                System.out.println("Dodaję "+roadForwards.size()+" kratek drogi "+roadForwards.get(0).getId() +" w przód");
+                this.roads.addAll(roadBackwards);
+                System.out.println("Dodaję "+roadBackwards.size()+" kratek drogi "+roadBackwards.get(0).getId() +" w tył");
+            }
+        }
 
     }
 
@@ -572,9 +652,9 @@ public class World {
         }
 
         for (Town town : this.towns) {
-        	for (Item item : town.getItems()) {
-        		sbuf.append(item.toString()).append("\n");
-        	}
+            for (Item item : town.getItems()) {
+                sbuf.append(item.toString()).append("\n");
+            }
         }
         return sbuf.toString();
     }
