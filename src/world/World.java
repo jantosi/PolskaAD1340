@@ -104,8 +104,6 @@ public class World {
                 numberOfBandits++;
             }
         }
-        
-        System.out.println("s: " + this.bandits.size());
     }
 
     public void randomCataclysms() {
@@ -332,8 +330,6 @@ public class World {
         width = mapLoad.getMapSize();
         mapFrames = new MapFrame[height][width];
 
-       // ArrayList<Point> pozycjeGrodow = new ArrayList<>();
-        //pozycjeGrodow.add(new Point(-1, -1)); //WAŻNE: grody numerowane od jedynki. Element zerowy to placeholder.
         // kratki
         int frameID = 0;
         for (int y = 0; y < height; y++) {
@@ -384,12 +380,6 @@ public class World {
                         towns.add(town2);
                         towns.add(town3);
                         towns.add(town4);
-
-                       /* pozycjeGrodow.add(new Point(x, y));
-                        pozycjeGrodow.add(new Point(x, y + 1));
-                        pozycjeGrodow.add(new Point(x + 1, y));
-                        pozycjeGrodow.add(new Point(x + 1, y + 1));*/
-
 
                         townId++;
                     }
