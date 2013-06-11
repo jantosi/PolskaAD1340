@@ -3,11 +3,8 @@ package world;
 import items.Item;
 
 import java.awt.Point;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -553,7 +550,7 @@ public class World {
                     {
                         nazwatypu = "platna";
                     }
-                    aktualnyKawalekDrogi = new Road(nazwatypu + i, frameID, grodyPunktowKoncowych.get(0).toString(), grodyPunktowKoncowych.get(1).toString(), "road type", true, iteration, -1);
+                    aktualnyKawalekDrogi = new Road(nazwatypu + i, frameID, grodyPunktowKoncowych.get(0).toString(), grodyPunktowKoncowych.get(1).toString(), "utwardzona", true, iteration, -1);
                     roadForwards.add(aktualnyKawalekDrogi);
                     //szukaj nastepnego kawalka drogi
                     for (Point potencjalnyKrok : aktualnaDroga) {
@@ -597,15 +594,28 @@ public class World {
                 System.out.println("Dodaję "+roadBackwards.size()+" kratek drogi "+roadBackwards.get(0).getId() +" w tył");
             }
         }
-
+        randomRoadType();
     }
 
-    /**
-     * Na sztywno z placa pisane
-     */
-    private void loadRoadsFromMap() {
+    private void randomRoadType() {
+    	Set<String> roadsId = new HashSet<String>();
+    	for (Road road : this.roads) {
+    		roadsId.add(road.getId());
+    	}
+    	
+    	String[] roadTypes = {"utwardzona", "nieutwardzona"};
+    	Random random = new Random();
+    	for (String roadId : roadsId) {
+    		String roadType = roadTypes[random.nextInt(roadTypes.length)];
+    		
+    		for (Road road : this.roads) {
+    			if (road.getId().equalsIgnoreCase(roadId)) {
+    				road.setType(roadType);
+    			}
+    		}
+    	}
     }
-
+    
     @Override
     public String toString() {
         StringBuffer sbuf = new StringBuffer();
