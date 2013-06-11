@@ -522,6 +522,18 @@
 
     (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
 )
+
+;WIP: Ataki pomiedzy rycerzem a smokiem
+
+(defrule atakujSmoka (declare (salience 3))
+    ?smok <- (smok (id ?id) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
+    ?rycerz <- (rycerz (id ?id) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
+    ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
+=>
+    (printout t "Not yet implemented." crlf)
+    (retract ?akcja)
+)
+
 ;regula do sciecia drzew
 (defrule zetnijDrzewo (declare (salience 3))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) 
