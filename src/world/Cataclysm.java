@@ -6,17 +6,19 @@ public class Cataclysm {
 
 	private String id;
 	private int mapFrame;
-	private double treesDestroy;
+	private int treesDestroy;
 	private int energyLoss;
 	private int populationLoss;
+	private int livingTime;
 
-	public Cataclysm(String id, int mapFrame, double treesDestroy, int energyLoss, int populationLoss) {
+	public Cataclysm(String id, int mapFrame, int treesDestroy, int energyLoss, int populationLoss,int livingTime) {
 		super();
 		this.id = id;
 		this.mapFrame = mapFrame;
 		this.treesDestroy = treesDestroy;
 		this.energyLoss = energyLoss;
 		this.populationLoss = populationLoss;
+		this.livingTime=livingTime;
 	}
 
 	public Cataclysm() {
@@ -27,9 +29,10 @@ public class Cataclysm {
 		try {
 			this.mapFrame = pv.getFactSlot("idKratki").intValue();
 			this.id = pv.getFactSlot("id").getValue().toString();
-			this.treesDestroy = pv.getFactSlot("niszczenieLasu").floatValue();
+			this.treesDestroy = pv.getFactSlot("niszczenieLasu").intValue();
 			this.energyLoss = pv.getFactSlot("oslabianieAgentow").intValue();
 			this.populationLoss = pv.getFactSlot("zabijanieMieszkancow").intValue();
+			this.livingTime = pv.getFactSlot("czasTrwania").intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -44,9 +47,18 @@ public class Cataclysm {
 		sbuf.append("(idKratki ").append(mapFrame).append(") ");
 		sbuf.append("(niszczenieLasu ").append(treesDestroy).append(") ");
 		sbuf.append("(oslabianieAgentow ").append(energyLoss).append(") ");
+		sbuf.append("(czasTrwania ").append(livingTime).append(") ");
 		sbuf.append("(zabijanieMieszkancow ").append(populationLoss).append(")");
 		sbuf.append(")");
 		return sbuf.toString();
+	}
+
+	public int getLivingTime() {
+		return livingTime;
+	}
+
+	public void setLivingTime(int livingTime) {
+		this.livingTime = livingTime;
 	}
 
 	public String getId() {
@@ -73,11 +85,11 @@ public class Cataclysm {
 		this.mapFrame = upperLeftMapFrame;
 	}
 
-	public double getTreesDestroy() {
+	public int getTreesDestroy() {
 		return treesDestroy;
 	}
 
-	public void setTreesDestroy(double treesDestroy) {
+	public void setTreesDestroy(int treesDestroy) {
 		this.treesDestroy = treesDestroy;
 	}
 

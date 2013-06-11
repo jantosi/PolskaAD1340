@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import world.Cataclysm;
 import world.World;
 import clips.ClipsEnvironment;
 
@@ -41,7 +42,7 @@ public class PolskaAD1340 {
             World world = new World(clipsEnv, lm);
             world.initializeWorld();
             //world.loadFromClips();
-           
+           world.getCataclysms().add(new Cataclysm("kleska1", 23, 34, 2, 5, 3));
             world.saveToClips(clipsEnv);
             //clipsEnv.displayWorldFacts();
             clipsEnv.getWorldEnv().run();

@@ -114,14 +114,16 @@ public class World {
             int frameStartX = random.nextInt(this.width);
             int frameStartY = random.nextInt(this.height);
 
-            double randomizedTreesDestroy = random.nextDouble();
+            int randomizedTreesDestroy = random.nextInt(100);
+            int randomizedLiveTime = random.nextInt(20)+4;
             int randomizedEnergyLoss = random.nextInt(20) + 4;
             int randomizedPopulationLoss = random.nextInt(10) + 4;
 
             for (int x = frameStartX; x < (frameStartX + size); x++) {
                 for (int y = frameStartY; y < (frameStartY + size); y++) {
                     if (x < this.width && x >= 0 && y < this.height && y >= 0) {
-                        Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i + 1), this.mapFrames[x][y].getId(), randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss);
+                        Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i + 1), this.mapFrames[x][y].getId(),
+                        				randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss,randomizedLiveTime);
                         this.cataclysms.add(tmpCataclysm);
                     }
                 }
