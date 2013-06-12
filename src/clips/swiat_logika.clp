@@ -905,26 +905,80 @@
     (assert (okreslonoWidocznosc (idAgenta ?agentId))) 
     (printout t "Agent: " ?agentId " widzi " ?kratki " kratek" crlf)
 )
+; REGULY DO KLESKI
+; niszczenie lasu
+(defrule kleskaNiszczLas (declare (salience 10))
+    ?drzewo <- (drzewo  (idKratki ?idKratki) )
+    ?kleska <- (kleska (id ?idKleski) (idKratki ?idKratki) (niszczenieLasu ?niszczenie))
 
+    (not (kleskaLas (idKleski ?idKleski )))
+=>
+    (bind ?szansa (+ (mod (random) 100) 1))
 
+    (if  (<= ?szansa ?niszczenie)
+    then
+    (modify ?drzewo (stan sciete))
+    (printout t "Kleska o id: " ?idKleski " zniszczyla drzewo na kratce " ?idKratki crlf)
+    )
 
+    (assert (kleskaLas (idKleski ?idKleski )))
+)
+; zabicie mieszkancow
+(defrule kleskaZabijMieszkancow (declare (salience 10))
+    ?grod <- (grod (nazwa ?idGrodu) (idKratki ?idKratki) (liczbaMieszkancow ?mieszkancow ) )
+    ?kleska <- (kleska (id ?idKleski) (idKratki ?idKratki) (zabijanieMieszkancow ?zabijanie))
+    (not (kleskaGrod (idKleski ?idKleski )))
+=>
+    (bind ?mieszkancowNew (- ?mieszkancow ?zabijanie))
+    (if (<= ?mieszkancowNew 0)
+    then
+    (bind ?mieszkancowNew 0)
+    )
+    (modify ?grod (liczbaMieszkancow ?mieszkancowNew))
+    (printout t "Kleska o id: " ?idKleski " zabila  " ?zabijanie " mieszkancow w grodzie " ?idGrodu crlf)
 
+    (assert (kleskaGrod (idKleski ?idKleski )))
+)
 
+; zranienie agentow
+(defrule kleskaZranAgentow (declare (salience 10))
+ (or	
+		?agent <- (poslaniec (id ?id)(energia ?energia) (idKratki ?idKratki))
+		?agent <- (rycerz (id ?id)(energia ?energia) (idKratki ?idKratki))
+		?agent <- (drwal (id ?id)(energia ?energia) (idKratki ?idKratki))
+		?agent <- (kupiec (id ?id)(energia ?energia) (idKratki ?idKratki))
+		?agent <- (zlodziej (id ?id)(energia ?energia) (idKratki ?idKratki))
+		?agent <- (smok (id ?id)(energia ?energia) (idKratki ?idKratki))
+	)
+    ?kleska <- (kleska (id ?idKleski) (idKratki ?idKratki) (oslabianieAgentow ?oslabienie))
+    (not (dzialanieKleskiNaAgenta (idAgenta ?id ) ( idKleski ?idKleski) ))
 
+=>
+    (bind ?energiaNew (- ?energia ?oslabienie))
+    (if (<= ?energiaNew 0)
+    then
+        (bind ?energiaNew 0)
+    )
+    (modify ?agent (energia ?energiaNew))
+    (printout t "Kleska o id: " ?idKleski " zabrala  " ?oslabienie " punktow energi agentowi " ?id crlf)
+    (assert (dzialanieKleskiNaAgenta ( idAgenta ?id) ( idKleski ?idKleski) ))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+)
+; update klesk
+(defrule kleskaUaktualnij (declare (salience 9))
+?kleska<- (kleska (id ?idKleski) (czasTrwania ?czas) )
+(iteracja ?iteracja)
+(not (uaktualnianieKlesk ( idKleski ?idKleski)))
+=>
+(bind ?czasNew (- ?czas 1))
+    (if (<= ?czasNew 0)
+    then
+        (retract ?kleska)
+        (printout t "Kleska o id: " ?idKleski " skonczyla sie" crlf)
+    else
+        (modify ?kleska (czasTrwania ?czasNew))
+        (printout t "Kleska o id: " ?idKleski " zostala uaktualniona" crlf)
+    )
+    (assert (uaktualnianieKlesk ( idKleski ?idKleski)))
+)
 
