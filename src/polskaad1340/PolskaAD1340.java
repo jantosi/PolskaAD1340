@@ -35,47 +35,21 @@ public class PolskaAD1340 {
         try {
             LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
             om.importBackgroundTileGrid(lm.getMap());
-
             om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
-
-            ObiektPierwszegoPlanu opp;
-            opp = om.nowyObiektPierwszegoPlanu(0, 0, 1895);
-
             om.drawAllTiles();
-            ClipsEnvironment clipsEnv = new ClipsEnvironment();
-            World world = new World(clipsEnv, lm);
-            world.initializeWorld();
-            //world.loadFromClips();
-           world.getCataclysms().add(new Cataclysm("kleska1", 23, 34, 2, 5, 3));
-            world.saveToClips(clipsEnv);
-            //clipsEnv.displayWorldFacts();
-            clipsEnv.getWorldEnv().run();
-            //ArrayList<Object> visibleObjects = world.getVisibleWorld("poslaniec1");
-           // System.out.println("widzialny swiat dla poslanca1: ");
-           // for (int i = 0; i < visibleObjects.size(); i++) {
-           // 	System.out.println(visibleObjects.get(i).toString());
-           // }
-           
-            System.out.println("przed: ");
-            System.out.println(world);
-            world.changeItemPrices();
-            for (Bandits b : world.getBandits())
-            	System.out.println(b);
-            
-            //clipsEnv.displayWorldFacts();
-            
-//            String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
-//            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
-//            for (int i = 0; i < pv1.size(); i++) {
-////                System.out.print("KRATKA ");
-////                System.out.print(" id: " + pv1.get(i).getFactSlot("id"));
-////                System.out.print(", X: " + pv1.get(i).getFactSlot("pozycjaX"));
-////                System.out.println(", Y: " + pv1.get(i).getFactSlot("pozycjaY"));
-//            	Tree a = new Tree();
-//            	a.loadFromClips(pv1.get(i));
-//            	System.out.println(a);
-//            }
 
+            ClipsEnvironment clipsEnv = new ClipsEnvironment();
+            World world = new World(clipsEnv, lm, om);
+            //world.loadFromClips();
+            world.getCataclysms().add(new Cataclysm("kleska1", 23, 34, 2, 5, 3));
+            world.saveToClips(clipsEnv);
+            clipsEnv.getWorldEnv().run();
+           
+            world.changeItemPrices();
+            
+            
+            //clipsEnv.displayWorldFacts();
+            
             /*            CourierStatistics cs = new CourierStatistics();
              Courier agent = new Courier("poslaniec1", 10, cs);
              agent.setCapacity(500);

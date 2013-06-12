@@ -1,8 +1,15 @@
 package agents;
 
+import items.Horse;
+import items.Pack;
+import items.PackCollection;
+
 import java.util.ArrayList;
-import items.*;
-import statistics.*;
+
+import polskaad1340.OknoMapy;
+
+import statistics.CourierStatistics_Interface;
+import world.MapFrame;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
 
@@ -37,65 +44,51 @@ public class Courier extends Agent {
      */
     protected Horse _horse;
     
-    protected int mapFrame;
-    
-    protected ClipsEnvironment clipsEnv;
-    
     /**
      * Konstruktor. Nadanie domyślnego udźwigu.
      * @param capacity 
      */
-    public Courier(String id, int capacity, CourierStatistics_Interface stat, int mapFrame, ClipsEnvironment clipsEnv) {
+    public Courier(String id, CourierStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
         super(id);
-        
-        this.setCapacity(capacity);
+
+        this._capacity = 5;
         this._packages = new PackCollection();
         this.setHorse(null);
         this._statistics = stat;
-        this.setGold(0);
-        this.setMapFrame(mapFrame);
-        this.clipsEnv = clipsEnv;
-    }
-    
-    public Courier setMapFrame(int mapFrame) {
         this.mapFrame = mapFrame;
-        
-        return this;
+        this._velocity = 1;
+        this._fieldOfView = 1;
+        this._possibleMove = 1;
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), 1088);
     }
     
-    public int getMapFrame() {
-        return this.mapFrame;
-    }
-    
-    
-    public void loadFromClips(PrimitiveValue pv){
-	try {
-		this.mapFrame = pv.getFactSlot("idKratki").intValue();
-		this.setVelocity(pv.getFactSlot("predkosc").intValue() + pv.getFactSlot("dodatekPredkosci").intValue());
-		this.setEnergy(pv.getFactSlot("energia").intValue());
-                this.setEnergyLoss(pv.getFactSlot("strataEnergii").intValue());
-                this.setEnergyRecovery(pv.getFactSlot("odnawianieEnergii").intValue());
-                this.setGold(pv.getFactSlot("zloto").intValue());
-                this.setFieldOfView(pv.getFactSlot("poleWidzenia").intValue());
-                this.setCapacity(pv.getFactSlot("udzwig").intValue());
-                
-                String horseFind = "(find-fact ((?k kon)) (eq ?k:id "+pv.getFactSlot("kon").intValue()+"))";
-                PrimitiveValue horsePv = this.clipsEnv.getWorldEnv().eval(horseFind);
-                Horse courierHourse = new Horse(horsePv, pv.getFactSlot("idAgenta").intValue(), this.clipsEnv);
-                this.setHorse(courierHourse);
-                
-                String packFind = "(find-all-facts ((?k paczka))) (eq ?k:id "+pv.getFactSlot("paczki").stringValue()+")";
-                PrimitiveValue packPv = this.clipsEnv.getWorldEnv().eval(packFind);
-                for(int i = 0; i < packPv.size(); i++) {
-                    Pack pack = new Pack();
-                    pack.loadFromClips(packPv.get(i));
-                    
-                    this.addPackage(pack);
-                }
-	} catch (Exception e) {
-		e.printStackTrace();
+	public void loadFromClips(PrimitiveValue pv, ClipsEnvironment clipsEnv) {
+		try {
+			this.setVelocity(pv.getFactSlot("predkosc").intValue() + pv.getFactSlot("dodatekPredkosci").intValue());
+			this.setEnergy(pv.getFactSlot("energia").intValue());
+			this.setEnergyLoss(pv.getFactSlot("strataEnergii").intValue());
+			this.setEnergyRecovery(pv.getFactSlot("odnawianieEnergii").intValue());
+			this.setGold(pv.getFactSlot("zloto").intValue());
+			this.setFieldOfView(pv.getFactSlot("poleWidzenia").intValue());
+			this.setCapacity(pv.getFactSlot("udzwig").intValue());
+
+			String horseFind = "(find-fact ((?k kon)) (eq ?k:id " + pv.getFactSlot("kon").intValue() + "))";
+			PrimitiveValue horsePv = clipsEnv.getWorldEnv().eval(horseFind);
+			Horse courierHourse = new Horse(horsePv, pv.getFactSlot("idAgenta").intValue(), clipsEnv);
+			this.setHorse(courierHourse);
+
+			String packFind = "(find-all-facts ((?k paczka))) (eq ?k:id " + pv.getFactSlot("paczki").stringValue() + ")";
+			PrimitiveValue packPv = clipsEnv.getWorldEnv().eval(packFind);
+			for (int i = 0; i < packPv.size(); i++) {
+				Pack pack = new Pack();
+				pack.loadFromClips(packPv.get(i));
+
+				this.addPackage(pack);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-    }
 
     
     
@@ -312,7 +305,7 @@ public class Courier extends Agent {
 		buffer.append(") (mozliwyRuch ");
 		buffer.append(_possibleMove);
 		buffer.append(") (idKratki ");
-		buffer.append(_mapFrameId);
+		buffer.append(this.mapFrame.getId());
 		buffer.append("))");
 		return buffer.toString();
 	}

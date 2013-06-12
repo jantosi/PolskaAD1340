@@ -8,8 +8,15 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import agents.Agent;
+import agents.Courier;
+import agents.Woodman;
+
 import polskaad1340.InformacjeOSwiecie;
 import polskaad1340.LadowanieMapy;
+import polskaad1340.OknoMapy;
+import statistics.CourierStatistics;
+import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
 
@@ -25,15 +32,19 @@ public class World {
     private ArrayList<Road> roads = new ArrayList<Road>();
     private ArrayList<Town> towns = new ArrayList<Town>();
     private ArrayList<Tree> trees = new ArrayList<Tree>();
+    private ArrayList<Agent> agents = new ArrayList<Agent>();
     private ClipsEnvironment clipsEnv;
+  
 
-    public World(ClipsEnvironment clipsEnv, LadowanieMapy ladowanieMapy) {
+    public World(ClipsEnvironment clipsEnv, LadowanieMapy ladowanieMapy, OknoMapy om) {
         this.clipsEnv = clipsEnv;
         this.loadFromMap(ladowanieMapy);
+        initializeWorld(om);
     }
 
-    public void initializeWorld() {
-        randomBlockades();
+    private void initializeWorld(OknoMapy om) {
+        initializeAgents(om);
+    	randomBlockades();
         randomCataclysms();
         randomBandits();
 
@@ -47,22 +58,22 @@ public class World {
 
     }
 
-    public void changeItemPrices() {
-        Random random = new Random();
-
-        for (Town town : this.towns) {
-            for (Item item : town.getItems()) {
-                int change = random.nextInt(15) - 7;
-                int newPrice = item.getPrice() + change;
-                if (newPrice < 0) {
-                    newPrice = 0;
-                }
-
-                item.setPrice(newPrice);
-            }
-        }
+    private void initializeAgents(OknoMapy om) {
+    	Random random = new Random();
+    	
+    	WoodmanStatistics ws = new WoodmanStatistics();
+    	MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Agent drwal = new Woodman("drwal1", ws, mapFrame, om);
+       
+        CourierStatistics cs = new CourierStatistics();
+        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Agent poslaniec = new Courier("poslaniec1", cs, mapFrame, om);
+        
+        this.agents.add(drwal);
+        this.agents.add(poslaniec);
+        om.drawAllTiles();
     }
-
+    
     public void randomBlockades() {
         this.blockades = new ArrayList<Blockade>();
 
@@ -111,6 +122,7 @@ public class World {
         }
     }
 
+    
     public void randomCataclysms() {
         this.cataclysms = new ArrayList<Cataclysm>();
         Random random = new Random();
@@ -134,6 +146,22 @@ public class World {
                         this.cataclysms.add(tmpCataclysm);
                     }
                 }
+            }
+        }
+    }
+
+    public void changeItemPrices() {
+        Random random = new Random();
+
+        for (Town town : this.towns) {
+            for (Item item : town.getItems()) {
+                int change = random.nextInt(15) - 7;
+                int newPrice = item.getPrice() + change;
+                if (newPrice < 0) {
+                    newPrice = 0;
+                }
+
+                item.setPrice(newPrice);
             }
         }
     }
@@ -195,7 +223,7 @@ public class World {
 
         return visibleObjects;
     }
-
+    
     public void printoutMapFrames() {
         for (int i = 0; i < height; i++) {
             for (int k = 0; k < width; k++) {
@@ -713,6 +741,18 @@ public class World {
         }
     }
 
+    public MapFrame getFrameById(int id) {
+    	for (int i = 0; i < this.mapFrames.length; i++) {
+    		for (int j = 0; j < this.mapFrames[i].length; j++) {
+    			if (this.mapFrames[i][j].getId() == id) {
+    				return this.mapFrames[i][j];
+    			}
+    		}
+    	}
+    	
+    	return null;
+    }
+    
     public MapFrame[][] getMapFrames() {
         return mapFrames;
     }
@@ -768,4 +808,12 @@ public class World {
     public void setTrees(ArrayList<Tree> trees) {
         this.trees = trees;
     }
+
+	public ArrayList<Agent> getAgents() {
+		return agents;
+	}
+
+	public void setAgents(ArrayList<Agent> agents) {
+		this.agents = agents;
+	}
 }

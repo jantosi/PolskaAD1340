@@ -1,5 +1,8 @@
 package agents;
 
+import polskaad1340.ObiektPierwszegoPlanu;
+import world.MapFrame;
+
 /**
  * Klasa abstrakcyjna definiująca podstawowe operacja dla każdego agenta.
  * 
@@ -7,6 +10,9 @@ package agents;
  */
 abstract public class Agent {
     
+	protected ObiektPierwszegoPlanu opp;
+	protected String pathToClipsFile;
+	
 	/**
 	 * Identyfikator agenta
 	 */
@@ -20,7 +26,7 @@ abstract public class Agent {
 	/**
 	 * Id kratki, na ktorej znajduje sie agent
 	 */
-	protected String _mapFrameId;
+	protected MapFrame mapFrame;
 	
     /**
      * Pole widzenia agenta.
@@ -65,12 +71,11 @@ abstract public class Agent {
      */
     public Agent(String id) {
         //Domyślne parametry dla większości agentów.
-        this.setFieldOfView(1);
-        this.setVelocity(2);
         this.setEnergy(100);
         this.setEnergyLoss(2);
         this.setEnergyRecovery(2);
         this.setId(id);
+        this._gold = 20;
     }
     
     /**

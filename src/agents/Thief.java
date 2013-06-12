@@ -220,7 +220,7 @@ public class Thief extends Agent {
 		buffer.append(")");
 		
 		buffer.append(" (idKratki ");
-		buffer.append(_mapFrameId);
+		buffer.append(this.mapFrame.getId());
 		buffer.append(")");
 		
 		buffer.append(" (poleWidzenia ");

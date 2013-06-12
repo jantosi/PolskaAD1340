@@ -45,7 +45,8 @@ public class InformacjeOSwiecie {
         opisyKafelkow.put(1972,"legowisko smoków3");
         opisyKafelkow.put(1973,"legowisko smoków4");
         
-        
+        opisyKafelkow.put(1088, "poslaniec");
+        opisyKafelkow.put(1662, "drwal");
         
 
     }

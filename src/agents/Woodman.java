@@ -1,8 +1,15 @@
 package agents;
 
-import items.*;
-import statistics.*;
+import items.Ax;
+import items.Vehicle;
+import items.Wood;
+
 import java.util.ArrayList;
+
+import polskaad1340.OknoMapy;
+
+import statistics.WoodmanStatistics_Interface;
+import world.MapFrame;
 /**
  * Klasa definiująca drwala.
  * 
@@ -15,12 +22,6 @@ public class Woodman extends Agent {
      * @var int
      */
     protected int _capacity;
-    
-    /**
-     * Ilość ścinanych drzew na iterację.
-     * @var int
-     */
-    protected int _numberOfShearWoods;
     
     /**
      * Posiadane narzędzie.
@@ -46,32 +47,18 @@ public class Woodman extends Agent {
      */
     protected WoodmanStatistics_Interface _statistics;
     
-    /**
-     * Konstruktor. Ustawienie domyślnego udźwigu.
-     * @param int capacity 
-     */
-    public Woodman(String id, int capacity, WoodmanStatistics_Interface stat) {
+    public Woodman(String id, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
         super(id);
-        
         this._statistics = stat;
-        this.setCapacity(capacity);
-        this.setNumberOfShearWoods(0);
         this.setAx(null);
         this.setVehicle(null);
-        
         this._woods = new ArrayList<Wood>();
-        this.setGold(0);
-    }
-    
-    /**
-     * Setter dla ilości ścinanych drzew.
-     * @param int numberOfShearWoods
-     * @return Woodman
-     */
-    public Woodman setNumberOfShearWoods(int numberOfShearWoods) {
-        this._numberOfShearWoods = numberOfShearWoods;
-        
-        return this;
+        this.mapFrame = mapFrame;
+        this._capacity = 10;
+        this._fieldOfView = 1;
+        this._possibleMove = 1;
+        this._velocity = 1;
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), 1662);
     }
     
     /**
@@ -280,7 +267,9 @@ public class Woodman extends Agent {
 			buffer.append(")");
 		}
 		buffer.append(" (scieteDrewno ");
-		buffer.append(_woods.size());
+		for (int i = 0; i < this._woods.size(); i++) {
+			buffer.append(_woods.get(i)).append(" ");
+		}
 		buffer.append(")");
 
 		buffer.append(" (id ");
@@ -292,7 +281,7 @@ public class Woodman extends Agent {
 		buffer.append(")");
 
 		buffer.append(" (idKratki ");
-		buffer.append(_mapFrameId);
+		buffer.append(this.mapFrame.getId());
 		buffer.append(")");
 		buffer.append(" (poleWidzenia ");
 		buffer.append(_fieldOfView);

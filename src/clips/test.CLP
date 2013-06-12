@@ -239,7 +239,7 @@
     ( cena 10)
 )
 (drewno 
-     (id "drewno2")
+    (id "drewno2")
     ( waga 10)
     ( cena 10)
 )
