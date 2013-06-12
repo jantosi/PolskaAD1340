@@ -573,7 +573,8 @@
         (modify ?rycerz 
             (zloto ( + ?zloto ?zlotoSmoka)) ;zdobadz lup, rycerzu
         )
-        (retract ?smok)        
+        (retract ?smok)
+        (printout t "Smok: " ?idSmoka " stracil zycie." crlf)
     )
     
     (retract ?akcja)
@@ -625,7 +626,8 @@
         (modify ?smok 
             (zloto ( + ?zlotoSmoka ?zloto)) ;zdobadz lup, zly smoku
         )
-        (retract ?rycerz)        
+        (retract ?rycerz)    
+        (printout t "Rycerz: " ?idRycerza " stracil zycie." crlf)   
     )
     (retract ?akcja)
 )
