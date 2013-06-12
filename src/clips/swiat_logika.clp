@@ -1,3 +1,4 @@
+
 ;template'y kontrolne
 (deftemplate modyfikacjaStratEnergiiPoslanca (slot idPoslanca))
 (deftemplate modyfikacjaPredkosciAgenta (slot idAgenta))
@@ -6,9 +7,7 @@
 (deftemplate dzialanieKleskiNaAgenta(slot idAgenta) (slot idKleski))
 (deftemplate kleskaLas(slot idKleski))
 (deftemplate kleskaGrod(slot idKleski))
-
 (deftemplate uaktualnianieKlesk(slot idKleski))
-
 
 ;REGULY
 ;regula okresla parametry poslanca po zakupieniu konia, czyli
@@ -528,6 +527,18 @@
 
     (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
 )
+
+;WIP: Ataki pomiedzy rycerzem a smokiem
+
+(defrule atakujSmoka (declare (salience 3))
+    ?smok <- (smok (id ?id) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
+    ?rycerz <- (rycerz (id ?id) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
+    ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
+=>
+    (printout t "Not yet implemented." crlf)
+    (retract ?akcja)
+)
+
 ;regula do sciecia drzew
 (defrule zetnijDrzewo (declare (salience 3))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) 
@@ -880,21 +891,3 @@
     (assert (uaktualnianieKlesk ( idKleski ?idKleski)))
 )
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

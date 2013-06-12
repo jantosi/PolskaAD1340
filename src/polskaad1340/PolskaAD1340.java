@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import world.Cataclysm;
+
+import world.Bandits;
+
 import world.World;
 import clips.ClipsEnvironment;
 
@@ -46,17 +50,17 @@ public class PolskaAD1340 {
             world.saveToClips(clipsEnv);
             //clipsEnv.displayWorldFacts();
             clipsEnv.getWorldEnv().run();
-            ArrayList<Object> visibleObjects = world.getVisibleWorld("poslaniec1");
-            System.out.println("widzialny swiat dla poslanca1: ");
-            for (int i = 0; i < visibleObjects.size(); i++) {
-            	System.out.println(visibleObjects.get(i).toString());
-            }
+            //ArrayList<Object> visibleObjects = world.getVisibleWorld("poslaniec1");
+           // System.out.println("widzialny swiat dla poslanca1: ");
+           // for (int i = 0; i < visibleObjects.size(); i++) {
+           // 	System.out.println(visibleObjects.get(i).toString());
+           // }
            
             System.out.println("przed: ");
             System.out.println(world);
             world.changeItemPrices();
-            System.out.println("po: ");
-            System.out.println(world);
+            for (Bandits b : world.getBandits())
+            	System.out.println(b);
             
             //clipsEnv.displayWorldFacts();
             

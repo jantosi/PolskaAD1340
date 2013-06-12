@@ -9,7 +9,7 @@ public class Road {
     private String sourceTown;
     private String destinationTown;
     private String type;
-    private boolean isFree;
+    private boolean isPaid;
     private int currentPartNo;
     private int maxPartNo;
     private double robberyProbability;
@@ -21,7 +21,7 @@ public class Road {
         this.sourceTown = sourceTown;
         this.destinationTown = destinationTown;
         this.type = type;
-        this.isFree = isFree;
+        this.isPaid = isFree;
         this.currentPartNo = currentPartNo;
         this.maxPartNo = maxPartNo;
     }
@@ -36,7 +36,7 @@ public class Road {
         this.sourceTown = other.sourceTown;
         this.destinationTown = other.destinationTown;
         this.type = other.type;
-        this.isFree = other.isFree;
+        this.isPaid = other.isPaid;
         this.currentPartNo = other.currentPartNo;
         this.maxPartNo = other.maxPartNo;
     }
@@ -48,7 +48,7 @@ public class Road {
             this.sourceTown = pv.getFactSlot("skadGrod").getValue().toString();
             this.destinationTown = pv.getFactSlot("dokadGrod").getValue().toString();
             this.type = pv.getFactSlot("nawierzchnia").getValue().toString();
-            this.isFree = Boolean.parseBoolean(pv.getFactSlot("platna").getValue().toString());
+            this.isPaid = Boolean.parseBoolean(pv.getFactSlot("platna").getValue().toString());
             this.currentPartNo = pv.getFactSlot("nrOdcinka").intValue();
             this.maxPartNo = pv.getFactSlot("maxOdcinek").intValue();
         } catch (Exception e) {
@@ -64,10 +64,11 @@ public class Road {
         sbuf.append("(idKratki ").append(mapFrame).append(") ");
         sbuf.append("(skadGrod ").append(sourceTown).append(") ");
         sbuf.append("(dokadGrod ").append(destinationTown).append(") ");
-        sbuf.append("(platna ").append(String.valueOf(isFree).toUpperCase()).append(") ");
+        sbuf.append("(platna ").append(String.valueOf(isPaid).toUpperCase()).append(") ");
         sbuf.append("(nawierzchnia ").append(type).append(") ");
         sbuf.append("(nrOdcinka ").append(currentPartNo).append(") ");
         sbuf.append("(maxOdcinek ").append(maxPartNo).append(")");
+        sbuf.append("(prawdopodobienstoNapasci ").append(robberyProbability).append(")");
         sbuf.append(")");
 
         return sbuf.toString();
@@ -129,14 +130,6 @@ public class Road {
         this.type = type;
     }
 
-    public boolean isFree() {
-        return isFree;
-    }
-
-    public void setFree(boolean isFree) {
-        this.isFree = isFree;
-    }
-
     public double getRobberyProbability() {
         return robberyProbability;
     }
@@ -144,4 +137,12 @@ public class Road {
     public void setRobberyProbability(double robberyProbability) {
         this.robberyProbability = robberyProbability;
     }
+
+	public boolean isPaid() {
+		return isPaid;
+	}
+
+	public void setPaid(boolean isPaid) {
+		this.isPaid = isPaid;
+	}
 }
