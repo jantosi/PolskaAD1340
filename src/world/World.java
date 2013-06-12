@@ -33,7 +33,7 @@ public class World {
     }
 
     public void initializeWorld() {
-        //randomBlockades();
+        randomBlockades();
         randomCataclysms();
         randomBandits();
 
@@ -67,14 +67,19 @@ public class World {
         this.blockades = new ArrayList<Blockade>();
 
         Random random = new Random();
-        int blockades = random.nextInt(6) + 1;
+        int blockades = random.nextInt(6) + 4;
+        
+        Set<Integer> roadWithBlockades = new HashSet<Integer>();
         for (int i = 0; i < blockades; i++) {
-            //TODO blokady maja byc  losowane na drogach - bedzie to mozliwe po wczytaniu drog
-            //this.blockades.add(new Blockade("blockade" + (i+1), mapFrame)
+        	Road randomRoad = this.roads.get(random.nextInt(this.roads.size()));
+        	while (roadWithBlockades.contains(randomRoad.getMapFrame())) {
+        		randomRoad = this.roads.get(random.nextInt(this.roads.size()));
+        	}
+        	Blockade blockade = new Blockade("blokada" + (i+1), randomRoad.getMapFrame());
+        	this.blockades.add(blockade);
         }
     }
 
-    //TODO prztestowac jak beda drogi
     public void randomBandits() {
         this.bandits = new ArrayList<Bandits>();
 
