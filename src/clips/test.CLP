@@ -41,9 +41,7 @@
 ;)
 (mapa 30 30)
 
-(grod (nazwa grod1)
-   
-)
+
 (kon (id kon1) 
     (grod grod1) 
     (udzwig 117)
@@ -72,7 +70,7 @@
 ;)
 (grod
 	(nazwa grod1) 
-	(idKratki 10)
+	(idKratki 19)
 	(liczbaMieszkancow 52)
 	(wspAktywnosciStrazy 0.7)
 )
@@ -197,7 +195,21 @@
 ) 
 ( drwal 
 	(id drwal1)  
-	(idKratki 10) 
+	(idKratki 19) 
+    (predkosc 2)
+    (scieteDrewno "drewno1" "drewno2")
+   ; (siekiera siekiera1)
+    ;(woz woz1) 
+    (zloto 100)
+    (udzwig 10)
+    (maxUdzwig 100)
+    (energia 100)
+    (strataEnergii 5)
+    (poleWidzenia 1)
+)
+( drwal 
+	(id drwal2)  
+	(idKratki 19) 
     (predkosc 2)
     (scieteDrewno "drewno1" "drewno2")
    ; (siekiera siekiera1)
@@ -234,6 +246,23 @@
 ( akcjaSprzedajDrewno
     (idAgenta drwal1)
 )
+( kleska
+	(id kleska1) 
+    (czasTrwania 1)
+	(idKratki 19) ;kratka na której jest klęska
+	(niszczenieLasu 30) ;procent zniszczonych drzew na obszarze kleski
+	(oslabianieAgentow 10) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
+	(zabijanieMieszkancow 2) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
+)
+( kleska
+	(id kleska2) 
+    (czasTrwania 1)
+	(idKratki 19) ;kratka na której jest klęska
+	(niszczenieLasu 30) ;procent zniszczonych drzew na obszarze kleski
+	(oslabianieAgentow 10) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
+	(zabijanieMieszkancow 2) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
+)
+(kleska (id cataclysm4) (idKratki 19) (niszczenieLasu 56) (oslabianieAgentow 19) (czasTrwania 6) (zabijanieMieszkancow 4))
 )
 
 

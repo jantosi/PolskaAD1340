@@ -33,7 +33,7 @@ public class World {
     }
 
     public void initializeWorld() {
-        //randomBlockades();
+        randomBlockades();
         randomCataclysms();
         randomBandits();
 
@@ -67,21 +67,27 @@ public class World {
         this.blockades = new ArrayList<Blockade>();
 
         Random random = new Random();
-        int blockades = random.nextInt(6) + 1;
+        int blockades = random.nextInt(6) + 4;
+        
+        Set<Integer> roadWithBlockades = new HashSet<Integer>();
         for (int i = 0; i < blockades; i++) {
-            //TODO blokady maja byc  losowane na drogach - bedzie to mozliwe po wczytaniu drog
-            //this.blockades.add(new Blockade("blockade" + (i+1), mapFrame)
+        	Road randomRoad = this.roads.get(random.nextInt(this.roads.size()));
+        	while (roadWithBlockades.contains(randomRoad.getMapFrame())) {
+        		randomRoad = this.roads.get(random.nextInt(this.roads.size()));
+        	}
+        	Blockade blockade = new Blockade("blokada" + (i+1), randomRoad.getMapFrame());
+        	this.blockades.add(blockade);
         }
     }
 
-    //TODO prztestowac jak beda drogi
     public void randomBandits() {
         this.bandits = new ArrayList<Bandits>();
 
         Random random = new Random();
         Set<String> roadIds = new HashSet<String>();
         for (Road road : this.roads) {
-            roadIds.add(road.getId());
+            String tmp = road.getId().replace("_wstecz", "");
+        	roadIds.add(tmp);
         }
 
         for (String roadId : roadIds) {
@@ -100,6 +106,7 @@ public class World {
                 int frame = actualRoad.get(random.nextInt(actualRoad.size())).getMapFrame();
                 Bandits bandits = new Bandits(packageLoss, goldLoss, frame);
                 this.bandits.add(bandits);
+                numberOfBandits++;
             }
         }
     }
@@ -114,14 +121,16 @@ public class World {
             int frameStartX = random.nextInt(this.width);
             int frameStartY = random.nextInt(this.height);
 
-            double randomizedTreesDestroy = random.nextDouble();
+            int randomizedTreesDestroy = random.nextInt(100);
+            int randomizedLiveTime = random.nextInt(20)+4;
             int randomizedEnergyLoss = random.nextInt(20) + 4;
             int randomizedPopulationLoss = random.nextInt(10) + 4;
 
             for (int x = frameStartX; x < (frameStartX + size); x++) {
                 for (int y = frameStartY; y < (frameStartY + size); y++) {
                     if (x < this.width && x >= 0 && y < this.height && y >= 0) {
-                        Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i + 1), this.mapFrames[x][y].getId(), randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss);
+                        Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i + 1), this.mapFrames[x][y].getId(),
+                        				randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss,randomizedLiveTime);
                         this.cataclysms.add(tmpCataclysm);
                     }
                 }
@@ -328,8 +337,6 @@ public class World {
         width = mapLoad.getMapSize();
         mapFrames = new MapFrame[height][width];
 
-        ArrayList<Point> pozycjeGrodow = new ArrayList<>();
-        pozycjeGrodow.add(new Point(-1, -1)); //WAŻNE: grody numerowane od jedynki. Element zerowy to placeholder.
         // kratki
         int frameID = 0;
         for (int y = 0; y < height; y++) {
@@ -380,12 +387,6 @@ public class World {
                         towns.add(town2);
                         towns.add(town3);
                         towns.add(town4);
-
-                        pozycjeGrodow.add(new Point(x, y));
-                        pozycjeGrodow.add(new Point(x, y + 1));
-                        pozycjeGrodow.add(new Point(x + 1, y));
-                        pozycjeGrodow.add(new Point(x + 1, y + 1));
-
 
                         townId++;
                     }
@@ -487,7 +488,7 @@ public class World {
 
             for (int i = 0; i < wykryteDrogiDanegoTypu.size(); i++) {
                 ArrayList<Point> punktyKoncowe = new ArrayList<>();
-                ArrayList<Integer> grodyPunktowKoncowych = new ArrayList<>();
+                ArrayList<String> grodyPunktowKoncowych = new ArrayList<>();
 
                 Set<Point> aktualnaDroga = wykryteDrogiDanegoTypu.get(i);
                 //szukaj punktów początkowych w drodze - czyli
@@ -512,20 +513,30 @@ public class World {
                 //punkty koncowe sa znane; teraz nalezy przejsc cala droge tworzac kratki drogi.
                 for (int j = 0; j < punktyKoncowe.size(); j++) {
                     Point[] sasiedziMogacyBycGrodem = InformacjeOSwiecie.getNeighboursOfPoint(punktyKoncowe.get(j));
-                    int grodID = -1;
+                    String grodID = "";
                     for (int k = 0; k < sasiedziMogacyBycGrodem.length; k++) {
                         Point point = sasiedziMogacyBycGrodem[k];
 
-                        int find = pozycjeGrodow.indexOf(point);
-
+                        //szukamy id kratki, ktora nalezy do grodu
+                        int mapFrame = 0;
+                        outer:for (int g = 0; g < this.mapFrames.length; g++) {
+                        	for (int h = 0; h < this.mapFrames[g].length; h++) {
+                        		if (this.mapFrames[g][h].getX() == point.x && this.mapFrames[g][h].getY() == point.y) {
+                        			mapFrame = this.mapFrames[g][h].getId();
+                        			break outer;
+                        		}
+                        	}
+                        }
+                        int find = this.towns.indexOf(new Town("", mapFrame, 0, 0));
+                        
                         if (find != -1) {
-                            grodID = find;
+                            grodID = this.towns.get(find).getNazwa();
                             break;
                         }
 
                     }
 
-                    if (grodID == -1) {
+                    if (grodID.equals("")) {
                         System.err.println("Droga nie ma zakonczenia w grodzie!");
                     }
 
@@ -542,15 +553,30 @@ public class World {
                 while (aktualnyPunkt != punktyKoncowe.get(1)) {
                     Road aktualnyKawalekDrogi; //max zostanie wypelniony pozniej
                     String nazwatypu;
+                    boolean platna;
                     if(typ==0)
                     {
                         nazwatypu = "nieplatna";
+                        platna = false;
                     }
                     else
                     {
                         nazwatypu = "platna";
+                        platna = true;
                     }
-                    aktualnyKawalekDrogi = new Road(nazwatypu + i, frameID, grodyPunktowKoncowych.get(0).toString(), grodyPunktowKoncowych.get(1).toString(), "utwardzona", true, iteration, -1);
+                    
+                    //szukamy id kratki, ktora nalezy do drogi
+                    int mapFrame = 0;
+                    outer:for (int g = 0; g < this.mapFrames.length; g++) {
+                    	for (int h = 0; h < this.mapFrames[g].length; h++) {
+                    		if (this.mapFrames[g][h].getX() == aktualnyPunkt.x && this.mapFrames[g][h].getY() == aktualnyPunkt.y) {
+                    			mapFrame = this.mapFrames[g][h].getId();
+                    			break outer;
+                    		}
+                    	}
+                    }
+                    
+                    aktualnyKawalekDrogi = new Road(nazwatypu + i, mapFrame, grodyPunktowKoncowych.get(0), grodyPunktowKoncowych.get(1), "utwardzona", platna, iteration, -1);
                     roadForwards.add(aktualnyKawalekDrogi);
                     //szukaj nastepnego kawalka drogi
                     for (Point potencjalnyKrok : aktualnaDroga) {
@@ -594,10 +620,13 @@ public class World {
                 System.out.println("Dodaję "+roadBackwards.size()+" kratek drogi "+roadBackwards.get(0).getId() +" w tył");
             }
         }
-        randomRoadType();
+        initializeRoads();
     }
 
-    private void randomRoadType() {
+    /**
+     * ustawia prawodopobienstwo napasci oraz nawierzchnie drogi
+     */
+    private void initializeRoads() {
     	Set<String> roadsId = new HashSet<String>();
     	for (Road road : this.roads) {
     		roadsId.add(road.getId());
@@ -608,9 +637,18 @@ public class World {
     	for (String roadId : roadsId) {
     		String roadType = roadTypes[random.nextInt(roadTypes.length)];
     		
+    		double robberyProbabilityFreeRoad = random.nextDouble() * 0.3 + 0.3;
+    		double robberyProbabilityPaidRoad = random.nextDouble() * 0.3;
     		for (Road road : this.roads) {
     			if (road.getId().equalsIgnoreCase(roadId)) {
     				road.setType(roadType);
+    				
+    				if (!road.isPaid()) {
+    					road.setRobberyProbability(robberyProbabilityFreeRoad);
+    				} else {
+    					road.setRobberyProbability(robberyProbabilityPaidRoad);
+    				}
+    				
     			}
     		}
     	}

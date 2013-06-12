@@ -76,6 +76,7 @@
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate kleska
 	(slot id) 
+    (slot czasTrwania)
 	(slot idKratki) ;kratka na której jest klęska
 	(slot niszczenieLasu) ;procent zniszczonych drzew na obszarze kleski
 	(slot oslabianieAgentow) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
@@ -290,5 +291,13 @@
 	(slot idOfiary) ;agent aatakowany
 	(slot rodzajAtaku) ;zarowno smok jak i rycerz maja 3 ataki, wiec tu chodzi o id tego ataku. Id b�dzie liczb� od 1 do 3
 )
-
-
+;AKCJA KLESKI
+(deftemplate akcjaKleskaLas
+    (slot idKleski);
+)
+(deftemplate akcjaKleskaAgenci
+    (slot idKleski);
+)
+(deftemplate akcjaKleskaGrod
+    (slot idKleski);
+)

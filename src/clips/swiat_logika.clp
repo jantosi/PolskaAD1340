@@ -3,6 +3,10 @@
 (deftemplate modyfikacjaPredkosciAgenta (slot idAgenta))
 (deftemplate zregenerowanoAgenta (slot idAgenta))
 (deftemplate okreslonoWidocznosc (slot idAgenta))
+(deftemplate dzialanieKleskiNaAgenta(slot idAgenta) (slot idKleski))
+(deftemplate kleskaLas(slot idKleski))
+(deftemplate kleskaGrod(slot idKleski))
+(deftemplate uaktualnianieKlesk(slot idKleski))
 
 ;REGULY
 ;regula okresla parametry poslanca po zakupieniu konia, czyli
@@ -530,8 +534,6 @@
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
     ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
 =>
-    
-    
     ;jesli bestia jeszcze zyje
     (if ( = ?rodzajAtaku 1)
         then
@@ -625,7 +627,6 @@
         )
         (retract ?rycerz)        
     )
-    
     (retract ?akcja)
 )
 

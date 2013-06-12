@@ -7,7 +7,6 @@ import items.Item;
 import items.Pack;
 import items.Vehicle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -240,4 +239,19 @@ public class Town {
 		this.items = items;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Town other = (Town) obj;
+		if (mapFrame != other.mapFrame)
+			return false;
+		return true;
+	}
+
+	
 }
