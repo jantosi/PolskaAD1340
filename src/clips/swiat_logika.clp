@@ -526,11 +526,106 @@
 ;WIP: Ataki pomiedzy rycerzem a smokiem
 
 (defrule atakujSmoka (declare (salience 3))
-    ?smok <- (smok (id ?id) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
-    ?rycerz <- (rycerz (id ?id) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
+    ?smok <- (smok (id ?idSmoka) (idKratki ?idKratkiSmoka) (energia ?energiaSmoka) (zloto ?zlotoSmoka) (strataEnergii ?strataEnergiiSmoka))
+    ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
     ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
 =>
-    (printout t "Not yet implemented." crlf)
+    
+    
+    ;jesli bestia jeszcze zyje
+    (if ( = ?rodzajAtaku 1)
+        then
+        (modify ?smok
+            (energia (- ?energiaSmoka 15))
+            
+        )
+        (modify ?rycerz
+            (energia ( - ?energia ?strataEnergii)) ;rycerz sie meczy atakiem
+        )
+    )
+    (if ( = ?rodzajAtaku 2)
+        then
+        (modify ?smok
+            (energia (- ?energiaSmoka 25))
+            
+        )
+        (modify ?rycerz
+            (energia ( - ?energia ( * 2 ?strataEnergii))) ;rycerz sie meczy atakiem
+        )
+    )
+    (if ( = ?rodzajAtaku 3)
+        then
+        (modify ?smok
+            (energia (- ?energiaSmoka 45))
+            
+        )
+        (modify ?rycerz
+            (energia ( - ?energia ( * 3 ?strataEnergii))) ;rycerz sie meczy atakiem
+        )
+    )
+    
+    ;jesli smok juz jest martwy
+    (if ( <= ?energiaSmoka 0 )
+        then 
+        
+        (modify ?rycerz 
+            (zloto ( + ?zloto ?zlotoSmoka)) ;zdobadz lup, rycerzu
+        )
+        (retract ?smok)        
+    )
+    
+    (retract ?akcja)
+)
+
+(defrule atakujRycerza (declare (salience 3))
+    ?smok <- (smok (id ?idSmoka) (idKratki ?idKratkiSmoka) (energia ?energiaSmoka) (zloto ?zlotoSmoka) (strataEnergii ?strataEnergiiSmoka))
+    ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
+    ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
+=>
+    
+    
+    ;jesli biedak jeszcze zyje
+    (if ( = ?rodzajAtaku 1)
+        then
+        (modify ?rycerz
+            (energia (- ?energia 15))
+            
+        )
+        (modify ?smok
+            (energia ( - ?energiaSmoka ?strataEnergii)) ;smok sie meczy atakiem
+        )
+    )
+    (if ( = ?rodzajAtaku 2)
+        then
+        (modify ?rycerz
+            (energia (- ?energia 25))
+            
+        )
+        (modify ?smok
+            (energia ( - ?energiaSmoka ( * 2 ?strataEnergii))) ;smok sie meczy atakiem
+        )
+    )
+    (if ( = ?rodzajAtaku 3)
+        then
+        (modify ?rycerz
+            (energia (- ?energia 45))
+            
+        )
+        (modify ?smok
+            (energia ( - ?energiaSmoka ( * 3 ?strataEnergii))) ;smok sie meczy atakiem
+        )
+    )
+    
+    ;jesli rycerz juz jest martwy
+    (if ( <= ?energia 0 )
+        then 
+        
+        (modify ?smok 
+            (zloto ( + ?zlotoSmoka ?zloto)) ;zdobadz lup, zly smoku
+        )
+        (retract ?rycerz)        
+    )
+    
     (retract ?akcja)
 )
 
