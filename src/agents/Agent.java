@@ -1,6 +1,6 @@
 package agents;
 
-import polskaad1340.ObiektPierwszegoPlanu;
+import polskaad1340.window.ObiektPierwszegoPlanu;
 import world.MapFrame;
 
 /**

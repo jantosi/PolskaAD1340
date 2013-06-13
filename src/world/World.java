@@ -12,9 +12,9 @@ import agents.Agent;
 import agents.Courier;
 import agents.Woodman;
 
-import polskaad1340.InformacjeOSwiecie;
-import polskaad1340.LadowanieMapy;
-import polskaad1340.OknoMapy;
+import polskaad1340.window.InformacjeOSwiecie;
+import polskaad1340.window.LadowanieMapy;
+import polskaad1340.window.OknoMapy;
 import statistics.CourierStatistics;
 import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;

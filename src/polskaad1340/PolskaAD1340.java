@@ -4,15 +4,12 @@
  */
 package polskaad1340;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+import polskaad1340.window.LadowanieMapy;
+import polskaad1340.window.OknoMapy;
 import world.Cataclysm;
-
-import world.Bandits;
-
 import world.World;
 import clips.ClipsEnvironment;
 

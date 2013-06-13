@@ -6,7 +6,7 @@ import items.PackCollection;
 
 import java.util.ArrayList;
 
-import polskaad1340.OknoMapy;
+import polskaad1340.window.OknoMapy;
 
 import statistics.CourierStatistics_Interface;
 import world.MapFrame;
