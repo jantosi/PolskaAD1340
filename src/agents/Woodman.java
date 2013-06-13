@@ -6,7 +6,7 @@ import items.Wood;
 
 import java.util.ArrayList;
 
-import polskaad1340.OknoMapy;
+import polskaad1340.window.OknoMapy;
 
 import statistics.WoodmanStatistics_Interface;
 import world.MapFrame;
