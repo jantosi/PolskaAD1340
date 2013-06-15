@@ -1,15 +1,12 @@
 package agents;
 
-import items.Ax;
-import items.Vehicle;
-import items.Wood;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import polskaad1340.window.OknoMapy;
-
 import statistics.WoodmanStatistics_Interface;
 import world.MapFrame;
+import CLIPSJNI.PrimitiveValue;
 /**
  * Klasa definiująca drwala.
  * 
@@ -21,175 +18,92 @@ public class Woodman extends Agent {
      * Udźwig drwala.
      * @var int
      */
-    protected int _capacity;
-    
+    private int capacity;
+    private int maxCapacity;
     /**
-     * Posiadane narzędzie.
+     * Posiadane siekiera.
      * @var Ax
      */
-    protected Ax _ax;
+    private String ax;
     
     /**
      * Posiadany wóz.
      * @var Vehicle
      */
-    protected Vehicle _vehicle;
+    private String vehicle;
     
     /**
      * Lista posiadanych przy sobie drzew.
      * @var ArrayList<Wood>
      */
-    protected ArrayList<Wood> _woods;
+    private ArrayList<String> woods;
     
     /**
      * Statystyki drwala.
      * @var WoodmanStatistics_Interface
      */
-    protected WoodmanStatistics_Interface _statistics;
+    private WoodmanStatistics_Interface statistics;
+    
+    public Woodman() {
+    	this.mapFrame = new MapFrame();
+    	this.woods = new ArrayList<String>();
+    }
     
     public Woodman(String id, String pathToClipsFile, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
         super(id, pathToClipsFile);
-        this._statistics = stat;
-        this.setAx(null);
-        this.setVehicle(null);
-        this._woods = new ArrayList<Wood>();
+        this.statistics = stat;
+        this.ax = null;
+        this.vehicle = null;
+        this.woods = new ArrayList<String>();
         this.mapFrame = mapFrame;
-        this._capacity = 10;
-        this._fieldOfView = 1;
-        this._possibleMove = 1;
-        this._velocity = 1;
+        this.capacity = 10;
+        this.maxCapacity = 100;
+        this.fieldOfView = 1;
+        this.possibleMove = 1;
+        this.velocity = 1;
         this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), 1662);
     }
     
-    /**
-     * Getter dla pojemności drwala.
-     * @return int
-     */
+    public void loadFromClips(PrimitiveValue pv) {
+		try {
+			this.id = pv.getFactSlot("id").toString();
+			this.capacity = pv.getFactSlot("udzwig").intValue();
+			this.maxCapacity = pv.getFactSlot("maxUdzwig").intValue();
+			this.ax = !pv.getFactSlot("siekiera").toString().equalsIgnoreCase("nil")? pv.getFactSlot("siekiera").toString() : null;
+			this.vehicle = !pv.getFactSlot("woz").toString().equalsIgnoreCase("nil")? pv.getFactSlot("woz").toString() : null;
+			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
+			
+			String woodsTmp = pv.getFactSlot("scieteDrewno").toString();
+			String[] woods = woodsTmp.replace("(", "").replace(")", "").split(" ");
+			this.woods = new ArrayList<String>(Arrays.asList(woods));
+
+			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
+			this.fieldOfView = pv.getFactSlot("poleWidzenia").intValue();
+			this.velocity = pv.getFactSlot("predkosc").intValue();
+			this.extraVelocity = pv.getFactSlot("dodatekPredkosc").intValue();
+			this.energy = pv.getFactSlot("energia").intValue();
+			this.energyLoss = pv.getFactSlot("strataEnergii").intValue();
+			this.energyRecovery = pv.getFactSlot("odnawianieEnergii").intValue();
+			this.gold = pv.getFactSlot("zloto").intValue();
+			this.target = !pv.getFactSlot("cel").toString().equalsIgnoreCase("nil")? pv.getFactSlot("cel").toString() : null;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+    
     public int getCapacity() {
-        if(this.getVehicle() != null) {
-            return this.getVehicle().getCapacity();
-        }
-        return this._capacity;
+        return this.capacity;
     }
-    
-    /**
-     * Setter dla pojemności drwala.
-     * @param int capacity
-     * @return Woodman
-     */
     public Woodman setCapacity(int capacity) {
-        this._capacity = capacity;
+        this.capacity = capacity;
         
         return this;
     }
     
-    /**
-     * Getter dla siekiery.
-     * @return Ax 
-     */
-    public Ax getAx() {
-        return this._ax;
-    }
-    
-    /**
-     * Setter dla siekiery.
-     * @param Ax ax
-     * @return Woodman
-     */
-    public Woodman setAx(Ax ax) {
-        this._ax = ax;
-        
-        return this;
-    }
-    
-    /**
-     * Zakup siekiery. Zwraca TRUE gdy ma wystarczającą ilość golda, w przeciwnym wypadku FALSE.
-     * @param Ax ax
-     * @return boolean
-     */
-    public boolean buyAx(Ax ax) {
-        if(this.getGold() < ax.getPrice()) {
-            return false;
-        }
-        this.setGold(this.getGold() - ax.getPrice());
-        this.setAx(ax);
-        
-        return true;
-    }
-    
-    /**
-     * Getter dla wozu.
-     * @return Vehicle 
-     */
-    public Vehicle getVehicle() {
-        return this._vehicle;
-    }
-    
-    /**
-     * Setter dla wozu.
-     * @param Vehicle vehicle
-     * @return Woodman
-     */
-    public Woodman setVehicle(Vehicle vehicle) {
-        this._vehicle = vehicle;
-        
-        return this;
-    }
-    
-    /**
-     * Zakup wozu. Zwraca TRUE, gdy ma wystarczającą ilość golda,
-     * w przeciwnym wypadku FALSE.
-     * @param Vehicle vehicle
-     * @return boolean
-     */
-    public boolean buyVehicle(Vehicle vehicle) {
-        if(this.getGold() < vehicle.getPrice()) {
-            return false;
-        }
-        this.setGold(this.getGold() - vehicle.getPrice());
-        this.setVehicle(vehicle);
-        
-        return true;
-    }
-    
-    /**
-     * Getter dla listy drzew.
-     * @return ArrayList<Wood> 
-     */
-    public ArrayList<Wood> getWoods() {
-        return this._woods;
-    }
-    
-    /**
-     * Dodawanie drzewa.
-     * @param Wood Wood
-     * @return Woodman
-     * @TODO Obsługa przypadku, w którym nie można wziąć więcej drzew.
-     */
-    public Woodman addWood(Wood wood) {
-        //Sprawdzenie czy można wziąć kolejną paczkę.
-        if(this.getWoods().size() < this.getCapacity()) {
-            this.getWoods().add(wood);
-            this.getStatistics().setNumberOfShearedWoods(this.getStatistics().getNumberOfShearedWoods() + 1);
-        }
-        
-        return this;
-    }
-    
-    /**
-     * Sprzedawanie drewna. Zwraca TRUE jeżeli uda się sprzedać drewo i FALSE gdy nie.
-     * @param Wood wood
-     * @return boolean
-     */
-    public boolean sellWood(Wood wood) {
-        if(this.getWoods().indexOf(wood) != -1) {
-            this.setGold(this.getGold() + wood.getPrice());
-            this.getStatistics().setIncome(this.getStatistics().getIncome() + wood.getPrice());
-            this.getWoods().remove(wood);
-            return true;
-        }
-        
-        return false;
+    public ArrayList<String> getWoods() {
+        return this.woods;
     }
     
     /**
@@ -205,97 +119,97 @@ public class Woodman extends Agent {
         return this;
     }
     
-    /**
-     * Przeciążenie getter dla zużycia energii uwzględniając obciążenie.
-     * @return int
-     */
-    @Override
-    public int getEnergyLoss() {
-        if(this.getVehicle() == null) {
-            return super.getEnergyLoss() + (int)Math.round(this.getWoods().size() * 0.5);
-        }
-        
-        return super.getEnergyLoss();
-    }
-    
-    /**
-     * Metoda odpowiedzialna za ścięcie drzewa. Zwraca TRUE jeżeli udało się ściąć drzewo i FALSE
-     * w przeciwnym wypadku.
-     * @return boolean
-     */
-    public boolean shear() {
-        if(this.getAx() == null || this.getWoods().size() == this.getCapacity()) {
-            return false;
-        }
-        this.setEnergy(this.getEnergy() - super.getEnergyLoss() * 2);
-        return true;
-    }
-    
-    /**
-     * Setter dla statystyk.
-     * @param WoodmanStatistics_Interface statistics
-     * @return Woodman
-     */
     public Woodman setStatistics(WoodmanStatistics_Interface statistics) {
-        this._statistics = statistics;
+        this.statistics = statistics;
         
         return this;
     }
     
-    /**
-     * Getter dla statystyk.
-     * @return WoodmanStatistics_Interface
-     */
     public WoodmanStatistics_Interface getStatistics() {
-        return this._statistics;
+        return this.statistics;
     }
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("(drwal (udzwig ");
-		buffer.append(_capacity);
+		buffer.append(this.capacity);
 		buffer.append(") ");
-		if (_ax != null) {
+		
+		buffer.append("(maxUdzwig ");
+		buffer.append(this.maxCapacity);
+		buffer.append(") ");
+		
+		if (ax != null) {
 			buffer.append(" (siekiera ");
-			buffer.append(_ax.getId());
+			buffer.append(this.ax);
 			buffer.append(")");
 		}
-		if (_vehicle != null) {
+		if (vehicle != null) {
 			buffer.append(" (woz ");
-			buffer.append(_vehicle.getId());
+			buffer.append(this.vehicle);
 			buffer.append(")");
 		}
 		buffer.append(" (scieteDrewno ");
-		for (int i = 0; i < this._woods.size(); i++) {
-			buffer.append(_woods.get(i)).append(" ");
+		for (int i = 0; i < this.woods.size(); i++) {
+			buffer.append(this.woods.get(i)).append(" ");
 		}
 		buffer.append(")");
 
 		buffer.append(" (id ");
-		buffer.append(_id);
+		buffer.append(this.id);
 		buffer.append(")");
 
 		buffer.append(" (mozliwyRuch ");
-		buffer.append(_possibleMove);
+		buffer.append(this.possibleMove);
 		buffer.append(")");
 
 		buffer.append(" (idKratki ");
 		buffer.append(this.mapFrame.getId());
 		buffer.append(")");
 		buffer.append(" (poleWidzenia ");
-		buffer.append(_fieldOfView);
+		buffer.append(this.fieldOfView);
 		buffer.append(") (predkosc ");
-		buffer.append(_velocity);
+		buffer.append(this.velocity);
+		buffer.append(") (dodatekPredkosc ");
+		buffer.append(this.extraVelocity);
 		buffer.append(") (energia ");
-		buffer.append(_energy);
+		buffer.append(this.energy);
 		buffer.append(") (strataEnergii ");
-		buffer.append(_energyLoss);
+		buffer.append(this.energyLoss);
 		buffer.append(") (odnawianieEnergii ");
-		buffer.append(_energyRecovery);
+		buffer.append(this.energyRecovery);
 		buffer.append(") (zloto ");
-		buffer.append(_gold);
+		buffer.append(this.gold);
 		buffer.append("))");
 		return buffer.toString();
+	}
+
+	public int getMaxCapacity() {
+		return maxCapacity;
+	}
+
+	public void setMaxCapacity(int maxCapacity) {
+		this.maxCapacity = maxCapacity;
+	}
+
+	public String getAx() {
+		return ax;
+	}
+
+	public void setAx(String ax) {
+		this.ax = ax;
+	}
+
+	public String getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(String vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public void setWoods(ArrayList<String> woods) {
+		this.woods = woods;
 	}
 }

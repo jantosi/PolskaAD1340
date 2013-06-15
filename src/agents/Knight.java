@@ -82,28 +82,28 @@ public class Knight extends Agent {
 		buffer.append(")");
 
 		buffer.append(" (id ");
-		buffer.append(_id);
+		buffer.append(id);
 		buffer.append(")");
 		
 		buffer.append(" (mozliwyRuch ");
-		buffer.append(_possibleMove);
+		buffer.append(possibleMove);
 		buffer.append(")");
 
 		buffer.append(" (idKratki ");
 		buffer.append(this.mapFrame.getId());
 		buffer.append(")");
 		buffer.append(" (poleWidzenia ");
-		buffer.append(_fieldOfView);
+		buffer.append(fieldOfView);
 		buffer.append(") (predkosc ");
-		buffer.append(_velocity);
+		buffer.append(velocity);
 		buffer.append(") (energia ");
-		buffer.append(_energy);
+		buffer.append(energy);
 		buffer.append(") (strataEnergii ");
-		buffer.append(_energyLoss);
+		buffer.append(energyLoss);
 		buffer.append(") (odnawianieEnergii ");
-		buffer.append(_energyRecovery);
+		buffer.append(energyRecovery);
 		buffer.append(") (zloto ");
-		buffer.append(_gold);
+		buffer.append(gold);
 		buffer.append("))");
 		return buffer.toString();
 	}

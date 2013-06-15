@@ -12,9 +12,11 @@ import polskaad1340.window.InformacjeOSwiecie;
 import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
 import statistics.CourierStatistics;
+import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;
 import agents.Agent;
 import agents.Courier;
+import agents.Woodman;
 import clips.ClipsEnvironment;
 
 public class World {
@@ -58,16 +60,17 @@ public class World {
     private void initializeAgents(OknoMapy om) {
     	Random random = new Random();
     	
-    	//WoodmanStatistics ws = new WoodmanStatistics();
-    	//MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-       // Agent drwal = new Woodman("drwal1", "src/clips/drwal.clp", ws, mapFrame, om);
-       
-        CourierStatistics cs = new CourierStatistics();
-        MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Agent poslaniec = new Courier("poslaniec1", "src/clips/poslaniec.clp", cs, mapFrame, om);
+    	WoodmanStatistics ws = new WoodmanStatistics();
+    	MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Woodman woodman = new Woodman("drwal1", "src/clips/poslaniec.clp", ws, mapFrame, om);
         
-       // this.agents.add(drwal);
-        this.agents.add(poslaniec);
+        
+        CourierStatistics cs = new CourierStatistics();
+        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", cs, mapFrame, om);
+        
+        this.agents.add(woodman);
+        this.agents.add(courier);
         om.drawAllTiles();
     }
     
@@ -164,12 +167,12 @@ public class World {
     }
 
     public void loadFromClips() {
-        bandits.clear();
-        blockades.clear();
-        cataclysms.clear();
-        roads.clear();
-        towns.clear();
-        trees.clear();
+        this.bandits.clear();
+        this.blockades.clear();
+        this.cataclysms.clear();
+        this.roads.clear();
+        this.towns.clear();
+        this.trees.clear();
 
         loadMapFrames();
         loadBandits();
@@ -178,6 +181,7 @@ public class World {
         loadRoads();
         loadTowns();
         loadTrees();
+        loadAgents();
     }
 
     public ArrayList<Object> getVisibleWorld(String agentId) throws Exception {
@@ -185,7 +189,15 @@ public class World {
         PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);
 
         ArrayList<Object> visibleObjects = new ArrayList<Object>();
-
+        //dodajemy informacje o agencie
+        for (Agent agent : this.agents) {
+        	if (agent.getId().equalsIgnoreCase(agentId)) {
+        		visibleObjects.add(agent.toString());
+        		break;
+        	}
+        }
+        
+        
         for (int i = 0; i < pv.size(); i++) {
             int visibleFrameId = pv.get(i).getFactSlot("idKratki").intValue();
 
@@ -235,6 +247,61 @@ public class World {
         }
     }
 
+    private void loadAgents() {
+    	loadWoodmens();
+    	loadCouriers();
+    }
+    
+    private void loadWoodmens() {
+    	try {
+            String evalString = "(find-all-facts ((?d drwal)) TRUE)";
+            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+                Woodman woodmanTmp = new Woodman();
+                woodmanTmp.loadFromClips(pv1.get(i));
+                
+                MapFrame mapFrame = this.getFrameById(woodmanTmp.getMapFrame().getId());
+                woodmanTmp.setMapFrame(mapFrame);
+                
+                for (int k = 0; k < this.agents.size(); k++) {
+                	if (this.agents.get(k).getId().equalsIgnoreCase(woodmanTmp.getId())) {
+                		woodmanTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		this.agents.set(k, woodmanTmp);
+                		break;
+                	}
+                }
+            }
+
+        } catch (Exception e) {
+        }
+    }
+    
+    private void loadCouriers() {
+    	try {
+            String evalString = "(find-all-facts ((?p poslaniec)) TRUE)";
+            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+                Courier courierTmp = new Courier();
+                courierTmp.loadFromClips(pv1.get(i));
+                
+                MapFrame mapFrame = this.getFrameById(courierTmp.getMapFrame().getId());
+                courierTmp.setMapFrame(mapFrame);
+                
+                for (int k = 0; k < this.agents.size(); k++) {
+                	if (this.agents.get(k).getId().equalsIgnoreCase(courierTmp.getId())) {
+                		courierTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		this.agents.set(k, courierTmp);
+                		break;
+                	}
+                }
+            }
+
+        } catch (Exception e) {
+        }
+    }
+    
     private void loadMapFrames() {
         try {
 
@@ -728,6 +795,10 @@ public class World {
             for (Item item : town.getItems()) {
                 sbuf.append(item.toString()).append("\n");
             }
+        }
+        
+        for (Agent agent : this.agents) {
+        	sbuf.append(agent.toString()).append("\n");
         }
         return sbuf.toString();
     }

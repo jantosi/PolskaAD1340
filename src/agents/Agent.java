@@ -21,12 +21,12 @@ abstract public class Agent {
 	/**
 	 * Identyfikator agenta
 	 */
-	protected String _id;
+	protected String id;
 	
 	/**
 	 * Liczba kratek ruchu w danej turze
 	 */
-	protected int _possibleMove;
+	protected int possibleMove;
 	
 	/**
 	 * Id kratki, na ktorej znajduje sie agent
@@ -37,7 +37,7 @@ abstract public class Agent {
      * Pole widzenia agenta.
      * @var int
      */
-    protected int _fieldOfView;
+    protected int fieldOfView;
     
     /**
      * Prędkość agenta w czasie jednej iteracji.
@@ -45,31 +45,38 @@ abstract public class Agent {
      * 
      * @TODO: Zróżnicowanie prędkości względem terenu, po którym się porusza.
      */
-    protected int _velocity;
+    protected int velocity;
     
     /**
      * Energia agenta.
      * @var int
      */
-    protected int _energy;
+    protected int energy;
     
     /**
      * Szybkość zużycia energii podczas ruchu o jedną kratkę.
      * @var int
      */
-    protected int _energyLoss;
+    protected int energyLoss;
     
     /**
      * Szybkość regeneracji energii w czasie jednej iteracji
      * @var int
      */
-    protected int _energyRecovery;
+    protected int energyRecovery;
     
     /**
      * Ilość sztuk złota
      * @var int
      */
-    protected int _gold;
+    protected int gold;
+    
+    protected String target;
+    protected int extraVelocity;
+    
+    public Agent() {
+
+    }
     
     /**
      * Konstruktor. Ustawienie domyślnych parametrów dla większości agentów.
@@ -80,7 +87,7 @@ abstract public class Agent {
         this.setEnergyLoss(2);
         this.setEnergyRecovery(2);
         this.setId(id);
-        this._gold = 20;
+        this.gold = 20;
         this.pathToClipsFile = pathToClipsFile;
     }
     
@@ -253,27 +260,27 @@ abstract public class Agent {
     }
     
     public int getFieldOfView() {
-        return this._fieldOfView;
+        return this.fieldOfView;
     }
     
     public Agent setFieldOfView(int fieldOfView) {
-        this._fieldOfView = fieldOfView;
+        this.fieldOfView = fieldOfView;
         
         return this;
     }
     
     public int getVelocity() {
-        return this._velocity;
+        return this.velocity;
     }
 
     public Agent setVelocity(int velocity) {
-        this._velocity = velocity;
+        this.velocity = velocity;
         
         return this;
     }
     
     public int getEnergy() {
-        return this._energy;
+        return this.energy;
     }
     
     public Agent setEnergy(int energy) {
@@ -281,37 +288,37 @@ abstract public class Agent {
             energy = 100;
         }       
         
-        this._energy = energy;
+        this.energy = energy;
         
         return this;
     }
 
     public int getEnergyLoss() {
-        return this._energyLoss;
+        return this.energyLoss;
     }
     
     public Agent setEnergyLoss(int energyLoss) {
-        this._energyLoss = energyLoss;
+        this.energyLoss = energyLoss;
         
         return this;
     }
     
     public int getEnergyRecovery() {
-        return this._energyRecovery;
+        return this.energyRecovery;
     }
     
     public Agent setEnergyRecovery(int energyRecovery) {
-        this._energyRecovery = energyRecovery;
+        this.energyRecovery = energyRecovery;
         
         return this;
     }
     
     public int getGold() {
-        return this._gold;
+        return this.gold;
     }
     
     public Agent setGold(int gold) {
-        this._gold = gold;
+        this.gold = gold;
         
         return this;
     }
@@ -327,11 +334,11 @@ abstract public class Agent {
     }
     
 	public String getId() {
-		return _id;
+		return id;
 	}
 
 	public void setId(String _id) {
-		this._id = _id;
+		this.id = _id;
 	}
 
 	public String getPathToClipsFile() {
@@ -340,5 +347,13 @@ abstract public class Agent {
 
 	public void setPathToClipsFile(String pathToClipsFile) {
 		this.pathToClipsFile = pathToClipsFile;
+	}
+
+	public MapFrame getMapFrame() {
+		return mapFrame;
+	}
+
+	public void setMapFrame(MapFrame mapFrame) {
+		this.mapFrame = mapFrame;
 	}
 }

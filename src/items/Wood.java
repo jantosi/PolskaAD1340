@@ -2,11 +2,24 @@ package items;
 
 /**
  * Klasa definiująca drzewo.
- * @author Piotrek
  */
 public class Wood extends Item {
 	
-	public Wood(int price) {
-		super(price);
+	private int mass;
+	
+	public Wood(String id, int price) {
+		super(price, id);
+		this.mass = 10;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		buf.append("(drewno ")
+		   .append("(id ").append(this._id).append(") ")
+		   .append("(waga ").append(this.mass).append(") ")
+		   .append("(cena ").append(this._price).append(")) ");
+		
+		return buf.toString();
 	}
 }

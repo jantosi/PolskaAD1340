@@ -53,10 +53,6 @@ abstract public class Item {
         this.setId(id);
     }
     
-    public Item(int price) {
-    	this.setPrice(price);
-    }
-    
     public Item(){
     	
     }
