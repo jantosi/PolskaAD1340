@@ -26,8 +26,8 @@ public class Knight extends Agent {
     
     private KnightStatistics_Interface _stat;
     
-    public Knight(String id, ArrayList<Attack> attacks, KnightStatistics_Interface stat) {
-    	super(id);
+    public Knight(String id, String pathToClipsFile, ArrayList<Attack> attacks, KnightStatistics_Interface stat) {
+    	super(id, pathToClipsFile);
     	this.setGold(0);
     	this._attacks = attacks;
     	this._stat = stat;

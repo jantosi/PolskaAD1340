@@ -32,8 +32,8 @@ public class Merchant extends Agent {
      * Konstruktor. Ustawienie domyślnej wielkości magazynu.
      * @param int capacity 
      */
-    public Merchant(String id, int capacity, MerchantStatistics_Interface stat) {
-        super(id);
+    public Merchant(String id, String pathToClipsFile, int capacity, MerchantStatistics_Interface stat) {
+        super(id, pathToClipsFile);
         
         this.setCapacity(capacity);
         this._items = new ArrayList<Item>();

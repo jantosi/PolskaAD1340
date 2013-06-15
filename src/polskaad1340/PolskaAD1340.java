@@ -4,13 +4,14 @@
  */
 package polskaad1340;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
-import world.Cataclysm;
 import world.World;
+import agents.Agent;
 import clips.ClipsEnvironment;
 
 /**
@@ -38,11 +39,41 @@ public class PolskaAD1340 {
             ClipsEnvironment clipsEnv = new ClipsEnvironment();
             World world = new World(clipsEnv, lm, om);
             //world.loadFromClips();
-            world.getCataclysms().add(new Cataclysm("kleska1", 23, 34, 2, 5, 3));
-            world.saveToClips(clipsEnv);
-            clipsEnv.getWorldEnv().run();
-           
-            world.changeItemPrices();
+            world.saveToClips();
+          
+            
+           //glowna petla
+            for (int i = 0; i < 2; i++) {
+            	System.out.println("|ITERACJA " + (i + 1) + " |");
+            	
+            	clipsEnv.getWorldEnv().reset();
+            	world.saveToClips();
+            	clipsEnv.getWorldEnv().run();
+            	world.loadFromClips();
+            	
+            	for (int j = 0; j < world.getAgents().size(); j++) {
+            		Agent actualAgent = world.getAgents().get(j);
+            		ArrayList<Object> visibleObjects = world.getVisibleWorld(actualAgent.getId());
+
+            		clipsEnv.getAgentEnv().reset();
+            		clipsEnv.getAgentEnv().load(actualAgent.getPathToClipsFile());
+            		
+            		for (int k = 0; k < visibleObjects.size(); k++) {
+            			clipsEnv.getAgentEnv().assertString(visibleObjects.get(k).toString());
+            		}
+            		
+            		//dany agent wnioskuje
+            		clipsEnv.getAgentEnv().run();
+            		//clipsEnv.displayAgentFacts();
+            		
+            		ArrayList<String> inferenceResults = actualAgent.getInferenceResults(clipsEnv.getAgentEnv()); 
+            		for (int k = 0; k < inferenceResults.size(); k++) {
+            			clipsEnv.getWorldEnv().assertString(inferenceResults.get(i));
+            		}
+            	}
+            	
+            	System.out.println("|KONIEC ITERACJI " + (i + 1) + " |\n");
+            }        
             
             
             //clipsEnv.displayWorldFacts();

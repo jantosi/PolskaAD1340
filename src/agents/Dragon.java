@@ -16,8 +16,8 @@ public class Dragon extends Agent {
      */
     private ArrayList<Attack> _attacks;
 	
-    public Dragon(String id) {
-    	super(id);
+    public Dragon(String id, String pathToClipsFile) {
+    	super(id, pathToClipsFile);
     	 this.setGold(0);
     }
     

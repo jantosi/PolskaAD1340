@@ -41,8 +41,8 @@ public class Thief extends Agent {
     /**
      * Konstruktor złodzieja.
      */
-    public Thief(String id, ThiefStatistics_Interface stat) {
-        super(id);
+    public Thief(String id, String pathToClipsFile, ThiefStatistics_Interface stat) {
+        super(id, pathToClipsFile);
         this._statitics = stat;
         
         this.setNumberOfStaysInJail(0);
@@ -160,19 +160,6 @@ public class Thief extends Agent {
         return super.run();
     }
     
-    /**
-     * Przeciążenie metody dotyczącej odpoczynku. Podczas pobytu w więzieniu traci energie.
-     */
-    @Override
-    public void recover() {
-        if(this.getIsInJail()) {
-            this.setEnergy(this.getEnergy()-1);
-            this.setNumberOfIterationsInJail(this.getNumberOfIterationsInJail()-1);
-        }
-        else {
-            super.recover(); 
-        }
-    }
     
     /**
      * Metoda odpowiedzialna za pójscie do więzienia, w której obliczamy ilość dni do odsiadki,

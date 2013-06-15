@@ -8,16 +8,13 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import agents.Agent;
-import agents.Courier;
-import agents.Woodman;
-
 import polskaad1340.window.InformacjeOSwiecie;
 import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
 import statistics.CourierStatistics;
-import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;
+import agents.Agent;
+import agents.Courier;
 import clips.ClipsEnvironment;
 
 public class World {
@@ -61,15 +58,15 @@ public class World {
     private void initializeAgents(OknoMapy om) {
     	Random random = new Random();
     	
-    	WoodmanStatistics ws = new WoodmanStatistics();
-    	MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Agent drwal = new Woodman("drwal1", ws, mapFrame, om);
+    	//WoodmanStatistics ws = new WoodmanStatistics();
+    	//MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+       // Agent drwal = new Woodman("drwal1", "src/clips/drwal.clp", ws, mapFrame, om);
        
         CourierStatistics cs = new CourierStatistics();
-        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Agent poslaniec = new Courier("poslaniec1", cs, mapFrame, om);
+        MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Agent poslaniec = new Courier("poslaniec1", "src/clips/poslaniec.clp", cs, mapFrame, om);
         
-        this.agents.add(drwal);
+       // this.agents.add(drwal);
         this.agents.add(poslaniec);
         om.drawAllTiles();
     }
@@ -735,9 +732,9 @@ public class World {
         return sbuf.toString();
     }
 
-    public void saveToClips(ClipsEnvironment clips) {
+    public void saveToClips() {
         for (String fact : this.toString().split("\n")) {
-            clips.getWorldEnv().assertString(fact);
+            this.clipsEnv.getWorldEnv().assertString(fact);
         }
     }
 

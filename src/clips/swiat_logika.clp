@@ -878,8 +878,8 @@
 		(smok (id ?agentId)(idKratki ?idKratki)(poleWidzenia ?poleWidzenia))
 	)
 	(kratka (id ?idKratki)(pozycjaX ?kX)(pozycjaY ?kY))
-    (not (akcjaPrzemieszczaniePoDrodze (idAgenta ?agentId)))
-    (not (akcjaPrzemieszczanie (idAgenta ?agentId)))
+    ;(not (akcjaPrzemieszczaniePoDrodze (idAgenta ?agentId)))
+    ;(not (akcjaPrzemieszczanie (idAgenta ?agentId)))
     (not (okreslonoWidocznosc (idAgenta ?agentId)))
 =>	
     

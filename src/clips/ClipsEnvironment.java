@@ -11,6 +11,7 @@ public class ClipsEnvironment {
 		this.worldEnv = new Environment();
 		this.agentEnv = new Environment();
 		initializeWorldEnv();
+		initializeAgentEnv();
 	}
 	
 	private void initializeWorldEnv() {
@@ -18,6 +19,10 @@ public class ClipsEnvironment {
 		this.worldEnv.load("src/clips/swiat_logika.clp");
 		this.worldEnv.load("src/clips/test.clp");
 		this.worldEnv.reset();
+	}
+	
+	private void initializeAgentEnv() {
+		this.agentEnv.load("src/clips/swiat_szablony.clp");
 	}
 	
 	public void displayWorldFacts() {

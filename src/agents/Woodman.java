@@ -47,8 +47,8 @@ public class Woodman extends Agent {
      */
     protected WoodmanStatistics_Interface _statistics;
     
-    public Woodman(String id, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
-        super(id);
+    public Woodman(String id, String pathToClipsFile, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
+        super(id, pathToClipsFile);
         this._statistics = stat;
         this.setAx(null);
         this.setVehicle(null);
