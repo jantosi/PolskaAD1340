@@ -750,6 +750,7 @@ public class World {
     public String toString() {
         StringBuffer sbuf = new StringBuffer();
 
+        sbuf.append("(mapa ").append(this.height).append(" ").append(this.width).append(" )\n");
         // sbuf.append(";kratki\n");
         for (int i = 0; i < height; i++) {
             for (int k = 0; k < width; k++) {
@@ -797,9 +798,10 @@ public class World {
             }
         }
         
-        for (Agent agent : this.agents) {
-        	sbuf.append(agent.toString()).append("\n");
-        }
+       // for (Agent agent : this.agents) {
+       // 	sbuf.append(agent.toString()).append("\n");
+       // }
+        
         return sbuf.toString();
     }
 

@@ -17,7 +17,7 @@ public class ClipsEnvironment {
 	private void initializeWorldEnv() {
 		this.worldEnv.load("src/clips/swiat_szablony.clp");
 		this.worldEnv.load("src/clips/swiat_logika.clp");
-		this.worldEnv.load("src/clips/test.clp");
+		//this.worldEnv.load("src/clips/test.clp");
 		this.worldEnv.reset();
 	}
 	

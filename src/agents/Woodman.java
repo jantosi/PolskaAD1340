@@ -181,6 +181,11 @@ public class Woodman extends Agent {
 		buffer.append(this.energyRecovery);
 		buffer.append(") (zloto ");
 		buffer.append(this.gold);
+		if (this.target != null) {
+			buffer.append(") (cel ");
+			buffer.append(this.target);
+		}
+		
 		buffer.append("))");
 		return buffer.toString();
 	}

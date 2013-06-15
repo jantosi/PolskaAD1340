@@ -1,8 +1,10 @@
 package agents;
 
+import items.Item;
+
 import java.util.ArrayList;
-import items.*;
-import statistics.*;
+
+import statistics.MerchantStatistics_Interface;
 
 /**
  * Klasa definiująca kupca.

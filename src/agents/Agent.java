@@ -122,7 +122,7 @@ abstract public class Agent {
 				buf.append("(akcjaPrzemieszczaniePoDrodze ")
 				   .append("(idAgenta ").append(tmpPv.getFactSlot("idAgenta").toString()).append(") ")
 				   .append("(ileKratek ").append(tmpPv.getFactSlot("ileKratek").toString()).append(") ")
-				   .append("(doeclowyGrod ").append(tmpPv.getFactSlot("docelowyGrod").toString()).append(")) ");
+				   .append("(docelowyGrod ").append(tmpPv.getFactSlot("docelowyGrod").toString()).append(")) ");
 				
 				results.add(buf.toString());
 			}
@@ -256,6 +256,28 @@ abstract public class Agent {
 		} catch (Exception e) {
 		}
     			
+    	evalString = "(find-all-facts ((?p poslaniec)) TRUE)";
+    	pv = agentEnv.eval(evalString);
+    	try {
+				Courier courier = new Courier();
+				courier.loadFromClips(pv.get(0));
+				results.add(courier.toString());
+				
+		} catch (Exception e) {
+		
+		}
+    	
+    	evalString = "(find-all-facts ((?d drwal)) TRUE)";
+    	pv = agentEnv.eval(evalString);
+    	try {
+				Woodman woodman = new Woodman();
+				woodman.loadFromClips(pv.get(0));
+				results.add(woodman.toString());
+				
+		} catch (Exception e) {
+		
+		}
+    	
     	return results;
     }
     

@@ -1,6 +1,6 @@
 package agents;
 
-import statistics.*;
+import statistics.ThiefStatistics_Interface;
 /**
  * Klasa definiująca złodzieja.
  * 
@@ -225,4 +225,5 @@ public class Thief extends Agent {
 		buffer.append("))");
 		return buffer.toString();
 	}
+
 }

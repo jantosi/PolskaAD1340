@@ -29,19 +29,21 @@ public class PolskaAD1340 {
 
         // TODO code application logic here
         OknoMapy om = new OknoMapy();
+        om.setVisible(true);
 
 		try {
 			LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
 			om.importBackgroundTileGrid(lm.getMap());
 			om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
 			om.drawAllTiles();
+			
 
 			ClipsEnvironment clipsEnv = new ClipsEnvironment();
 			World world = new World(clipsEnv, lm, om);
 
 			ArrayList<String> inferenceResults = new ArrayList<String>();
 			// glowna petla
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i < 3; i++) {
 				System.out.println("|ITERACJA " + (i + 1) + " |");
 
 				clipsEnv.getWorldEnv().reset();
@@ -49,8 +51,9 @@ public class PolskaAD1340 {
 				// przez agentow fakty
 				world.saveToClips();
 				for (int k = 0; k < inferenceResults.size(); k++) {
-					clipsEnv.getWorldEnv().assertString(inferenceResults.get(i));
+					clipsEnv.getWorldEnv().assertString(inferenceResults.get(k));
 				}
+				clipsEnv.getWorldEnv().assertString("(iteracja " + (i + 1) + ")");
 				inferenceResults = new ArrayList<String>();
 
 				System.out.println("<wnioskowanie swiata>");
@@ -71,10 +74,11 @@ public class PolskaAD1340 {
 					}
 
 					// dany agent wnioskuje
+					//clipsEnv.displayAgentFacts();
 					System.out.println("<wnioskowanie agenta " + actualAgent.getId() + " >");
 					clipsEnv.getAgentEnv().run();
 					System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");
-					clipsEnv.displayAgentFacts();
+					
 
 					ArrayList<String> agentInferenceResults = actualAgent.getInferenceResults(clipsEnv.getAgentEnv());
 					// wywnioskowane przez agenta fakty dodajemy do wszystkich
@@ -92,7 +96,6 @@ public class PolskaAD1340 {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        om.setVisible(true);
         System.out.println("done and done.");
 
     }

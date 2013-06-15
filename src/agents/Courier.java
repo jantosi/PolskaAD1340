@@ -41,6 +41,7 @@ public class Courier extends Agent {
      */
     protected String horse;
     
+    
     public Courier() {
     	this.mapFrame = new MapFrame();
     	this.packages = new ArrayList<String>();
@@ -66,6 +67,7 @@ public class Courier extends Agent {
     
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
+			this.id = pv.getFactSlot("id").toString();
 			this.velocity = pv.getFactSlot("predkosc").intValue();
 			this.extraVelocity = pv.getFactSlot("dodatekPredkosc").intValue();
 			this.energy = pv.getFactSlot("energia").intValue();
@@ -75,6 +77,9 @@ public class Courier extends Agent {
 			this.fieldOfView = pv.getFactSlot("poleWidzenia").intValue();
 			this.capacity = pv.getFactSlot("udzwig").intValue();
 			this.horse = pv.getFactSlot("kon").toString();
+			this.target = !pv.getFactSlot("cel").toString().equalsIgnoreCase("nil")? pv.getFactSlot("cel").toString() : null;
+			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
+			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
 			
 			String packsTmp = pv.getFactSlot("paczki").toString();
 			String[] packs = packsTmp.replace("(", "").replace(")", "").split(" ");
@@ -179,6 +184,10 @@ public class Courier extends Agent {
 		buffer.append(this.possibleMove);
 		buffer.append(") (idKratki ");
 		buffer.append(this.mapFrame.getId());
+		if (this.target != null) {
+			buffer.append(") (cel ");
+			buffer.append(this.target);
+		}
 		buffer.append("))");
 		return buffer.toString();
 	}

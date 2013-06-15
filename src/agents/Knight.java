@@ -123,4 +123,5 @@ public class Knight extends Agent {
 	public void set_stat(KnightStatistics_Interface _stat) {
 		this._stat = _stat;
 	}
+
 }
