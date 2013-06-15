@@ -21,20 +21,20 @@
     (strataEnergii 10)
     (odnawianieEnergii 3)
 )
-;(akcjaPrzemieszczaniePoDrodze 
-;    (idAgenta poslaniec1)
-;    (ileKratek 5)
-;    (docelowyGrod grod2)
-;)
-;(akcjaPrzemieszczaniePoDrodze  
-;    (idAgenta poslaniec1)
-;    (ileKratek 3)
-;    (docelowyGrod grod2)
-;)
-;(akcjaPrzemieszczanie (idAgenta poslaniec1)
-;	(ileKratek 2)
-;	(kierunek prawo)
-;)
+(akcjaPrzemieszczaniePoDrodze 
+    (idAgenta poslaniec1)
+    (ileKratek 5)
+    (docelowyGrod grod2)
+)
+(akcjaPrzemieszczaniePoDrodze  
+    (idAgenta poslaniec1)
+    (ileKratek 3)
+    (docelowyGrod grod2)
+)
+(akcjaPrzemieszczanie (idAgenta poslaniec1)
+	(ileKratek 2)
+	(kierunek prawo)
+)
 ;(akcjaPrzemieszczanie (idAgenta rycerz1)
 ;    (ileKratek 1)
 ;	(kierunek lewo)
@@ -254,7 +254,7 @@
 	(oslabianieAgentow 10) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
 	(zabijanieMieszkancow 2) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
 )
-( kleska
+(kleska
 	(id kleska2) 
     (czasTrwania 1)
 	(idKratki 19) ;kratka na której jest klęska
@@ -262,7 +262,13 @@
 	(oslabianieAgentow 10) ;liczba punktow energii jaka zabiera znajdujacym sie na jej obszarze agentom
 	(zabijanieMieszkancow 2) ;liczba mieszkancow, ktorych zabija, gdy w jej obszarze znajduje sie grod
 )
-(kleska (id cataclysm4) (idKratki 19) (niszczenieLasu 56) (oslabianieAgentow 19) (czasTrwania 6) (zabijanieMieszkancow 4))
+(paczka
+    (id paczka3)
+	(waga 1)
+	(grodStart grod1) ;grod, w ktorym paczka sie znajduje
+	(grodKoniec grod2) ;grod, do ktorego paczka jest przeznaczona
+)
+(akcjaWezPaczke (idAgenta poslaniec1)(idPaczki paczka3))
 )
 
 

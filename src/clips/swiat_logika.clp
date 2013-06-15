@@ -485,7 +485,7 @@
 )
 
 ;regula realizujaca odpoczynek agentów, regenerujac im przy tym energie
-(defrule odpoczywanie (declare (salience 1))
+(defrule odpoczywanie (declare (salience 8))
     (or	
 		?agent <- (poslaniec (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
 		?agent <- (rycerz (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
@@ -515,20 +515,19 @@
 )
 
 ; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
-(defrule wezPaczke (declare (salience 3))
-    ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki ?paczki))
+(defrule wezPaczke (declare (salience 4))
+    ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki $?paczki))
     ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
     ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
 =>
-    (modify ?agent (paczki ?paczki ?idPaczki))
+    (modify ?agent (paczki $?paczki ?idPaczki))
 
     (retract ?akcja)
 
-    (printout t "Poslaniec o id: " ?id " wzial paczke o id: " ?idPaczki crlf)
+    (printout t "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
 )
 
 ;WIP: Ataki pomiedzy rycerzem a smokiem
-
 (defrule atakujSmoka (declare (salience 3))
     ?smok <- (smok (id ?idSmoka) (idKratki ?idKratkiSmoka) (energia ?energiaSmoka) (zloto ?zlotoSmoka) (strataEnergii ?strataEnergiiSmoka))
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
