@@ -43,7 +43,7 @@ public class PolskaAD1340 {
 
 			ArrayList<String> inferenceResults = new ArrayList<String>();
 			// glowna petla
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 10; i++) {
 				System.out.println("|ITERACJA " + (i + 1) + " |");
 
 				clipsEnv.getWorldEnv().reset();

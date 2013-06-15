@@ -146,7 +146,7 @@
     )    
     
     ;modyfikujemy dodatek predkosci agenta oraz jego pole widzenia
-    (modify ?agent (dodatekPredkosc ?dodatPredkosc)(poleWidzenia (+ ?dodatPredkosc ?predkosc)))    
+    (modify ?agent (dodatekPredkosc ?dodatPredkosc)(poleWidzenia (+ ?dodatPredkosc ?predkosc))(mozliwyRuch (+ ?dodatPredkosc ?predkosc)))    
     (printout t "Zmodyfikowano dodatek predkosci agenta: " ?id ", dodatek predkosci = " ?dodatPredkosc crlf)
     
     ;umieszczamy fakt kontrolny, ze dla danego agenta dodatkowa predkosc zostala juz zmodyfikowana
@@ -182,7 +182,7 @@
     ;sprawdzamy czy nie przejdziemy docelowego grodu
     (if (> (+ ?nrOdc ?ilePrzesunac) ?maxOdcinek)
     then     
-        (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc))
+        (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc 1))
     )
     
     ;sprawdzamy czy agent ma odpowiednia ilosc energii aby sie przmiescic
