@@ -184,7 +184,10 @@
     (if (> (+ ?nrOdc ?ilePrzesunac) ?maxOdcinek)
     then     
         (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc))
+<<<<<<< HEAD
         (bind ?dotarcieDoGrodu TRUE)
+=======
+>>>>>>> branch 'master' of https://github.com/wyzellak/PolskaAD1340.git
     )
     
     ;sprawdzamy czy agent ma odpowiednia ilosc energii aby sie przmiescic
