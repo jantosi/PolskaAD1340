@@ -601,7 +601,7 @@ public class World {
                         punktyKoncowe.add(kawalekDrogi);
                     }
                 }
-
+                
                 //punkty koncowe sa znane; teraz nalezy przejsc cala droge tworzac kratki drogi.
                 for (int j = 0; j < punktyKoncowe.size(); j++) {
                     Point[] sasiedziMogacyBycGrodem = InformacjeOSwiecie.getNeighboursOfPoint(punktyKoncowe.get(j));
@@ -641,7 +641,6 @@ public class World {
                 ArrayList<Road> roadForwards = new ArrayList<>();
 
                 int iteration = 1;
-
                 while (aktualnyPunkt != punktyKoncowe.get(1)) {
                     Road aktualnyKawalekDrogi; //max zostanie wypelniony pozniej
                     String nazwatypu;
@@ -658,15 +657,7 @@ public class World {
                     }
                     
                     //szukamy id kratki, ktora nalezy do drogi
-                    int mapFrame = 0;
-                    outer:for (int g = 0; g < this.mapFrames.length; g++) {
-                    	for (int h = 0; h < this.mapFrames[g].length; h++) {
-                    		if (this.mapFrames[g][h].getX() == aktualnyPunkt.x && this.mapFrames[g][h].getY() == aktualnyPunkt.y) {
-                    			mapFrame = this.mapFrames[g][h].getId();
-                    			break outer;
-                    		}
-                    	}
-                    }
+                    int mapFrame = getFrameIdByCoords(aktualnyPunkt.x,aktualnyPunkt.y);
                     
                     aktualnyKawalekDrogi = new Road(nazwatypu + i, mapFrame, grodyPunktowKoncowych.get(0), grodyPunktowKoncowych.get(1), "utwardzona", platna, iteration, -1);
                     roadForwards.add(aktualnyKawalekDrogi);
@@ -682,6 +673,13 @@ public class World {
                     iteration++;
                 }
 
+                //ma koniec szukamy kratki z ostatnim punktem koncowym
+                int mapFrame = getFrameIdByCoords(punktyKoncowe.get(1).x, punktyKoncowe.get(1).y);
+                Road tmp = roadForwards.get(roadForwards.size() - 1);
+                Road koncowyKawalek = new Road(tmp.getId(), mapFrame, tmp.getSourceTown(), tmp.getDestinationTown(),
+                		tmp.getType(), tmp.isPaid(), tmp.getCurrentPartNo() + 1, -1);
+                roadForwards.add(koncowyKawalek);
+                
                 for (int j = 0; j < roadForwards.size(); j++) {
                     Road road = roadForwards.get(j);
                     road.setMaxPartNo(iteration);
@@ -821,6 +819,18 @@ public class World {
     	}
     	
     	return null;
+    }
+    
+    public int getFrameIdByCoords(int x, int y) {
+    	for (int i = 0; i < this.mapFrames.length; i++) {
+    		for (int j = 0; j < this.mapFrames[i].length; j++) {
+    			if (this.mapFrames[i][j].getX() == x && this.mapFrames[i][j].getY() == y) {
+    				return this.mapFrames[i][j].getId();
+    			}
+    		}
+    	}
+    	
+    	return -1;
     }
     
     public MapFrame[][] getMapFrames() {
