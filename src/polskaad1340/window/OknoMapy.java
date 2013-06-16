@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicBorders;
+import javax.swing.JTextField;
 
 /**
  *
@@ -37,6 +38,28 @@ public final class OknoMapy extends javax.swing.JFrame {
     public BasicBorders.FieldBorder defaultBorder;
     private boolean isTileBordered = false;
     ArrayList<ObiektPierwszegoPlanu> foregroundList = new ArrayList<>();
+    
+    
+    private javax.swing.JPanel backgroundPanel;
+    private javax.swing.JPanel bulkPanel;
+    private javax.swing.JPanel contextPanel;
+    private javax.swing.JPanel foregroundPanel;
+    private javax.swing.JPanel iconDisplayPanel;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel overallBackgroundPanel;
+    private javax.swing.JPanel tileInfoPanel;
+    private javax.swing.JLabel tileInfoPanelLabel1;
+    private JPanel controlPanel;
+    private JButton btnNextIter;
+    private JButton btnNextAgent;
+    private JLabel lblIteracja;
+    private JLabel lblAgent;
+    private JTextField textFieldIter;
+    private JTextField textFieldAgent;
 
     public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
@@ -388,6 +411,28 @@ public final class OknoMapy extends javax.swing.JFrame {
         btnNextAgent.setFocusable(false);
         controlPanel.add(btnNextAgent);
         
+        lblIteracja = new JLabel("ITERACJA");
+        lblIteracja.setBounds(13, 256, 78, 19);
+        controlPanel.add(lblIteracja);
+        
+        lblAgent = new JLabel("AGENT");
+        lblAgent.setBounds(12, 308, 41, 19);
+        controlPanel.add(lblAgent);
+        
+        textFieldIter = new JTextField();
+        textFieldIter.setBounds(7, 329, 86, 20);
+        textFieldIter.setFocusable(false);
+        textFieldIter.setEditable(false);
+        controlPanel.add(textFieldIter);
+        textFieldIter.setColumns(10);
+        
+        textFieldAgent = new JTextField();
+        textFieldAgent.setBounds(8, 276, 86, 20);
+        textFieldAgent.setFocusable(false);
+        textFieldAgent.setEditable(false);
+        controlPanel.add(textFieldAgent);
+        textFieldAgent.setColumns(10);
+        
         jMenu3.setText("Widok");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, java.awt.event.InputEvent.ALT_MASK));
@@ -565,22 +610,62 @@ public final class OknoMapy extends javax.swing.JFrame {
         this.isTileBordered = !this.isTileBordered;
         this.setTileBorders(isTileBordered);
     }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel backgroundPanel;
-    private javax.swing.JPanel bulkPanel;
-    private javax.swing.JPanel contextPanel;
-    private javax.swing.JPanel foregroundPanel;
-    private javax.swing.JPanel iconDisplayPanel;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel overallBackgroundPanel;
-    private javax.swing.JPanel tileInfoPanel;
-    private javax.swing.JLabel tileInfoPanelLabel1;
-    private JPanel controlPanel;
-    private JButton btnNextIter;
-    private JButton btnNextAgent;
-    // End of variables declaration//GEN-END:variables
+
+	public javax.swing.JPanel getIconDisplayPanel() {
+		return iconDisplayPanel;
+	}
+
+	public void setIconDisplayPanel(javax.swing.JPanel iconDisplayPanel) {
+		this.iconDisplayPanel = iconDisplayPanel;
+	}
+
+	public javax.swing.JPanel getTileInfoPanel() {
+		return tileInfoPanel;
+	}
+
+	public void setTileInfoPanel(javax.swing.JPanel tileInfoPanel) {
+		this.tileInfoPanel = tileInfoPanel;
+	}
+
+	public javax.swing.JLabel getTileInfoPanelLabel1() {
+		return tileInfoPanelLabel1;
+	}
+
+	public void setTileInfoPanelLabel1(javax.swing.JLabel tileInfoPanelLabel1) {
+		this.tileInfoPanelLabel1 = tileInfoPanelLabel1;
+	}
+
+	public JButton getBtnNextIter() {
+		return btnNextIter;
+	}
+
+	public void setBtnNextIter(JButton btnNextIter) {
+		this.btnNextIter = btnNextIter;
+	}
+
+	public JButton getBtnNextAgent() {
+		return btnNextAgent;
+	}
+
+	public void setBtnNextAgent(JButton btnNextAgent) {
+		this.btnNextAgent = btnNextAgent;
+	}
+
+	public JTextField getTextFieldIter() {
+		return textFieldIter;
+	}
+
+	public void setTextFieldIter(JTextField textFieldIter) {
+		this.textFieldIter = textFieldIter;
+	}
+
+	public JTextField getTextFieldAgent() {
+		return textFieldAgent;
+	}
+
+	public void setTextFieldAgent(JTextField textFieldAgent) {
+		this.textFieldAgent = textFieldAgent;
+	}
+
+
 }

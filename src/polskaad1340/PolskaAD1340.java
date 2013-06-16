@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import polskaad1340.window.ControlButtonsListeners;
 import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
 import world.World;
@@ -41,7 +42,14 @@ public class PolskaAD1340 {
 			ClipsEnvironment clipsEnv = new ClipsEnvironment();
 			World world = new World(clipsEnv, lm, om);
 
-			ArrayList<String> inferenceResults = new ArrayList<String>();
+			ControlButtonsListeners controlListeners = new ControlButtonsListeners(om, clipsEnv, world);
+			Inference inference = new Inference(clipsEnv, world);
+			
+			for (int i = 0; i < 10; i++) {
+				inference.realizeRound();
+			}
+			
+			/*ArrayList<String> inferenceResults = new ArrayList<String>();
 			// glowna petla
 			for (int i = 0; i < 10; i++) {
 				System.out.println("|ITERACJA " + (i + 1) + " |");
@@ -90,7 +98,7 @@ public class PolskaAD1340 {
 				}
 
 				System.out.println("|KONIEC ITERACJI " + (i + 1) + " |\n");
-			}
+			}*/
 
 		} catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);
