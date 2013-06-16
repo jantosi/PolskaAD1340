@@ -3,14 +3,12 @@ package polskaad1340.window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import world.World;
-import clips.ClipsEnvironment;
+import polskaad1340.Inference;
 
 public class ControlButtonsListeners {
 
 	private OknoMapy om;
-	private ClipsEnvironment clipsEnv;
-	private World world;
+	private Inference inference;
 	
 	private class BtnNextIterListener implements ActionListener {
 		@Override
@@ -28,10 +26,9 @@ public class ControlButtonsListeners {
 
 	}
 	
-	public ControlButtonsListeners(OknoMapy om, ClipsEnvironment clipsEnv, World world) {
+	public ControlButtonsListeners(OknoMapy om, Inference inference) {
 		this.om = om;
-		this.clipsEnv = clipsEnv;
-		this.world = world;
+		this.inference = inference;
 		
 		this.om.getBtnNextIter().addActionListener(new BtnNextIterListener());
 		this.om.getBtnNextAgent().addActionListener(new BtnNextAgentListener());

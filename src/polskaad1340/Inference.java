@@ -12,8 +12,14 @@ public class Inference {
 	private World world;
 	private ArrayList<String> agentsInferenceResults;
 	
+	//ostatnia pelna runda czyli swiat i wszyscy agenci
 	private int lastPerformedIter;
+	//aktualna runda swiata
 	private int actualIteration;
+	
+	//to jest po to, aby jak klikniemy przycisk nastepny agent
+	//a pozniej nastepna iteracja, to zebysmy wiedziele, ktorzy agenci musza
+	//w danej rundzie wywnioskowac przed przejsciem do nastepnej rundy
 	private ArrayList<Agent> agentsWhoDidntInfer;
 	
 	public Inference(ClipsEnvironment clipsEnv, World world) {
@@ -89,6 +95,30 @@ public class Inference {
 		
 		System.out.println("|KONIEC ITERACJI " + (this.lastPerformedIter + 1) + " |\n");
 		this.lastPerformedIter = this.actualIteration;
+	}
+
+	public ClipsEnvironment getClipsEnv() {
+		return clipsEnv;
+	}
+
+	public void setClipsEnv(ClipsEnvironment clipsEnv) {
+		this.clipsEnv = clipsEnv;
+	}
+
+	public World getWorld() {
+		return world;
+	}
+
+	public void setWorld(World world) {
+		this.world = world;
+	}
+
+	public ArrayList<Agent> getAgentsWhoDidntInfer() {
+		return agentsWhoDidntInfer;
+	}
+
+	public void setAgentsWhoDidntInfer(ArrayList<Agent> agentsWhoDidntInfer) {
+		this.agentsWhoDidntInfer = agentsWhoDidntInfer;
 	}
 	
 }

@@ -4,7 +4,6 @@
  */
 package polskaad1340;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,7 +11,6 @@ import polskaad1340.window.ControlButtonsListeners;
 import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
 import world.World;
-import agents.Agent;
 import clips.ClipsEnvironment;
 
 /**
@@ -42,8 +40,8 @@ public class PolskaAD1340 {
 			ClipsEnvironment clipsEnv = new ClipsEnvironment();
 			World world = new World(clipsEnv, lm, om);
 
-			ControlButtonsListeners controlListeners = new ControlButtonsListeners(om, clipsEnv, world);
 			Inference inference = new Inference(clipsEnv, world);
+			ControlButtonsListeners controlListeners = new ControlButtonsListeners(om, inference);
 			
 			for (int i = 0; i < 10; i++) {
 				inference.realizeRound();
