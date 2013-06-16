@@ -16,9 +16,27 @@ public class ControlButtonsListeners {
 	private class BtnNextIterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//konczymy zaczeta runde
 			inference.realizeRound();
+			
+			//rozpoczynamy nowa runde swiata
+			inference.performWorldInference();
+			
 			om.getTextFieldIter().setText(String.valueOf(inference.getActualIteration()));
-			agentsWhoInferedNum = 0;
+			
+			//wnioskuje rowniez pierwszy agent
+			Agent agent = inference.getWorld().getAgents().get(0);
+			
+			try {
+				inference.performAgentInference(agent);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			om.getTextFieldAgent().setText(agent.getId());
+			
+			inference.getAgentsWhoDidntInfer()[0] = -1;
+			
+			agentsWhoInferedNum = 1;
 		}
 	}
 	
@@ -33,6 +51,8 @@ public class ControlButtonsListeners {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				
+				om.getTextFieldAgent().setText(agent.getId());
 				
 				inference.getAgentsWhoDidntInfer()[agentsWhoInferedNum] = -1;
 				agentsWhoInferedNum += 1;

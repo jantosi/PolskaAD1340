@@ -420,14 +420,14 @@ public final class OknoMapy extends javax.swing.JFrame {
         controlPanel.add(lblAgent);
         
         textFieldIter = new JTextField();
-        textFieldIter.setBounds(7, 329, 86, 20);
+        textFieldIter.setBounds(8, 276, 86, 20);
         textFieldIter.setFocusable(false);
         textFieldIter.setEditable(false);
         controlPanel.add(textFieldIter);
         textFieldIter.setColumns(10);
         
         textFieldAgent = new JTextField();
-        textFieldAgent.setBounds(8, 276, 86, 20);
+        textFieldAgent.setBounds(7, 329, 86, 20);
         textFieldAgent.setFocusable(false);
         textFieldAgent.setEditable(false);
         controlPanel.add(textFieldAgent);
