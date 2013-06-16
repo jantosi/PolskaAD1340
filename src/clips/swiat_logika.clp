@@ -180,9 +180,11 @@
     )
                
     ;sprawdzamy czy nie przejdziemy docelowego grodu
+    (bind ?dotarcieDoGrodu FALSE)
     (if (> (+ ?nrOdc ?ilePrzesunac) ?maxOdcinek)
     then     
-        (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc 1))
+        (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc))
+        (bind ?dotarcieDoGrodu TRUE)
     )
     
     ;sprawdzamy czy agent ma odpowiednia ilosc energii aby sie przmiescic
@@ -211,12 +213,21 @@
         )         
 
         ;znajdujemy kratke danej drogi po przemieszczeniu agenta
-        (bind ?drogaPoPrzes (nth$ 1 (find-fact ((?d droga))(and (eq ?d:id ?drogaId) (eq ?d:nrOdcinka ?nrOdcPoPrzesunieciu)) )))
-        (bind ?nowaKratkaId (fact-slot-value ?drogaPoPrzes idKratki))
+        (if (and (eq ?dotarcieDoGrodu TRUE) (eq ?czyWykryto FALSE))
+        then
+            (bind ?grodIndex (nth$ 1 (find-fact ((?g grod))(eq ?g:nazwa ?cel))))
+            (bind ?nowaKratkaId (fact-slot-value ?grodIndex idKratki))
+        else
+            (bind ?drogaPoPrzes (nth$ 1 (find-fact ((?d droga))(and (eq ?d:id ?drogaId) (eq ?d:nrOdcinka ?nrOdcPoPrzesunieciu)) )))
+            (bind ?nowaKratkaId (fact-slot-value ?drogaPoPrzes idKratki))
+        )
+        
+        (bind ?tmp (nth$ 1 (find-fact ((?k kratka))(eq ?k:id ?nowaKratkaId))))
     
+                
         ;przesuwamy agenta odejmujac mu przy tym punkty ruchu
         (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac))(energia (- ?energia ?potrzebnaEnergia)))  
-        (printout t "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId ", ile kratek: " ?ilePrzesunac ", strata energii: " ?potrzebnaEnergia crlf) 
+        (printout t "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId " x: " (fact-slot-value ?tmp pozycjaX) " y: " (fact-slot-value ?tmp pozycjaY) ", ile kratek: " ?ilePrzesunac ", strata energii: " ?potrzebnaEnergia crlf) 
         
         ;po przesunieciu agenta znow musimy wyznaczyc dodatek predkosci zwiazany z polozeniem na nowym terenie
         (retract ?modyfikacjaPredkosci)   
