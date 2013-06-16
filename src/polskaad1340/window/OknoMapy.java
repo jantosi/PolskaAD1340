@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -123,8 +124,9 @@ public final class OknoMapy extends javax.swing.JFrame {
 
         drawAllTiles();
         bulkPanel.setPreferredSize(this.getSize());
+        
         contextPanel.setVisible(false);
-
+        this.requestFocus();
     }
 
     public ObiektPierwszegoPlanu nowyObiektPierwszegoPlanu(int x, int y, int tileID) {
@@ -307,7 +309,7 @@ public final class OknoMapy extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(800, 600));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
+            	formMouseClicked(evt);
             }
         });
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -369,8 +371,23 @@ public final class OknoMapy extends javax.swing.JFrame {
         jScrollPane1.setViewportView(bulkPanel);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(0, 0, 790, 470);
+        jScrollPane1.setBounds(0, 0, 680, 540);
 
+        controlPanel = new JPanel();
+        controlPanel.setLayout(null);
+        controlPanel.setBounds(683, 0, 101, 540);
+        getContentPane().add(controlPanel);
+        
+        btnNextIter = new JButton("<html><center>Nastepna<br>iteracja</center></html>");
+        btnNextIter.setBounds(10, 11, 81, 92);
+        btnNextIter.setFocusable(false);
+        controlPanel.add(btnNextIter);
+        
+        btnNextAgent = new JButton("<html><center>Nastepny<br>agent</center></html>");
+        btnNextAgent.setBounds(10, 128, 81, 92);
+        btnNextAgent.setFocusable(false);
+        controlPanel.add(btnNextAgent);
+        
         jMenu3.setText("Widok");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, java.awt.event.InputEvent.ALT_MASK));
@@ -399,11 +416,11 @@ public final class OknoMapy extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void resizeContentsTo(Dimension d) {
-        //        d.height -= 37;
-//        d.width -= 15; //corrections for window borders
-
         jScrollPane1.setPreferredSize(d);
         jScrollPane1.setSize(d);
+        
+        //przesuwam odpowiednio panel kontrolny
+        this.controlPanel.setBounds(d.width, 0, this.controlPanel.getWidth(), this.controlPanel.getHeight());
 
         if (this.backgroundTileGrid != null) {
             bulkPanel.setPreferredSize(new Dimension(this.tileSize * this.backgroundTileGrid.size(), this.tileSize * this.backgroundTileGrid.size()));
@@ -415,19 +432,24 @@ public final class OknoMapy extends javax.swing.JFrame {
         if (jScrollPane1.getVerticalScrollBar() != null) {
             jScrollPane1.getVerticalScrollBar().setUnitIncrement(tileSize / 2);
         }
+        
+        this.jScrollPane1.validate();
     }
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
 
-        Dimension d = this.getContentPane().getSize();
-        this.resizeContentsTo(d);
-
-
+    	//nalezy takze uwzglednic panel kontrolny, ktory jest obok scroll panelu,
+    	//aby scroll panel nie nachodzil na panel kontrolny
+        Dimension contentPanelDim = this.getContentPane().getSize();
+        Dimension controlPanelDim = this.controlPanel.getSize();
+        Dimension newDim = new Dimension(contentPanelDim.width - controlPanelDim.width, contentPanelDim.height);
+        
+        this.resizeContentsTo(newDim);
 
     }//GEN-LAST:event_formComponentResized
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-//        demo eventu       
+//        demo eventu   
         if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             this.foregroundList.get(0).move(0, 1);
         }
@@ -557,5 +579,8 @@ public final class OknoMapy extends javax.swing.JFrame {
     private javax.swing.JPanel overallBackgroundPanel;
     private javax.swing.JPanel tileInfoPanel;
     private javax.swing.JLabel tileInfoPanelLabel1;
+    private JPanel controlPanel;
+    private JButton btnNextIter;
+    private JButton btnNextAgent;
     // End of variables declaration//GEN-END:variables
 }
