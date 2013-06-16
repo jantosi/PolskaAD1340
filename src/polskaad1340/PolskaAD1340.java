@@ -42,61 +42,8 @@ public class PolskaAD1340 {
 
 			Inference inference = new Inference(clipsEnv, world);
 			ControlButtonsListeners controlListeners = new ControlButtonsListeners(om, inference);
+			controlListeners.activateListeners();
 			
-			for (int i = 0; i < 10; i++) {
-				inference.realizeRound();
-			}
-			
-			/*ArrayList<String> inferenceResults = new ArrayList<String>();
-			// glowna petla
-			for (int i = 0; i < 10; i++) {
-				System.out.println("|ITERACJA " + (i + 1) + " |");
-
-				clipsEnv.getWorldEnv().reset();
-				// do swiata przekazujemy obiekty swiata oraz wywnioskowane
-				// przez agentow fakty
-				world.saveToClips();
-				for (int k = 0; k < inferenceResults.size(); k++) {
-					clipsEnv.getWorldEnv().assertString(inferenceResults.get(k));
-				}
-				clipsEnv.getWorldEnv().assertString("(iteracja " + (i + 1) + ")");
-				inferenceResults = new ArrayList<String>();
-
-				System.out.println("<wnioskowanie swiata>");
-				clipsEnv.getWorldEnv().run();
-				System.out.println("</wnioskowanie swiata>");
-				//clipsEnv.displayWorldFacts();
-				world.loadFromClips();
-
-				for (int j = 0; j < world.getAgents().size(); j++) {
-					Agent actualAgent = world.getAgents().get(j);
-					ArrayList<Object> visibleObjects = world.getVisibleWorld(actualAgent.getId());
-
-					clipsEnv.getAgentEnv().reset();
-					clipsEnv.getAgentEnv().load(actualAgent.getPathToClipsFile());
-
-					for (int k = 0; k < visibleObjects.size(); k++) {
-						clipsEnv.getAgentEnv().assertString(visibleObjects.get(k).toString());
-					}
-
-					// dany agent wnioskuje
-					//clipsEnv.displayAgentFacts();
-					System.out.println("<wnioskowanie agenta " + actualAgent.getId() + " >");
-					clipsEnv.getAgentEnv().run();
-					System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");
-					
-
-					ArrayList<String> agentInferenceResults = actualAgent.getInferenceResults(clipsEnv.getAgentEnv());
-					// wywnioskowane przez agenta fakty dodajemy do wszystkich
-					// faktow, ktore po wnioskowaniu wszystkich agentow zosatna przekazane do swiata
-					for (String agentInferenceResult : agentInferenceResults) {
-						inferenceResults.add(agentInferenceResult);
-					}
-
-				}
-
-				System.out.println("|KONIEC ITERACJI " + (i + 1) + " |\n");
-			}*/
 
 		} catch (Exception ex) {
             Logger.getLogger(PolskaAD1340.class.getName()).log(Level.SEVERE, null, ex);

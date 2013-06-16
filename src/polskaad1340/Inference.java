@@ -20,12 +20,20 @@ public class Inference {
 	//to jest po to, aby jak klikniemy przycisk nastepny agent
 	//a pozniej nastepna iteracja, to zebysmy wiedziele, ktorzy agenci musza
 	//w danej rundzie wywnioskowac przed przejsciem do nastepnej rundy
-	private ArrayList<Agent> agentsWhoDidntInfer;
+	private int[] agentsWhoDidntInfer;
 	
 	public Inference(ClipsEnvironment clipsEnv, World world) {
 		this.clipsEnv = clipsEnv;
 		this.world = world;
 		this.agentsInferenceResults = new ArrayList<String>();
+		
+		//pierwsza runda jest inicjalizacyjna
+		System.out.println("<RUNDA INICJALIZACYJNA - NIE MA WPLYWU NA ROZGRYWKE>");
+		realizeRound();
+		System.out.println("</RUNDA INICJALIZACYJNA>\n");
+		
+		this.lastPerformedIter = 0;
+		this.actualIteration = 0;
 	}
 	
 	public void performWorldInference() {
@@ -43,11 +51,16 @@ public class Inference {
 
 		System.out.println("<wnioskowanie swiata>");
 		this.clipsEnv.getWorldEnv().run();
-		System.out.println("</wnioskowanie swiata>");
+		System.out.println("fakty:");
 		//clipsEnv.displayWorldFacts();
+		System.out.println("</wnioskowanie swiata>");
 		this.world.loadFromClips();
 		
-		this.agentsWhoDidntInfer = this.world.getAgents();
+		this.agentsWhoDidntInfer = new int[this.world.getAgents().size()];
+		for (int i = 0; i < this.agentsWhoDidntInfer.length; i++) {
+			this.agentsWhoDidntInfer[i] = i;
+		}
+		
 		this.actualIteration += 1;
 	}
 
@@ -62,9 +75,10 @@ public class Inference {
 		}
 
 		// dany agent wnioskuje
-		//clipsEnv.displayAgentFacts();
 		System.out.println("<wnioskowanie agenta " + actualAgent.getId() + " >");
 		this.clipsEnv.getAgentEnv().run();
+		System.out.println("fakty:");
+		//clipsEnv.displayAgentFacts();
 		System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");
 		
 
@@ -83,11 +97,11 @@ public class Inference {
 			performWorldInference();
 		}
 		
-		for (Agent agent : this.agentsWhoDidntInfer) {
+		for (int agent : this.agentsWhoDidntInfer) {
 			try {
-				
-				performAgentInference(agent);
-				
+				if (agent != -1) {
+					performAgentInference(this.world.getAgents().get(agent));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -113,11 +127,27 @@ public class Inference {
 		this.world = world;
 	}
 
-	public ArrayList<Agent> getAgentsWhoDidntInfer() {
+	public int getLastPerformedIter() {
+		return lastPerformedIter;
+	}
+
+	public void setLastPerformedIter(int lastPerformedIter) {
+		this.lastPerformedIter = lastPerformedIter;
+	}
+
+	public int getActualIteration() {
+		return actualIteration;
+	}
+
+	public void setActualIteration(int actualIteration) {
+		this.actualIteration = actualIteration;
+	}
+
+	public int[] getAgentsWhoDidntInfer() {
 		return agentsWhoDidntInfer;
 	}
 
-	public void setAgentsWhoDidntInfer(ArrayList<Agent> agentsWhoDidntInfer) {
+	public void setAgentsWhoDidntInfer(int[] agentsWhoDidntInfer) {
 		this.agentsWhoDidntInfer = agentsWhoDidntInfer;
 	}
 	

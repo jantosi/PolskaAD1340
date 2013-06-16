@@ -13,7 +13,7 @@ import world.MapFrame;
  * 
  * @author Piotrek
  */
-abstract public class Agent {
+abstract public class Agent implements Cloneable{
     
 	protected ObiektPierwszegoPlanu opp;
 	protected String pathToClipsFile;

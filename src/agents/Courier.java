@@ -65,6 +65,7 @@ public class Courier extends Agent {
         this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), 1088);
     }
     
+    
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
 			this.id = pv.getFactSlot("id").toString();
