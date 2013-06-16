@@ -19,10 +19,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicBorders;
-import javax.swing.JTextField;
+
+import agents.Agent;
 
 /**
  *
@@ -287,6 +290,28 @@ public final class OknoMapy extends javax.swing.JFrame {
         }
     }
 
+    public void highlightVisibleFrames(Agent agent) {
+    	for (int x = -agent.getFieldOfView(); x <= agent.getFieldOfView(); x++ ) {
+    		for (int y = -agent.getFieldOfView(); y <= agent.getFieldOfView(); y++) {
+    			int yAfter = agent.getMapFrame().getY() + y;
+    			int xAfter = agent.getMapFrame().getY() + y;
+    			
+    			if (yAfter < this.backgroundTileGrid.size() && yAfter >= 0 
+    					&& xAfter < this.backgroundTileGrid.get(0).size() && xAfter >=0)
+    			
+    			this.backgroundTileGrid.get(agent.getMapFrame().getY() + y).get(agent.getMapFrame().getX() + x).setBorder(new LineBorder(new Color(185, 226, 18), 3, true));
+    		}
+    	}
+    }
+    
+    public void deleteHighlightedBorders() {
+    	for (int x = 0; x < this.backgroundTileGrid.size(); x++ ) {
+    		for (int y = 0; y < this.backgroundTileGrid.get(0).size(); y++) {
+    			this.backgroundTileGrid.get(y).get(x).setBorder(null);
+    		}
+    	}
+    }
+    
     public ArrayList<ArrayList<JLabel>> getForegroundTileGrid() {
         return foregroundTileGrid;
     }
