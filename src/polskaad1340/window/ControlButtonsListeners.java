@@ -25,6 +25,8 @@ public class ControlButtonsListeners {
 	
 	private boolean bandits;
 	
+	private boolean changePrices;
+	
 	private class BtnNextIterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -43,6 +45,7 @@ public class ControlButtonsListeners {
 				}
 			}
 			
+			//usuwamy poprzednie kleski z mapy
 			for (Cataclysm cataclysm : inference.getWorld().getCataclysms()) {
 				om.getForegroundTileGrid().get(cataclysm.getOpp().y).set(cataclysm.getOpp().x, om.tileFromNumber(0));
 			}
@@ -53,6 +56,7 @@ public class ControlButtonsListeners {
 				inference.getWorld().setCataclysms(new ArrayList<Cataclysm>());
 			}
 
+			//usuwamy poprzednich bandydtow z mapy
 			for (Bandits bandit : inference.getWorld().getBandits()) {
 				om.getForegroundTileGrid().get(bandit.getOpp().y).set(bandit.getOpp().x, om.tileFromNumber(0));
 			}
@@ -61,7 +65,16 @@ public class ControlButtonsListeners {
 			} else {
 				inference.getWorld().setBandits(new ArrayList<Bandits>());
 			}
-			System.out.println("size: " + inference.getWorld().getBandits().size());
+			
+			//zmiana cen w grodzie
+			if (changePrices) {
+				changePrices = false;
+				inference.getWorld().changeItemPrices();
+				om.getLblPricesChanged().setVisible(true);
+			} else {
+				om.getLblPricesChanged().setVisible(false);
+			}
+			
 			//rozpoczynamy nowa runde swiata
 			inference.performWorldInference();
 			
@@ -149,6 +162,15 @@ public class ControlButtonsListeners {
 		
 	}
 	
+	private class BtnChangePricesListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			changePrices = true;
+		}
+		
+	}
+	
 	public ControlButtonsListeners(OknoMapy om, Inference inference) {
 		this.om = om;
 		this.inference = inference;
@@ -167,5 +189,6 @@ public class ControlButtonsListeners {
 		this.om.getBtnBlockades().addActionListener(new BtnBlockadesListener());
 		this.om.getBtnCataclysms().addActionListener(new BtnCataclysmsListener());
 		this.om.getBtnBandits().addActionListener(new BtnBanditsListener());
+		this.om.getBtnChangePrices().addActionListener(new BtnChangePricesListener());
 	}
 }

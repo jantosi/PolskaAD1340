@@ -74,6 +74,9 @@ public final class OknoMapy extends javax.swing.JFrame {
     private JButton btnCataclysms;
     private JLabel lblBandits;
     private JButton btnBandits;
+    private JLabel lblChangePrices;
+    private JButton btnChangePrices;
+    private JLabel lblPricesChanged;
 
     public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
@@ -449,65 +452,83 @@ public final class OknoMapy extends javax.swing.JFrame {
         controlPanel.add(btnNextAgent);
         
         lblIteracja = new JLabel("ITERACJA");
-        lblIteracja.setBounds(13, 256, 78, 19);
+        lblIteracja.setBounds(13, 226, 78, 19);
         controlPanel.add(lblIteracja);
         
         lblAgent = new JLabel("AGENT");
-        lblAgent.setBounds(12, 308, 41, 19);
+        lblAgent.setBounds(12, 278, 41, 19);
         controlPanel.add(lblAgent);
         
         textFieldIter = new JTextField();
-        textFieldIter.setBounds(8, 276, 86, 20);
+        textFieldIter.setBounds(8, 246, 86, 20);
         textFieldIter.setFocusable(false);
         textFieldIter.setEditable(false);
         controlPanel.add(textFieldIter);
         textFieldIter.setColumns(10);
         
         textFieldAgent = new JTextField();
-        textFieldAgent.setBounds(7, 329, 86, 20);
+        textFieldAgent.setBounds(7, 299, 86, 20);
         textFieldAgent.setFocusable(false);
         textFieldAgent.setEditable(false);
         controlPanel.add(textFieldAgent);
         textFieldAgent.setColumns(10);
         
         lblBlockades = new JLabel("BLOKADY");
-        lblBlockades.setBounds(10, 360, 81, 19);
+        lblBlockades.setBounds(10, 330, 81, 19);
         controlPanel.add(lblBlockades);
         
         btnBlockades = new JButton("WYLACZONE");
         btnBlockades.setFont(new Font("Tahoma", Font.PLAIN, 8));
         btnBlockades.setForeground(Color.RED);
-        btnBlockades.setBounds(10, 378, 83, 23);
+        btnBlockades.setBounds(10, 348, 83, 23);
         btnBlockades.setFocusable(false);
         btnBlockades.setToolTipText("<html>Po wlaczeniu/wylaczeniu przy NASTEPNEJ iteracji<br>" +
         		"zostana wlaczone/wylaczone wylosowane blokady</html>");
         controlPanel.add(btnBlockades);
         
         lblCataclysms = new JLabel("KLESKI");
-        lblCataclysms.setBounds(10, 412, 81, 19);
+        lblCataclysms.setBounds(10, 378, 81, 19);
         controlPanel.add(lblCataclysms);
         
         btnCataclysms = new JButton("WYLACZONE");
         btnCataclysms.setFont(new Font("Tahoma", Font.PLAIN, 8));
         btnCataclysms.setForeground(Color.RED);
         btnCataclysms.setFocusable(false);
-        btnCataclysms.setBounds(10, 430, 83, 23);
+        btnCataclysms.setBounds(10, 396, 83, 23);
         btnCataclysms.setToolTipText("<html>Po wlaczeniu/wylaczeniu przy NASTEPNEJ iteracji<br>" +
         		"zostana wlaczone/wylaczone wylosowane kleski<html>");
         controlPanel.add(btnCataclysms);
         
         lblBandits = new JLabel("ROZBOJNICY");
-        lblBandits.setBounds(10, 464, 81, 19);
+        lblBandits.setBounds(10, 426, 81, 19);
         controlPanel.add(lblBandits);
         
         btnBandits = new JButton("WYLACZONE");
         btnBandits.setForeground(Color.RED);
         btnBandits.setFont(new Font("Tahoma", Font.PLAIN, 8));
         btnBandits.setFocusable(false);
-        btnBandits.setBounds(10, 482, 83, 23);
+        btnBandits.setBounds(10, 444, 83, 23);
         btnBandits.setToolTipText("<html>Po wlaczeniu przy KAZDEJ iteracji<br>" +
         		"beda losowani na nowo rozbojnicy<html>");
         controlPanel.add(btnBandits);
+        
+        lblChangePrices = new JLabel("ZMIEN CENY");
+        lblChangePrices.setBounds(11, 476, 81, 19);
+        controlPanel.add(lblChangePrices);
+        
+        btnChangePrices = new JButton("ZMIEN CENY");
+        btnChangePrices.setToolTipText("<html>Zmiena losowo ceny w kazdym grodzie z przedzialu (-7, 8)<html>");
+        btnChangePrices.setForeground(new Color(128, 128, 0));
+        btnChangePrices.setFont(new Font("Tahoma", Font.PLAIN, 8));
+        btnChangePrices.setFocusable(false);
+        btnChangePrices.setBounds(11, 494, 83, 23);
+        controlPanel.add(btnChangePrices);
+        
+        lblPricesChanged = new JLabel("zmieniono ceny");
+        lblPricesChanged.setForeground(new Color(0, 128, 0));
+        lblPricesChanged.setBounds(15, 517, 77, 19);
+        lblPricesChanged.setVisible(false);
+        controlPanel.add(lblPricesChanged);
         
         jMenu3.setText("Widok");
 
@@ -792,5 +813,21 @@ public final class OknoMapy extends javax.swing.JFrame {
 
 	public void setBtnBandits(JButton btnBandits) {
 		this.btnBandits = btnBandits;
+	}
+
+	public JButton getBtnChangePrices() {
+		return btnChangePrices;
+	}
+
+	public void setBtnChangePrices(JButton btnChangePrices) {
+		this.btnChangePrices = btnChangePrices;
+	}
+
+	public JLabel getLblPricesChanged() {
+		return lblPricesChanged;
+	}
+
+	public void setLblPricesChanged(JLabel lblPricesChanged) {
+		this.lblPricesChanged = lblPricesChanged;
 	}
 }
