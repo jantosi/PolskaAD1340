@@ -1,5 +1,9 @@
 package clips;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import CLIPSJNI.Environment;
 
 public class ClipsEnvironment {
@@ -23,6 +27,30 @@ public class ClipsEnvironment {
 	
 	private void initializeAgentEnv() {
 		this.agentEnv.load("src/clips/swiat_szablony.clp");
+	}
+	
+	
+	public String getWorldInferenceResults(String fileName) {
+		StringBuffer buf = new StringBuffer();
+		File inferenceResultFile = new File(fileName);
+		Scanner scanner;
+		
+		buf.append("");
+		try {
+			scanner = new Scanner(inferenceResultFile);
+
+			while (scanner.hasNextLine()) {
+				buf.append(scanner.nextLine()).append("\n");
+			}
+
+			scanner.close();
+			inferenceResultFile.delete();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return buf.toString();
 	}
 	
 	public void displayWorldFacts() {

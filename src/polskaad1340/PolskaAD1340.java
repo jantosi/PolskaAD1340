@@ -39,7 +39,7 @@ public class PolskaAD1340 {
 			ClipsEnvironment clipsEnv = new ClipsEnvironment();
 			World world = new World(clipsEnv, lm, om);
 
-			Inference inference = new Inference(clipsEnv, world);
+			Inference inference = new Inference(clipsEnv, world, om);
 			ControlButtonsListeners controlListeners = new ControlButtonsListeners(om, inference);
 			controlListeners.activateListeners();
 			

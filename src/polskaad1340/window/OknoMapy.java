@@ -27,6 +27,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicBorders;
 
 import agents.Agent;
+import javax.swing.BoxLayout;
 
 /**
  *
@@ -64,6 +65,7 @@ public final class OknoMapy extends javax.swing.JFrame {
     private JLabel lblAgent;
     private JTextField textFieldIter;
     private JTextField textFieldAgent;
+    private Rectangle contextPanelDefaultRect;
 
     public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
@@ -295,12 +297,11 @@ public final class OknoMapy extends javax.swing.JFrame {
     	for (int x = -agent.getFieldOfView(); x <= agent.getFieldOfView(); x++ ) {
     		for (int y = -agent.getFieldOfView(); y <= agent.getFieldOfView(); y++) {
     			int yAfter = agent.getMapFrame().getY() + y;
-    			int xAfter = agent.getMapFrame().getY() + y;
-    			
+    			int xAfter = agent.getMapFrame().getX() + x;
     			if (yAfter < this.backgroundTileGrid.size() && yAfter >= 0 
-    					&& xAfter < this.backgroundTileGrid.get(0).size() && xAfter >=0)
-    			
-    			this.backgroundTileGrid.get(agent.getMapFrame().getY() + y).get(agent.getMapFrame().getX() + x).setBorder(new LineBorder(new Color(185, 226, 18), 3, true));
+    					&& xAfter < this.backgroundTileGrid.get(0).size() && xAfter >=0) {
+    				this.backgroundTileGrid.get(yAfter).get(xAfter).setBorder(new LineBorder(new Color(185, 226, 18), 3, true));
+    			}
     		}
     	}
     }
@@ -313,12 +314,16 @@ public final class OknoMapy extends javax.swing.JFrame {
     	}
     }
     
-    public void focusOnAgent(Agent agent) {
+    public void setScrollFocusOn(int x, int y) {
     	JScrollBar vertical = jScrollPane1.getVerticalScrollBar();
-    	vertical.setValue( agent.getMapFrame().getY() * this.tileSize - 5 * this.tileSize);
+    	vertical.setValue( y * this.tileSize - 5 * this.tileSize);
     	
     	JScrollBar horizontal = jScrollPane1.getHorizontalScrollBar();
-    	horizontal.setValue( agent.getMapFrame().getX() * this.tileSize - 10 * this.tileSize);
+    	horizontal.setValue( x * this.tileSize - 10 * this.tileSize);
+    }
+    
+    public void displayInferenceResults(int x, int y, String header, String inferenceMessage) {
+    	this.displayContextPanelWithInferenceResults(x, y, header, inferenceMessage);
     }
     
     public ArrayList<ArrayList<JLabel>> getForegroundTileGrid() {
@@ -386,23 +391,24 @@ public final class OknoMapy extends javax.swing.JFrame {
 
         contextPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 4, true));
         contextPanel.setOpaque(false);
-        contextPanel.setLayout(new javax.swing.BoxLayout(contextPanel, javax.swing.BoxLayout.Y_AXIS));
-
+        contextPanel.setLayout(new BoxLayout(contextPanel, BoxLayout.Y_AXIS));
+        contextPanel.setBounds(500, 270, 290, 180);
+        contextPanelDefaultRect = new Rectangle(contextPanel.getBounds());
+        
         iconDisplayPanel.setBackground(new java.awt.Color(255, 255, 255));
         iconDisplayPanel.setPreferredSize(new java.awt.Dimension(20, 50));
         iconDisplayPanel.setLayout(new java.awt.GridLayout(1, 1));
         contextPanel.add(iconDisplayPanel);
 
         tileInfoPanel.setLayout(new java.awt.CardLayout());
-
         tileInfoPanelLabel1.setText("jLabel1");
         tileInfoPanelLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         tileInfoPanel.add(tileInfoPanelLabel1, "card2");
-
         contextPanel.add(tileInfoPanel);
-
+        
         bulkPanel.add(contextPanel);
-        contextPanel.setBounds(500, 270, 290, 180);
+        
+        
 
         foregroundPanel.setOpaque(false);
         foregroundPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -559,87 +565,118 @@ public final class OknoMapy extends javax.swing.JFrame {
 
     private void foregroundPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundPanelMouseClicked
         if (evt.getButton() == MouseEvent.BUTTON1) { //LMB
-
-            contextPanel.setVisible(false);
-            ((JPanel) contextPanel.getComponent(0)).removeAll();
-
-
-            Point pointClicked = evt.getPoint();
-            int tileX = pointClicked.x / this.tileSize;
-            int tileY = pointClicked.y / this.tileSize;
-
-            //klikniety tile tła
-            JLabel clickedTile = this.backgroundTileGrid.get(tileY).get(tileX);
+        	Point pointClicked = evt.getPoint();
+        	this.displayContextPanelWithTileInfo(pointClicked.x, pointClicked.y);
             
-            int tileNum = getTileIDFromColor(clickedTile);
-            
-            Rectangle rect = new Rectangle(pointClicked.x, pointClicked.y, contextPanel.getWidth(), contextPanel.getHeight());
-            if (rect.y > this.getContentPane().getHeight() - rect.height) {
-                rect.y -= rect.height;
-            }
-            if (rect.x > this.getContentPane().getWidth() - rect.width) {
-                rect.x -= rect.width;
-            }
-            contextPanel.setBounds(rect);
-            
-            JLabel iconForContextPanel = tileFromNumber(tileNum);
-
-            iconForContextPanel.setHorizontalAlignment(JLabel.CENTER);
-            iconForContextPanel.setVerticalAlignment(JLabel.CENTER);
-
-            ((JPanel) contextPanel.getComponent(0)).add(iconForContextPanel);
-
-            //klikniety tile pierwszego planu
-            JLabel clickedFgTile = this.foregroundTileGrid.get(tileY).get(tileX);
-            
-            
-            int tileFgNum = -1;
-            //jesli klikniety tile jest typu TilesLabel to wtedy pobiramy liste obiektow, ktore tam sa
-            //i wyswietlamy o nich informacje
-            JLabel iconFgForContextPanel = new JLabel(clickedFgTile.getIcon());
-            if (!(clickedFgTile instanceof TilesLabel)) {
-            	 tileFgNum = getTileIDFromColor(clickedFgTile);
-                 iconFgForContextPanel = tileFromNumber(tileFgNum);
-            } else {
-            	if (((TilesLabel)clickedFgTile).getForegroundObjects().size() == 1) {
-            		tileFgNum = ((TilesLabel)clickedFgTile).getForegroundObjects().get(0).tile.getBackground().getRGB() & 0xFFFFFF;
-            	}
-            }
-            
-            iconFgForContextPanel.setHorizontalAlignment(JLabel.CENTER);
-            iconFgForContextPanel.setVerticalAlignment(JLabel.CENTER);
-            ((JPanel) contextPanel.getComponent(0)).add(iconFgForContextPanel);
-
-            JLabel opisIkony;
-            opisIkony = new JLabel("<html><h3>Informacje o polu</h3></html>");
-            opisIkony.setBorder(new EmptyBorder(0, 8, 0, 0));
-
-            iconDisplayPanel.add(opisIkony);
-
-            StringBuilder sb = new StringBuilder("<html>");
-            sb.append("Kliknięte pole: <pre>X: <b>").append(tileX).append("</b> Y: <b>").append(tileY).append("</b></pre>");
-            sb.append("<br/> ");
-            sb.append("Warstwa obiektów:<br/>");
-            
-            if (!(clickedFgTile instanceof TilesLabel)) {
-            	sb.append(tileFgNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileFgNum)).append("</b>");
-            } else {
-            	sb.append(tileFgNum).append(": <b>").append(((TilesLabel)clickedFgTile).getDescription()).append("</b>");
-            }
-            
-            
-            sb.append("<br/>Warstwa tła:<br/>");
-            sb.append(tileNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileNum)).append("</b>");
-            sb.append("</html>");
-
-            tileInfoPanelLabel1.setText(sb.toString());
-            contextPanel.setVisible(true);
         } else if (evt.getButton() == MouseEvent.BUTTON3) { //RMB
             contextPanel.setVisible(false);
             ((JPanel) contextPanel.getComponent(0)).removeAll();
         }
     }//GEN-LAST:event_foregroundPanelMouseClicked
 
+    public void displayContextPanelWithTileInfo(int x, int y) {
+    	contextPanel.setVisible(false);
+        ((JPanel) contextPanel.getComponent(0)).removeAll();
+
+        int tileX = x / this.tileSize;
+        int tileY = y / this.tileSize;
+
+        //klikniety tile tła
+        JLabel clickedTile = this.backgroundTileGrid.get(tileY).get(tileX);
+        
+        int tileNum = getTileIDFromColor(clickedTile);
+        
+        contextPanel.setBounds(this.contextPanelDefaultRect);
+        Rectangle rect = new Rectangle(x, y, contextPanel.getWidth(), contextPanel.getHeight());
+        if (rect.y > this.getContentPane().getHeight() - rect.height) {
+            rect.y -= rect.height;
+        }
+        if (rect.x > this.getContentPane().getWidth() - rect.width) {
+            rect.x -= rect.width;
+        }
+        contextPanel.setBounds(rect);
+        
+        JLabel iconForContextPanel = tileFromNumber(tileNum);
+
+        iconForContextPanel.setHorizontalAlignment(JLabel.CENTER);
+        iconForContextPanel.setVerticalAlignment(JLabel.CENTER);
+
+        ((JPanel) contextPanel.getComponent(0)).add(iconForContextPanel);
+
+        //klikniety tile pierwszego planu
+        JLabel clickedFgTile = this.foregroundTileGrid.get(tileY).get(tileX);
+        
+        
+        int tileFgNum = -1;
+        //jesli klikniety tile jest typu TilesLabel to wtedy pobiramy liste obiektow, ktore tam sa
+        //i wyswietlamy o nich informacje
+        JLabel iconFgForContextPanel = new JLabel(clickedFgTile.getIcon());
+        if (!(clickedFgTile instanceof TilesLabel)) {
+        	 tileFgNum = getTileIDFromColor(clickedFgTile);
+             iconFgForContextPanel = tileFromNumber(tileFgNum);
+        } else {
+        	if (((TilesLabel)clickedFgTile).getForegroundObjects().size() == 1) {
+        		tileFgNum = ((TilesLabel)clickedFgTile).getForegroundObjects().get(0).tile.getBackground().getRGB() & 0xFFFFFF;
+        	}
+        }
+        
+        iconFgForContextPanel.setHorizontalAlignment(JLabel.CENTER);
+        iconFgForContextPanel.setVerticalAlignment(JLabel.CENTER);
+        ((JPanel) contextPanel.getComponent(0)).add(iconFgForContextPanel);
+
+        JLabel opisIkony;
+        opisIkony = new JLabel("<html><h3>Informacje o polu</h3></html>");
+        opisIkony.setBorder(new EmptyBorder(0, 8, 0, 0));
+
+        iconDisplayPanel.add(opisIkony);
+
+        StringBuilder sb = new StringBuilder("<html>");
+        sb.append("Kliknięte pole: <pre>X: <b>").append(tileX).append("</b> Y: <b>").append(tileY).append("</b></pre>");
+        sb.append("<br/> ");
+        sb.append("Warstwa obiektów:<br/>");
+        
+        if (!(clickedFgTile instanceof TilesLabel)) {
+        	sb.append(tileFgNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileFgNum)).append("</b>");
+        } else {
+        	sb.append(tileFgNum).append(": <b>").append(((TilesLabel)clickedFgTile).getDescription()).append("</b>");
+        }
+        
+        
+        sb.append("<br/>Warstwa tła:<br/>");
+        sb.append(tileNum).append(": <b>").append(InformacjeOSwiecie.getOpisKafelka(tileNum)).append("</b>");
+        sb.append("</html>");
+
+        tileInfoPanelLabel1.setText(sb.toString());
+        contextPanel.setVisible(true);
+    }
+    
+    public void displayContextPanelWithInferenceResults(int x, int y, String header, String message) {
+    	contextPanel.setVisible(false);
+        ((JPanel) contextPanel.getComponent(0)).removeAll();
+
+        contextPanel.setBounds(this.contextPanelDefaultRect);
+        Rectangle rect = new Rectangle(x, y, contextPanel.getWidth() + 50, contextPanel.getHeight());
+        if (rect.y > this.getContentPane().getHeight() - rect.height) {
+            rect.y -= rect.height;
+        }
+        if (rect.x > this.getContentPane().getWidth() - rect.width) {
+            rect.x -= rect.width;
+        }
+        contextPanel.setBounds(rect);
+        
+        JLabel opisIkony;
+        opisIkony = new JLabel("<html><h3>" + header + "</h3></html>");
+        opisIkony.setBorder(new EmptyBorder(0, 8, 0, 0));
+
+        iconDisplayPanel.add(opisIkony);
+
+        StringBuffer sb = new StringBuffer("<html>");
+        sb.append(message.replaceAll("\n", "<br>"));
+        sb.append("</html>");
+        tileInfoPanelLabel1.setText(sb.toString());
+        contextPanel.setVisible(true);
+    }
+    
     private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
         this.isTileBordered = !this.isTileBordered;
         this.setTileBorders(isTileBordered);
@@ -701,5 +738,11 @@ public final class OknoMapy extends javax.swing.JFrame {
 		this.textFieldAgent = textFieldAgent;
 	}
 
+	public int getTileSize() {
+		return tileSize;
+	}
 
+	public void setTileSize(int tileSize) {
+		this.tileSize = tileSize;
+	}
 }

@@ -2,6 +2,8 @@ package polskaad1340;
 
 import java.util.ArrayList;
 
+import polskaad1340.window.OknoMapy;
+
 import world.World;
 import clips.ClipsEnvironment;
 import agents.Agent;
@@ -10,6 +12,7 @@ public class Inference {
 	
 	private ClipsEnvironment clipsEnv;
 	private World world;
+	private OknoMapy om;
 	private ArrayList<String> agentsInferenceResults;
 	
 	//ostatnia pelna runda czyli swiat i wszyscy agenci
@@ -22,9 +25,10 @@ public class Inference {
 	//w danej rundzie wywnioskowac przed przejsciem do nastepnej rundy
 	private int[] agentsWhoDidntInfer;
 	
-	public Inference(ClipsEnvironment clipsEnv, World world) {
+	public Inference(ClipsEnvironment clipsEnv, World world, OknoMapy om) {
 		this.clipsEnv = clipsEnv;
 		this.world = world;
+		this.om = om;
 		this.agentsInferenceResults = new ArrayList<String>();
 		
 		//pierwsza runda jest inicjalizacyjna
@@ -51,6 +55,10 @@ public class Inference {
 
 		System.out.println("<wnioskowanie swiata>");
 		this.clipsEnv.getWorldEnv().run();
+		String worldInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/results.txt");
+		System.out.println(worldInfRes);
+		om.setScrollFocusOn(15, 15);
+		this.om.displayInferenceResults(20 * this.om.tileSize, 20 * this.om.tileSize, "Wynik wnioskowania swiata", worldInfRes);
 		System.out.println("fakty:");
 		//clipsEnv.displayWorldFacts();
 		System.out.println("</wnioskowanie swiata>");
@@ -77,6 +85,10 @@ public class Inference {
 		// dany agent wnioskuje
 		System.out.println("<wnioskowanie agenta " + actualAgent.getId() + " >");
 		this.clipsEnv.getAgentEnv().run();
+		String agentInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/agentResults.txt");
+		System.out.println(agentInfRes);
+		om.displayInferenceResults(actualAgent.getMapFrame().getX() * om.tileSize + 10, actualAgent.getMapFrame().getY() * om.tileSize + 10
+				,"Wynik wnioskowania agenta", agentInfRes);
 		System.out.println("fakty:");
 		//clipsEnv.displayAgentFacts();
 		System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");
@@ -149,6 +161,14 @@ public class Inference {
 
 	public void setAgentsWhoDidntInfer(int[] agentsWhoDidntInfer) {
 		this.agentsWhoDidntInfer = agentsWhoDidntInfer;
+	}
+
+	public OknoMapy getOm() {
+		return om;
+	}
+
+	public void setOm(OknoMapy om) {
+		this.om = om;
 	}
 	
 }

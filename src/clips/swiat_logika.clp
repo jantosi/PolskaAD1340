@@ -28,7 +28,10 @@
     ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
     (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc) (kon ?konId))   
         
-    (printout t "Poslaniec: " ?poslaniecId " kupil konia o predkosci: " ?konPredkosc crlf)
+    (open "src/clips/results.txt" resultFile "a")
+    (printout resultFile "Poslaniec: " ?poslaniecId " kupil konia o predkosci: " ?konPredkosc crlf)
+    (close resultFile)
+    
     ;usuwamy akcje kupienia konia        
     (retract ?kupienieKonia)
     
@@ -77,8 +80,10 @@
         (bind ?strataEnergii (round (- ?strataEnergii (* ?strataEnergii ?konZmeczenieJezdzcy))))
     )    
     
-    (printout t "Poslaniec: " ?poslaniecId " - nowa starta energii: " ?strataEnergii crlf)
-    
+    (open "src/clips/results.txt" resultFile "a")
+    (printout resultFile "Poslaniec: " ?poslaniecId " - nowa starta energii: " ?strataEnergii crlf)
+    (close resultFile)
+        
     (modify ?poslaniec (strataEnergii ?strataEnergii))
     
     ;fakt kontrolny, za pomoca ktorego oznaczamy, 
@@ -147,8 +152,9 @@
     
     ;modyfikujemy dodatek predkosci agenta oraz jego pole widzenia
     (modify ?agent (dodatekPredkosc ?dodatPredkosc)(poleWidzenia (+ ?dodatPredkosc ?predkosc))(mozliwyRuch (+ ?dodatPredkosc ?predkosc)))    
-    (printout t "Zmodyfikowano dodatek predkosci agenta: " ?id ", dodatek predkosci = " ?dodatPredkosc crlf)
-    
+    (open "src/clips/results.txt" resultFile "a")    
+    (printout resultFile "Zmodyfikowano dodatek predkosci agenta: " ?id ", dodatek predkosci = " ?dodatPredkosc crlf)
+    (close)    
     ;umieszczamy fakt kontrolny, ze dla danego agenta dodatkowa predkosc zostala juz zmodyfikowana
     (assert (modyfikacjaPredkosciAgenta (idAgenta ?id)))
 )
@@ -171,6 +177,7 @@
     (not (akcjaOdpoczywanie (idAgenta ?id)))
     ?modyfikacjaPredkosci <- (modyfikacjaPredkosciAgenta (idAgenta ?id))
 =>
+    (open "src/clips/results.txt" resultFile "a")    
     sprawdzamy o ile moze sie przesunac dany agent
     (if (<= ?ileKratek ?mozliwyRuch) 
     then
@@ -184,10 +191,7 @@
     (if (> (+ ?nrOdc ?ilePrzesunac) ?maxOdcinek)
     then     
         (bind ?ilePrzesunac (- ?maxOdcinek ?nrOdc))
-<<<<<<< HEAD
         (bind ?dotarcieDoGrodu TRUE)
-=======
->>>>>>> branch 'master' of https://github.com/wyzellak/PolskaAD1340.git
     )
     
     ;sprawdzamy czy agent ma odpowiednia ilosc energii aby sie przmiescic
@@ -210,7 +214,7 @@
                 (bind ?nrOdcPoPrzesunieciu (- ?i 1))
                 (bind ?ilePrzesunac (- ?nrOdcPoPrzesunieciu ?nrOdc))
                 (bind ?potrzebnaEnergia (* ?strE ?ilePrzesunac))
-                (printout t "wykryto blokade" crlf)
+                ;(printout resultFile "wykryto blokade" crlf)
                 (break)         
             ) 
         )         
@@ -230,16 +234,17 @@
                 
         ;przesuwamy agenta odejmujac mu przy tym punkty ruchu
         (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac))(energia (- ?energia ?potrzebnaEnergia)))  
-        (printout t "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId " x: " (fact-slot-value ?tmp pozycjaX) " y: " (fact-slot-value ?tmp pozycjaY) ", ile kratek: " ?ilePrzesunac ", strata energii: " ?potrzebnaEnergia crlf) 
+        (printout resultFile "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId " x: " (fact-slot-value ?tmp pozycjaX) " y: " (fact-slot-value ?tmp pozycjaY) ", ile kratek: " ?ilePrzesunac ", strata energii: " ?potrzebnaEnergia crlf) 
         
         ;po przesunieciu agenta znow musimy wyznaczyc dodatek predkosci zwiazany z polozeniem na nowym terenie
         (retract ?modyfikacjaPredkosci)   
     else    
-         (printout t "Agent: " ?id " chcial sie przemiescic ale zabraklo mu energii - musi odpoczac" crlf)
+         (printout resultFile "Agent: " ?id " chcial sie przemiescic ale zabraklo mu energii - musi odpoczac" crlf)
          (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))   
     ) 
     
     (retract ?akcja)
+    (close)
     
 )
 
@@ -264,6 +269,7 @@
     (not (akcjaOdpoczywanie (idAgenta ?id)))
     ?modyfikacjaPredkosci <- (modyfikacjaPredkosciAgenta (idAgenta ?id))
 =>
+    (open "src/clips/results.txt" resultFile "a")
 	(bind ?ilePrzesunac 0)
      
     ;okreslamy wspolrzedne nowej kratki, na ktorej bedzie stal agent po przemieszczeniu
@@ -287,7 +293,7 @@
                 then
                     (bind ?czyWykryto TRUE)
                     (bind ?nowaKratkaY (- ?y 1))
-                    (printout t "wykryto blokade" crlf)
+                    ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
                 ) 
                 (bind ?ilePrzesunac (+ ?ilePrzesunac 1))
@@ -311,7 +317,7 @@
                 then
                     (bind ?czyWykryto TRUE)
                     (bind ?nowaKratkaY (- ?y 1))
-                    (printout t "wykryto blokade" crlf)
+                    ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
                 ) 
            ) 
@@ -335,7 +341,7 @@
                 then
                     (bind ?czyWykryto TRUE)
                     (bind ?nowaKratkaX (- ?x 1))
-                    (printout t "wykryto blokade" crlf)
+                    ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
                 ) 
            )    
@@ -359,7 +365,7 @@
                 then
                     (bind ?czyWykryto TRUE)
                     (bind ?nowaKratkaX (- ?x 1))
-                    (printout t "wykryto blokade" crlf)
+                    ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
                 ) 
            ) 
@@ -378,18 +384,19 @@
     	;zamieniamy id kratki, na ktorej stoi agent oraz odejmujemy mu punkty ruchu
     	(modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?ruch ?kratki))(energia (- ?energia ?potrzebnaEnergia)))
     
-    	(printout t "Przesunieto agenta: " ?id " w " ?kierunek ." Nowa kratka : " ?nowaKratkaId ", strata energii: " ?potrzebnaEnergia crlf)
+    	(printout resultFile "Przesunieto agenta: " ?id " w " ?kierunek ." Nowa kratka : " ?nowaKratkaId ", strata energii: " ?potrzebnaEnergia crlf)
     	
         ;po przesunieciu agenta znow musimy wyznaczyc dodatek predkosci zwiazany z polozeniem na nowym terenie    
         (retract ?modyfikacjaPredkosci)  
         
     else
-        (printout t "Agent: " ?id " chcial sie przemiescic ale zabraklo mu energii - musi odpoczac" crlf)
+        (printout resultFile "Agent: " ?id " chcial sie przemiescic ale zabraklo mu energii - musi odpoczac" crlf)
         (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))
     )
     
     ;usuwamy akcje przesuwania
     (retract ?akcja)
+    (close)
 )
 
 ;regula realizujaca akcje podjete przez agentow w momencie natrafienia na blokade
@@ -416,6 +423,7 @@
     (iteracja ?iteracja)
     (modyfikacjaPredkosciAgenta (idAgenta ?id))
 =>  
+    (open "src/clips/results.txt" resultFile "a")
     ;jezeli agent porusza sie po drodze
     (if (eq (sub-string 1 4 ?cel) "grod")
     then
@@ -433,17 +441,17 @@
                 (if (> (- ?energia ?potrzebnaEnergia) 6 )
                 then
                     (modify ?agent (idKratki ?kratkaZaBlokadaId)(mozliwyRuch (- ?mozliwyRuch 4))(energia (- ?energia ?potrzebnaEnergia)))
-                    (printout t "Agent: " ?id  " przeskoczyl przeszkode, strata energii: " ?potrzebnaEnergia crlf) 
+                    (printout resultFile "Agent: " ?id  " przeskoczyl przeszkode, strata energii: " ?potrzebnaEnergia crlf) 
                     (retract ?akcjaBlokada)              
                 else
-                    (printout t "Agent: " ?id " chcial przeskoczyc przeszkode ale zabraklo mu energii, potrzeba: " ?potrzebnaEnergia " - musi odpoczac" crlf)
+                    (printout resultFile "Agent: " ?id " chcial przeskoczyc przeszkode ale zabraklo mu energii, potrzeba: " ?potrzebnaEnergia " - musi odpoczac" crlf)
                     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))             
                 )
             else
-                (printout t "Agent: " ?id " chcial przeskoczyc przeszkode ale nie mial punktow ruchu" crlf)
+                (printout resultFile "Agent: " ?id " chcial przeskoczyc przeszkode ale nie mial punktow ruchu" crlf)
             )
         else
-             (printout t "Agent: " ?id " napotkal na przeszkode i postanowil odpoczywac" crlf)
+             (printout resultFile "Agent: " ?id " napotkal na przeszkode i postanowil odpoczywac" crlf)
              (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))     
         )
     else ;jezeli agent chodzi w po lasach itd.
@@ -482,20 +490,22 @@
                 (if (> (- ?energia ?potrzebnaEnergia) 6 )
                 then
                     (modify ?agent (idKratki ?kratkaPoSkokuId)(mozliwyRuch (- ?mozliwyRuch 4))(energia (- ?energia ?potrzebnaEnergia)))
-                    (printout t "Agent: " ?id  " przeskoczyl przeszkode, strata energii: " ?potrzebnaEnergia crlf) 
+                    (printout resultFile "Agent: " ?id  " przeskoczyl przeszkode, strata energii: " ?potrzebnaEnergia crlf) 
                     (retract ?akcjaBlokada)              
                 else
-                    (printout t "Agent: " ?id " chcial przeskoczyc przeszkode ale zabraklo mu energii, potrzeba: " ?potrzebnaEnergia " - musi odpoczac" crlf)
+                    (printout resultFile "Agent: " ?id " chcial przeskoczyc przeszkode ale zabraklo mu energii, potrzeba: " ?potrzebnaEnergia " - musi odpoczac" crlf)
                     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))             
                 )
             else
-                (printout t "Agent: " ?id " chcial przeskoczyc przeszkode ale nie mial punktow ruchu" crlf)
+                (printout resultFile "Agent: " ?id " chcial przeskoczyc przeszkode ale nie mial punktow ruchu" crlf)
             )
         else
-             (printout t "Agent: " ?id " napotkal na przeszkode i postanowil odpoczywac" crlf)
+             (printout resultFile "Agent: " ?id " napotkal na przeszkode i postanowil odpoczywac" crlf)
              (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?iteracja)(iteracjaKoniec (+ ?iteracja 1))))     
         )
-    )         
+    ) 
+    
+    (close)        
 )
 
 ;regula realizujaca odpoczynek agentów, regenerujac im przy tym energie
@@ -512,11 +522,12 @@
     ?odpoczynek <- (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec ?iteracjaKoniec))
     (not (zregenerowanoAgenta (idAgenta ?id)))
 =>
+    (open "src/clips/results.txt" resultFile "a")
     ;jesli agent nadal odpoczywa to przywracamy mu pewna liczbe energii,
     ;ktora okresla pole odnawianieEnergii   
     (if (> ?aktualnaIteracja ?iteracjaKoniec)
     then 
-        (printout t "Agent: " ?id " skonczyl odpoczywac" crlf)
+        (printout resultFile "Agent: " ?id " skonczyl odpoczywac" crlf)
         (retract ?odpoczynek)    
     else  ;jezeli przestal odpoczywac to usuwamy akcjeOdpoczynku i 
         (modify ?agent (energia (+ ?energia ?odnawianieE)))
@@ -524,8 +535,10 @@
         ;tworzymy fakt kontrolny, ze juz w tej iteracji zregenerowano agenta
         (assert (zregenerowanoAgenta (idAgenta ?id)))
             
-        (printout t "Agent: " ?id " odpoczywa" crlf)        
+        (printout resultFile "Agent: " ?id " odpoczywa" crlf)        
     )  
+    
+   (close)     
 )
 
 ; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
@@ -534,11 +547,13 @@
     ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
     ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
 =>
+    (open "src/clips/results.txt" resultFile "a")
     (modify ?agent (paczki $?paczki ?idPaczki))
 
     (retract ?akcja)
 
-    (printout t "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
+    (printout resultFile "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
+    (close)
 )
 
 ;WIP: Ataki pomiedzy rycerzem a smokiem
@@ -547,6 +562,7 @@
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
     ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
 =>
+    (open "src/clips/results.txt" resultFile "a")
     ;jesli bestia jeszcze zyje
     (if ( = ?rodzajAtaku 1)
         then
@@ -587,10 +603,11 @@
             (zloto ( + ?zloto ?zlotoSmoka)) ;zdobadz lup, rycerzu
         )
         (retract ?smok)
-        (printout t "Smok: " ?idSmoka " stracil zycie." crlf)
+        (printout resultFile "Smok: " ?idSmoka " stracil zycie." crlf)
     )
     
     (retract ?akcja)
+    (close)
 )
 
 (defrule atakujRycerza (declare (salience 3))
@@ -598,7 +615,7 @@
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
     ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
 =>
-    
+    (open "src/clips/results.txt" resultFile "a")
     
     ;jesli biedak jeszcze zyje
     (if ( = ?rodzajAtaku 1)
@@ -640,9 +657,10 @@
             (zloto ( + ?zlotoSmoka ?zloto)) ;zdobadz lup, zly smoku
         )
         (retract ?rycerz)    
-        (printout t "Rycerz: " ?idRycerza " stracil zycie." crlf)   
+        (printout resultFile "Rycerz: " ?idRycerza " stracil zycie." crlf)   
     )
     (retract ?akcja)
+    (close)
 )
 
 ;regula do sciecia drzew
@@ -655,9 +673,11 @@
     (iteracja ?iteracja)
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-     (if (eq ?stanDrzewa sciete)
+    (open "src/clips/results.txt" resultFile "a")
+    
+    (if (eq ?stanDrzewa sciete)
     then 
-        (printout t "Drwal: " ?id " chcial sciac sciete drzewo" crlf)  
+        (printout resultFile "Drwal: " ?id " chcial sciac sciete drzewo" crlf)  
     else  
        
         (if ( eq ?rodzajDrzewa dab)
@@ -698,7 +718,7 @@
                             (energia ( - ?energia (* 2 ?strataEnergii)))
                             (siekiera nil)
                     )
-                 (printout t "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
+                 (printout resultFile "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
                 else
                     (modify ?siekiera (zuzycie (+ ?zuzycie 10)))
                 
@@ -707,12 +727,12 @@
                             (energia ( - ?energia (* 2 ?strataEnergii)))
                     )
                 )
-                (printout t "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
+                (printout resultFile "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
                 else
-                (printout t "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
+                (printout resultFile "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
            )
             else
-            (printout t "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
+            (printout resultFile "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
             )
          )
          (if ( eq ?typSiekiery zlota)
@@ -739,7 +759,7 @@
                             (energia ( - ?energia (* 2 ?strataEnergii)))
                             (siekiera nil)
                     )
-                 (printout t "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
+                 (printout resultFile "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
                 else
                     (modify ?siekiera (zuzycie (+ ?zuzycie 10)))
                 
@@ -748,12 +768,12 @@
                             (energia ( - ?energia (* 2 ?strataEnergii)))
                     )
                 )
-                (printout t "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
+                (printout resultFile "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
                 else
-                (printout t "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
+                (printout resultFile "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
            )
             else
-            (printout t "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
+            (printout resultFile "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
             )
          )
             (if ( eq ?typSiekiery tytanowa)
@@ -782,7 +802,7 @@
                             (energia ( - ?energia (* 2 ?strataEnergii)))
                             (siekiera nil)
                     )
-                 (printout t "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
+                 (printout resultFile "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
                 else
                     (modify ?siekiera (zuzycie (+ ?zuzycie 10)))
                 
@@ -791,17 +811,18 @@
                             (energia ( - ?energia (* 2 ?strataEnergii)))
                     )
                 )
-                (printout t "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
+                (printout resultFile "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
                 else
-                (printout t "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
+                (printout resultFile "Drwal: " ?id " nie moze sciac drzewa. Za malo enegrii." crlf)
            )
             else
-            (printout t "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
+            (printout resultFile "Drwal: " ?id " nie moze sciac drzewa. Za maly udzwig maksymalny." crlf)
             )
          )
     ) 
    
     (retract ?akcja)
+    (close)
 ) 
 ; kupowanie wozu z grodu przez drwala
 (defrule kupWozZGrodu (declare (salience 4))
@@ -812,17 +833,20 @@
     ?akcja <- (akcjaKupWoz (idAgenta ?id) (idWozu ?idWozu))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
+    (open "src/clips/results.txt" resultFile "a")
+    
     (if (>= ?zlotoDrwala ?cenaWozu)
     then
         (modify ?drwal (woz ?idWozu)(zloto (- ?zlotoDrwala ?cenaWozu))
          (maxUdzwig ?udzwigNowegoWozu)  
         )    
-        (printout t "Drwal: " ?id " kupil woz o udzwigu " ?udzwigNowegoWozu " za " ?cenaWozu " sztuk zlota." crlf)
+        (printout resultFile "Drwal: " ?id " kupil woz o udzwigu " ?udzwigNowegoWozu " za " ?cenaWozu " sztuk zlota." crlf)
     else
-    (printout t "Drwal: " ?id "ma za malo zlota zeby kupić woz. " crlf)
+    (printout resultFile "Drwal: " ?id "ma za malo zlota zeby kupić woz. " crlf)
     ) 
    (retract ?akcja)
    (modify ?nowyWoz (idGrodu nil))
+   (close)
 )
 ; drwal kupuje siekiere z grodu
 (defrule kupSiekiereZGrodu (declare (salience 4))
@@ -834,6 +858,8 @@
     ?akcja <- (akcjaKupSiekiere (idAgenta ?id) (idSiekiery ?idSiekiery))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
+    (open "src/clips/results.txt" resultFile "a")
+    
     (if (>= ?zlotoDrwala ?cenaSiekiery)
     then
         (modify ?drwal (siekiera ?idSiekiery)
@@ -841,12 +867,13 @@
         )    
         ;naprawiamy siekierę. Przecież musi być nowa :)
         (modify ?nowaSiekiera (zuzycie 0))
-        (printout t "Drwal: " ?id " kupil siekiere typu " ?typSiekiery " za " ?cenaSiekiery " sztuk zlota." crlf)
+        (printout resultFile "Drwal: " ?id " kupil siekiere typu " ?typSiekiery " za " ?cenaSiekiery " sztuk zlota." crlf)
     else
-        (printout t "Drwal: " ?id "ma za malo zlota zeby kupić siekiere. " crlf)
+        (printout resultFile "Drwal: " ?id "ma za malo zlota zeby kupić siekiere. " crlf)
     ) 
    (retract ?akcja)
    (modify ?nowaSiekiera (idGrodu nil))
+   (close)
 )
 ;drwal zawsze sprzedaje całe drewno jakie ma
 (defrule sprzedajDrewnoWGrodzie (declare (salience 2))
@@ -855,6 +882,7 @@
     ?akcja <- (akcjaSprzedajDrewno (idAgenta ?id) )
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
+(open "src/clips/results.txt" resultFile "a")
 
 (bind ?zysk 0)
 (loop-for-count (?i 0 (- (length $?drewno) 1)) do
@@ -867,8 +895,9 @@
    (retract (nth$ 1(find-fact ((?d drewno))(eq ?d:id ?drewnoId))))
 )
     (modify ?drwal(scieteDrewno nil) (udzwig 0) (zloto (+ ?zlotoDrwala ?zysk)))
-    (printout t "Akcja sprzedaj drewno" crlf)
+    (printout resultFile "Drwal o id: " ?id " sprzedal drewno" crlf)
     (retract ?akcja)
+    (close)
 )
 ; TODO: Sprawdzenie, czy ma miejsce w magazynie.
 (defrule kupTowarZGrodu (declare (salience 4))
@@ -877,8 +906,11 @@
     ?przedmiot <- (przedmiot (id ?idPrzedmiotu))
     ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
 =>
+(open "src/clips/results.txt" resultFile "a")
+
     (modify ?agent (przedmioty ?przedmioty ?idPrzedmiotu))
-    (printout t "Kupiec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
+    (printout resultFile "Kupiec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
+    (close)
 )
 
 ;regula, ktora okresla jakie kratki widzi dany agent
@@ -896,7 +928,7 @@
     ;(not (akcjaPrzemieszczanie (idAgenta ?agentId)))
     (not (okreslonoWidocznosc (idAgenta ?agentId)))
 =>	
-    
+(open "src/clips/results.txt" resultFile "a")    
 	;kazdy agent widzi kwadratowy obszar o dlugosci boku rownej wartosci poleWidzenia
     (bind ?kratki 0)	
      (loop-for-count (?i (- 0 ?poleWidzenia) ?poleWidzenia) do
@@ -918,7 +950,8 @@
 	)
  
     (assert (okreslonoWidocznosc (idAgenta ?agentId))) 
-    (printout t "Agent: " ?agentId " widzi " ?kratki " kratek" crlf)
+    (printout resultFile "Agent: " ?agentId " widzi " ?kratki " kratek" crlf)
+    (close)
 )
 ; REGULY DO KLESKI
 ; niszczenie lasu
@@ -928,15 +961,18 @@
 
     (not (kleskaLas (idKleski ?idKleski )))
 =>
+(open "src/clips/results.txt" resultFile "a")
+
     (bind ?szansa (+ (mod (random) 100) 1))
 
     (if  (<= ?szansa ?niszczenie)
     then
     (modify ?drzewo (stan sciete))
-    (printout t "Kleska o id: " ?idKleski " zniszczyla drzewo na kratce " ?idKratki crlf)
+    (printout resultFile "Kleska o id: " ?idKleski " zniszczyla drzewo na kratce " ?idKratki crlf)
     )
 
     (assert (kleskaLas (idKleski ?idKleski )))
+    (close)
 )
 ; zabicie mieszkancow
 (defrule kleskaZabijMieszkancow (declare (salience 10))
@@ -944,15 +980,18 @@
     ?kleska <- (kleska (id ?idKleski) (idKratki ?idKratki) (zabijanieMieszkancow ?zabijanie))
     (not (kleskaGrod (idKleski ?idKleski )))
 =>
+(open "src/clips/results.txt" resultFile "a")
+
     (bind ?mieszkancowNew (- ?mieszkancow ?zabijanie))
     (if (<= ?mieszkancowNew 0)
     then
     (bind ?mieszkancowNew 0)
     )
     (modify ?grod (liczbaMieszkancow ?mieszkancowNew))
-    (printout t "Kleska o id: " ?idKleski " zabila  " ?zabijanie " mieszkancow w grodzie " ?idGrodu crlf)
+    (printout resultFile "Kleska o id: " ?idKleski " zabila  " ?zabijanie " mieszkancow w grodzie " ?idGrodu crlf)
 
     (assert (kleskaGrod (idKleski ?idKleski )))
+    (close)
 )
 
 ; zranienie agentow
@@ -969,14 +1008,17 @@
     (not (dzialanieKleskiNaAgenta (idAgenta ?id ) ( idKleski ?idKleski) ))
 
 =>
+(open "src/clips/results.txt" resultFile "a")
+
     (bind ?energiaNew (- ?energia ?oslabienie))
     (if (<= ?energiaNew 0)
     then
         (bind ?energiaNew 0)
     )
     (modify ?agent (energia ?energiaNew))
-    (printout t "Kleska o id: " ?idKleski " zabrala  " ?oslabienie " punktow energi agentowi " ?id crlf)
+    (printout resultFile "Kleska o id: " ?idKleski " zabrala  " ?oslabienie " punktow energi agentowi " ?id crlf)
     (assert (dzialanieKleskiNaAgenta ( idAgenta ?id) ( idKleski ?idKleski) ))
+    (close)
 
 )
 ; update klesk
@@ -985,15 +1027,18 @@
 (iteracja ?iteracja)
 (not (uaktualnianieKlesk ( idKleski ?idKleski)))
 =>
+(open "src/clips/results.txt" resultFile "a")
+
 (bind ?czasNew (- ?czas 1))
     (if (<= ?czasNew 0)
     then
         (retract ?kleska)
-        (printout t "Kleska o id: " ?idKleski " skonczyla sie" crlf)
+        (printout resultFile "Kleska o id: " ?idKleski " skonczyla sie" crlf)
     else
         (modify ?kleska (czasTrwania ?czasNew))
-        (printout t "Kleska o id: " ?idKleski " zostala uaktualniona" crlf)
+        (printout resultFile "Kleska o id: " ?idKleski " zostala uaktualniona" crlf)
     )
     (assert (uaktualnianieKlesk ( idKleski ?idKleski)))
+    (close)
 )
 
