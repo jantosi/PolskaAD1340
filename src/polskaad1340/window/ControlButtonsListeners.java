@@ -22,7 +22,6 @@ public class ControlButtonsListeners {
 	private boolean blockadesChange;
 	
 	private boolean cataclysms;
-	private boolean cataclysmsChange;
 	
 	private boolean bandits;
 	
@@ -44,14 +43,13 @@ public class ControlButtonsListeners {
 				}
 			}
 			
-			if (cataclysmsChange) {
-				cataclysmsChange = false;
-				if (cataclysms) {
-					inference.getWorld().randomCataclysms();
-				} else {
-					inference.getWorld().setCataclysms(new ArrayList<Cataclysm>());
-				}
+			
+			if (cataclysms) {
+				inference.getWorld().randomCataclysms();
+			} else {
+				inference.getWorld().setCataclysms(new ArrayList<Cataclysm>());
 			}
+
 			
 			if (bandits) {
 				inference.getWorld().randomBandits();
@@ -102,12 +100,10 @@ public class ControlButtonsListeners {
 				om.getBtnCataclysms().setText("WLACZONE");
 				om.getBtnCataclysms().setForeground(new Color(0, 128, 0));
 				cataclysms = true;
-				cataclysmsChange = true;
 			} else {
 				om.getBtnCataclysms().setText("WYLACZONE");
 				om.getBtnCataclysms().setForeground(Color.RED);
 				cataclysms = false;
-				cataclysmsChange = true;
 			}
 		}
 	}
