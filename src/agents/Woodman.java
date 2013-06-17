@@ -61,7 +61,7 @@ public class Woodman extends Agent {
         this.fieldOfView = 1;
         this.possibleMove = 1;
         this.velocity = 1;
-        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), 1662);
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1662);
     }
     
     public void loadFromClips(PrimitiveValue pv) {

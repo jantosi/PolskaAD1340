@@ -33,16 +33,18 @@ public class World {
     private ArrayList<Tree> trees = new ArrayList<Tree>();
     private ArrayList<Agent> agents = new ArrayList<Agent>();
     private ClipsEnvironment clipsEnv;
+    private OknoMapy om;
   
 
     public World(ClipsEnvironment clipsEnv, LadowanieMapy ladowanieMapy, OknoMapy om) {
         this.clipsEnv = clipsEnv;
         this.loadFromMap(ladowanieMapy);
-        initializeWorld(om);
+        this.om = om;
+        initializeWorld();
     }
 
-    private void initializeWorld(OknoMapy om) {
-        initializeAgents(om);
+    private void initializeWorld() {
+        initializeAgents();
     	randomBlockades();
         randomCataclysms();
         randomBandits();
@@ -57,7 +59,7 @@ public class World {
 
     }
 
-    private void initializeAgents(OknoMapy om) {
+    private void initializeAgents() {
     	Random random = new Random();
     	
     	WoodmanStatistics ws = new WoodmanStatistics();
@@ -260,9 +262,11 @@ public class World {
             for (int i = 0; i < pv1.size(); i++) {
                 Woodman woodmanTmp = new Woodman();
                 woodmanTmp.loadFromClips(pv1.get(i));
+               
                 
                 MapFrame mapFrame = this.getFrameById(woodmanTmp.getMapFrame().getId());
                 woodmanTmp.setMapFrame(mapFrame);
+                woodmanTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), woodmanTmp.getId(), 1662));
                 
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(woodmanTmp.getId())) {
@@ -285,9 +289,11 @@ public class World {
             for (int i = 0; i < pv1.size(); i++) {
                 Courier courierTmp = new Courier();
                 courierTmp.loadFromClips(pv1.get(i));
+                 
                 
                 MapFrame mapFrame = this.getFrameById(courierTmp.getMapFrame().getId());
                 courierTmp.setMapFrame(mapFrame);
+                courierTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), courierTmp.getId(), 1088));
                 
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(courierTmp.getId())) {

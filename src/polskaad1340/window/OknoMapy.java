@@ -10,11 +10,11 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,7 +27,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicBorders;
 
 import agents.Agent;
-import javax.swing.BoxLayout;
 
 /**
  *
@@ -90,29 +89,6 @@ public final class OknoMapy extends javax.swing.JFrame {
         return 1;
     }
 
-    public void moveForegroundObject(ObiektPierwszegoPlanu opp, int dx, int dy) {
-    	if (isValidCoords(new Point(opp.x + dx, opp.y + dy)) == -1) {//poza mapa
-        	return;
-        }
-    	TilesLabel actual = (TilesLabel)this.foregroundTileGrid.get(opp.y).get(opp.x);
-        JLabel target = this.foregroundTileGrid.get(opp.y + dy).get(opp.x + dx);
-    	
-    	if (this.foregroundTileGrid.get(opp.y + dy).get(opp.x + dx) instanceof TilesLabel) {
-        	((TilesLabel)target).addObject(opp);
-        	
-        } else {
-        	this.foregroundTileGrid.get(opp.y + dy).set(opp.x + dx, new TilesLabel(opp));
-        }
-    	
-    	actual.removeObject(opp);
-    	if (actual.getForegroundObjects().isEmpty()) {
-    		this.foregroundTileGrid.get(opp.y).set(opp.x, this.tileFromNumber(0));
-    	}
-    	
-        this.drawAllTiles();
-        this.repaint();
-    }
-
     public JLabel tileFromNumber(int num) {
         String path = "/images/" + num + ".png";
 
@@ -158,21 +134,21 @@ public final class OknoMapy extends javax.swing.JFrame {
         this.requestFocus();
     }
 
-    public ObiektPierwszegoPlanu nowyObiektPierwszegoPlanu(int x, int y, int tileID) {
+    public ObiektPierwszegoPlanu nowyObiektPierwszegoPlanu(int x, int y, String id, int tileID) {
         if(isValidCoords(new Point(x, y)) == -1) {
             return null;
         }
-        ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(x, y);
+        ObiektPierwszegoPlanu opp = new ObiektPierwszegoPlanu(x, y, id);
         opp.tile = this.tileFromNumber(tileID);
         
-        if (getTileIDFromColor(foregroundTileGrid.get(y).get(x)) == 0) {
-        	this.getForegroundTileGrid().get(y).set(x, new TilesLabel(opp));
-        } else {
-        	((TilesLabel)this.getForegroundTileGrid().get(y).get(x)).addObject(opp);
-        }
-        
-        this.addObjectToForegroundList(opp);
-        
+		if (getTileIDFromColor(foregroundTileGrid.get(y).get(x)) == 0) {
+			this.getForegroundTileGrid().get(y).set(x, new TilesLabel(opp));
+		} else {
+			((TilesLabel) this.getForegroundTileGrid().get(y).get(x)).addObject(opp);
+		}
+
+		this.addObjectToForegroundList(opp);
+
         return opp;
     }
 
@@ -379,11 +355,7 @@ public final class OknoMapy extends javax.swing.JFrame {
                 formComponentResized(evt);
             }
         });
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                formKeyReleased(evt);
-            }
-        });
+        
         getContentPane().setLayout(null);
 
         bulkPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
@@ -532,24 +504,6 @@ public final class OknoMapy extends javax.swing.JFrame {
         this.resizeContentsTo(newDim);
 
     }//GEN-LAST:event_formComponentResized
-
-    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-//        demo eventu   
-        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
-            this.foregroundList.get(0).move(0, 1);
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_UP) {
-            this.foregroundList.get(0).move(0, -1);
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
-            this.foregroundList.get(0).move(-1, 0);
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
-            this.foregroundList.get(0).move(1, 0);
-        }
-
-        this.revalidate();
-    }//GEN-LAST:event_formKeyReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         this.setExtendedState(Frame.MAXIMIZED_BOTH);

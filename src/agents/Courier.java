@@ -45,6 +45,7 @@ public class Courier extends Agent {
     public Courier() {
     	this.mapFrame = new MapFrame();
     	this.packages = new ArrayList<String>();
+    	
     }
     
     /**
@@ -62,7 +63,7 @@ public class Courier extends Agent {
         this.velocity = 1;
         this.fieldOfView = 1;
         this.possibleMove = 1;
-        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), 1088);
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1088);
     }
     
     

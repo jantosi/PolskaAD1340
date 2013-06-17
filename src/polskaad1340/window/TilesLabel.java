@@ -22,15 +22,16 @@ public class TilesLabel extends JLabel{
 		this.foregroundObjects.add(opp);
 		this.updateIcon();
 	}
-	
-	public void addObject(ObiektPierwszegoPlanu opp) {
-		this.foregroundObjects.add(opp);
-		this.updateIcon();
-	}
-	
 	public void removeObject(ObiektPierwszegoPlanu opp) {
 		this.foregroundObjects.remove(opp);
 		this.updateIcon();
+	}
+	
+	public void addObject(ObiektPierwszegoPlanu opp) {
+		if (!this.foregroundObjects.contains(opp)) {
+			this.foregroundObjects.add(opp);
+			this.updateIcon();
+		}
 	}
 	
 	//informacja po klikniecu na kafelek

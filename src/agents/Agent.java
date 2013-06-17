@@ -378,4 +378,12 @@ abstract public class Agent implements Cloneable{
 	public void setMapFrame(MapFrame mapFrame) {
 		this.mapFrame = mapFrame;
 	}
+
+	public ObiektPierwszegoPlanu getOpp() {
+		return opp;
+	}
+
+	public void setOpp(ObiektPierwszegoPlanu opp) {
+		this.opp = opp;
+	}
 }

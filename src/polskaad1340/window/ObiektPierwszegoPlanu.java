@@ -4,8 +4,6 @@
  */
 package polskaad1340.window;
 
-import java.awt.Point;
-
 import javax.swing.JLabel;
 
 /**
@@ -16,35 +14,14 @@ public class ObiektPierwszegoPlanu {
 
     int OknoMapyListHandler = -1;
     OknoMapy om;
-    int x,y;
+    public int x,y;
     JLabel tile;
+    private String id;
     
-    private boolean isInOknoMapy()
-    {
-        return(om!=null && OknoMapyListHandler!=-1);
-    }
-    
-    public void move(int dx, int dy)
-    {
-        if(isInOknoMapy())
-        {
-            Point nuCoords = new Point(x+dx, y+dy);
-            int check = om.isValidCoords(nuCoords);
-            if(check==1)
-            {
-                om.moveForegroundObject(this, dx, dy);
-                
-                this.x += dx;
-                this.y += dy;
-            }
-            om.drawAllTiles();
-            om.getForegroundPanel().repaint();
-        }
-        
-    }
-    
-    public ObiektPierwszegoPlanu(int x, int y) {
-        this.x = x; this.y = y;
+    public ObiektPierwszegoPlanu(int x, int y, String id) {
+        this.x = x;
+        this.y = y;
+        this.id = id;
     }
 
 	@Override
@@ -56,17 +33,10 @@ public class ObiektPierwszegoPlanu {
 		if (getClass() != obj.getClass())
 			return false;
 		ObiektPierwszegoPlanu other = (ObiektPierwszegoPlanu) obj;
-		if (OknoMapyListHandler != other.OknoMapyListHandler)
-			return false;
-		if (om == null) {
-			if (other.om != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!om.equals(other.om))
-			return false;
-		if (tile == null) {
-			if (other.tile != null)
-				return false;
-		} else if (!tile.equals(other.tile))
+		} else if (!id.equals(other.id))
 			return false;
 		if (x != other.x)
 			return false;
@@ -74,4 +44,7 @@ public class ObiektPierwszegoPlanu {
 			return false;
 		return true;
 	}
+
+    
+
 }

@@ -3,10 +3,9 @@ package polskaad1340;
 import java.util.ArrayList;
 
 import polskaad1340.window.OknoMapy;
-
 import world.World;
-import clips.ClipsEnvironment;
 import agents.Agent;
+import clips.ClipsEnvironment;
 
 public class Inference {
 	
@@ -55,13 +54,23 @@ public class Inference {
 
 		System.out.println("<wnioskowanie swiata>");
 		this.clipsEnv.getWorldEnv().run();
+		
 		String worldInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/results.txt");
 		System.out.println(worldInfRes);
+		
 		om.setScrollFocusOn(10, 10);
-		this.om.displayInferenceResults(20 * this.om.tileSize, 20 * this.om.tileSize, "Wynik wnioskowania swiata", worldInfRes, "world");
+		this.om.displayInferenceResults(20 * this.om.tileSize, 20 * this.om.tileSize
+				, "Wynik wnioskowania swiata", worldInfRes, "world");
+		
 		System.out.println("fakty:");
 		//clipsEnv.displayWorldFacts();
 		System.out.println("</wnioskowanie swiata>");
+		
+		ArrayList<Agent> agentsBeforeMoving = new ArrayList<Agent>();
+		for (Agent agentTmp : this.world.getAgents()) {
+			agentsBeforeMoving.add(agentTmp);
+		}
+		
 		this.world.loadFromClips();
 		
 		this.agentsWhoDidntInfer = new int[this.world.getAgents().size()];
@@ -70,6 +79,8 @@ public class Inference {
 		}
 		
 		this.actualIteration += 1;
+		
+		this.om.drawAllTiles();
 	}
 
 	public void performAgentInference(Agent actualAgent) throws Exception {
@@ -85,10 +96,13 @@ public class Inference {
 		// dany agent wnioskuje
 		System.out.println("<wnioskowanie agenta " + actualAgent.getId() + " >");
 		this.clipsEnv.getAgentEnv().run();
+		
 		String agentInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/agentResults.txt");
 		System.out.println(agentInfRes);
+		
 		om.displayInferenceResults(actualAgent.getMapFrame().getX() * om.tileSize + 25, actualAgent.getMapFrame().getY() * om.tileSize + 10
 				,"Wynik wnioskowania agenta " + actualAgent.getId(), agentInfRes, "agent");
+		
 		System.out.println("fakty:");
 		//clipsEnv.displayAgentFacts();
 		System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");
@@ -100,6 +114,9 @@ public class Inference {
 		for (String agentInferenceResult : agentInferenceResultsTmp) {
 			this.agentsInferenceResults.add(agentInferenceResult);
 		}
+		
+		//zerujemy kafelek na ktorym stal agent
+		this.om.getForegroundTileGrid().get(actualAgent.getOpp().y).set(actualAgent.getOpp().x, this.om.tileFromNumber(0));
 	}
 	
 	public void realizeRound() {
