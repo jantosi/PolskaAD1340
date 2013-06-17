@@ -47,7 +47,7 @@ public class ClipsEnvironment {
 			inferenceResultFile.delete();
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+
 		}
 		
 		return buf.toString();
