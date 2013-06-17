@@ -46,18 +46,17 @@ public class Ax extends Item {
 		StringBuilder builder = new StringBuilder();
 		builder.append("(siekiera (");
 		builder.append("typ ");
-		builder.append(type);
+		builder.append(this.type);
 		builder.append(") (");
 		builder.append("id ");
-		builder.append(id);
+		builder.append(this.id);
 		builder.append(") (");
 		builder.append("cena ");
-		builder.append(price);
+		builder.append(this.price);
 		builder.append(") (zuzycie ");
-		builder.append(levelOfWear);
-		builder.append(") (");
-		builder.append("idGrodu ");
-		builder.append(townId);
+		builder.append(this.levelOfWear);
+		builder.append(") (idGrodu ");
+		builder.append(this.townId);
 		builder.append("))");
 		return builder.toString();
 	}

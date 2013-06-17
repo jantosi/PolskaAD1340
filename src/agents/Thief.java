@@ -149,19 +149,6 @@ public class Thief extends Agent {
     }
     
     /**
-     * Przeciążenie metody dotyczącej przemieszania się uwzględniając pobyt w więzeniu.
-     * @return boolean
-     */
-    @Override
-    public boolean run() {
-        if(this.getIsInJail()) {
-            return false;
-        }
-        return super.run();
-    }
-    
-    
-    /**
      * Metoda odpowiedzialna za pójscie do więzienia, w której obliczamy ilość dni do odsiadki,
      * zerujemy jego aktualny łup.
      */

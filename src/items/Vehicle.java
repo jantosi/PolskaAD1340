@@ -46,15 +46,15 @@ public class Vehicle extends Item {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("(woz (udzwig ");
-		builder.append(capacity);
+		builder.append(this.capacity);
 		builder.append(") (");
 		builder.append("id ");
-		builder.append(id);
+		builder.append(this.id);
 		builder.append(") (");
 		builder.append("cena ");
-		builder.append(price);
+		builder.append(this.price);
 		builder.append(") (idGrodu ");
-		builder.append(townId);
+		builder.append(this.townId);
 		builder.append("))");
 		
 		return builder.toString();

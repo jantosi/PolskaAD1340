@@ -52,7 +52,7 @@ public class Town {
 			int capacity = random.nextInt(100) + 30;
 			int price = (int)(0.7 * capacity);
 			
-			Vehicle vehicle = new Vehicle("woz" + (i+1), capacity, price);
+			Vehicle vehicle = new Vehicle("woz" + (i+1) + this.getId(), capacity, price);
 			vehicle.setTownId(this.getId());
 			this.items.add(vehicle);
 		}
@@ -69,7 +69,7 @@ public class Town {
 				destTownId = "grod" + (random.nextInt(3) + 1);
 			}
 			
-			Pack pack = new Pack("paczka" + (i+1), mass);
+			Pack pack = new Pack("paczka" + (i+1) + this.getId(), mass);
 			pack.setSourceTown(this.getId());
 			pack.setDestinationTown(destTownId);
 			this.items.add(pack);
@@ -114,7 +114,7 @@ public class Town {
 			}
 			}
 			
-			Horse horse = new Horse("kon" + (i+1), velocity, capacity, price, wearSpeed, riderTiredness);
+			Horse horse = new Horse("kon" + (i+1) + this.getId(), velocity, capacity, price, wearSpeed, riderTiredness);
 			horse.setTownId(this.getId());
 			horse.setLevelOfWear(levelOfWear);
 			this.items.add(horse);
@@ -150,7 +150,7 @@ public class Town {
 			}
 			}			
 			
-			Ax ax = new Ax("siekiera" + (i+1), axTypes[axTypesIndex], price, wearSpeed, this.getId());
+			Ax ax = new Ax("siekiera" + (i+1) + this.getId(), axTypes[axTypesIndex], price, wearSpeed, this.getId());
 			ax.setLevelOfWear(levelOfWear);
 			this.items.add(ax);
 		}
@@ -167,7 +167,7 @@ public class Town {
 			int wearSpeed = random.nextInt(5) + 5;
 			int price = (int) (0.4 * (value + levelOfWear - wearSpeed)) + 2;
 		
-			Armor armor = new Armor("zbroja" + (i+1), value, price, wearSpeed, this.id);
+			Armor armor = new Armor("zbroja" + (i+1) + this.getId(), value, price, wearSpeed, this.id);
 			armor.setLevelOfWear(levelOfWear);
 			
 			this.items.add(armor);

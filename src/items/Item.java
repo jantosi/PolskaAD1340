@@ -33,6 +33,7 @@ abstract public class Item {
     
     protected String townId;
     
+    
     /**
      * Konstruktor. Ustawienie domyślnej ceny i szybkości zużycia narzędzia.
      * @param int id
@@ -51,7 +52,7 @@ abstract public class Item {
     }
     
     public Item(){
-    	
+
     }
     /**
      * Getter dla ceny.

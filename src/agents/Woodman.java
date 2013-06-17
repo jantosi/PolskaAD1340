@@ -1,5 +1,9 @@
 package agents;
 
+import items.Ax;
+import items.Item;
+import items.Vehicle;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,6 +11,7 @@ import polskaad1340.window.OknoMapy;
 import statistics.WoodmanStatistics_Interface;
 import world.MapFrame;
 import CLIPSJNI.PrimitiveValue;
+import clips.ClipsEnvironment;
 /**
  * Klasa definiująca drwala.
  * 
@@ -92,6 +97,34 @@ public class Woodman extends Agent {
 		}
 
 	}
+    
+    public ArrayList<Item> findItems(ClipsEnvironment clipsEnv) {
+    	ArrayList<Item> foundItems = new ArrayList<Item>();
+    	
+    	if (this.ax != null) {
+			try {
+				String evalString = "(find-all-facts ((?s siekiera))(eq ?s:id " + this.ax + "))";
+				PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+				Ax axTmp = new Ax(pv1.get(0));
+				foundItems.add(axTmp);
+			} catch (Exception e) {
+
+			}
+		}
+
+		if (this.vehicle != null) {
+			try {
+				String evalString = "(find-all-facts ((?w woz))(eq ?w:id " + this.vehicle + "))";
+				PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+				Vehicle vehicleTmp = new Vehicle(pv1.get(0));
+				foundItems.add(vehicleTmp);
+			} catch (Exception e) {
+
+			}
+		}
+		
+		return foundItems;
+    }
     
     public int getCapacity() {
         return this.capacity;

@@ -1,5 +1,7 @@
 package agents;
 
+import items.Horse;
+import items.Item;
 import items.Pack;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import polskaad1340.window.OknoMapy;
 import statistics.CourierStatistics_Interface;
 import world.MapFrame;
 import CLIPSJNI.PrimitiveValue;
+import clips.ClipsEnvironment;
 
 /**
  * Klasa definiująca posłańca.
@@ -92,6 +95,38 @@ public class Courier extends Agent {
 		}
 	}
 
+	public ArrayList<Item> findItems(ClipsEnvironment clipsEnv) {
+		ArrayList<Item> foundItems = new ArrayList<Item>();
+		
+		if (this.horse != null) {
+			try {
+				String evalString = "(find-all-facts ((?k kon))(eq ?k:id " + this.horse + "))";
+				PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+				Horse horseTmp = new Horse(pv1.get(0));
+				foundItems.add(horseTmp);
+			} catch (Exception e) {
+
+			}
+		}
+
+		if (!this.packages.isEmpty()) {
+			System.out.println("weszlo");
+			for (String pack : this.packages) {
+				try {
+					if (!pack.equals("")) {
+						String evalString = "(find-all-facts ((?p paczka))(eq ?p:id " + pack + "))";
+						PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+						Pack packTmp = new Pack(pv1.get(0));
+						foundItems.add(packTmp);
+					}
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		
+		return foundItems;
+	}
     
     public int getCapacity() {
         return this.capacity;

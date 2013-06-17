@@ -255,7 +255,9 @@ abstract public class Agent implements Cloneable{
 			}
 		} catch (Exception e) {
 		}
-    			
+    	
+    	
+    	//dodatkowo nalezy przekazac aktualne parametry kazdego agenta
     	evalString = "(find-all-facts ((?p poslaniec)) TRUE)";
     	pv = agentEnv.eval(evalString);
     	try {
@@ -343,16 +345,6 @@ abstract public class Agent implements Cloneable{
         this.gold = gold;
         
         return this;
-    }
-    
-    /**
-     * Zużycie energii podczas ruchu. Zwraca TRUE jeżeli agent może się poruszać i FALSE gdy nie.
-     * @return boolean
-     */
-    public boolean run() {
-        this.setEnergy(this.getEnergy()-this.getEnergyLoss());
-        
-        return true;
     }
     
 	public String getId() {

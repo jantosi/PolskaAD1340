@@ -27,14 +27,12 @@ public class Armor extends Item {
         this.setTownId(town);
     }
     public Armor(PrimitiveValue pv) throws Exception {
-    	
     	this.id = pv.getFactSlot("id").toString();
     	this.townId = pv.getFactSlot("grod").toString();
     	this.levelOfWear = pv.getFactSlot("zuzycie").intValue();
     	this.price = pv.getFactSlot("cena").intValue();
     	this.value = pv.getFactSlot("wytrzymalosc").intValue();
     	this.wearSpeed = pv.getFactSlot("szybkoscZuzycia").intValue();
-    
     }
     
     public int getValue() {
@@ -51,21 +49,17 @@ public class Armor extends Item {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("(zbroja (wytrzymalosc ");
-		builder.append(value);
-		builder.append(") (");
-		
-		builder.append("id ");
-		builder.append(id);
-		builder.append(") (");
-		
-		builder.append("cena ");
-		builder.append(price);
+		builder.append(this.value);
+		builder.append(") (id ");
+		builder.append(this.id);
+		builder.append(") (cena ");
+		builder.append(this.price);
 		builder.append(") (zuzycie ");
-		builder.append(levelOfWear);
+		builder.append(this.levelOfWear);
 		builder.append(") (szybkoscZuzycia ");
-		builder.append(wearSpeed);
+		builder.append(this.wearSpeed);
 		builder.append(") (grod ");
-		builder.append(townId);
+		builder.append(this.townId);
 		builder.append("))");
 		return builder.toString();
 	}

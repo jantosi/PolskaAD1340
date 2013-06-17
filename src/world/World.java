@@ -37,6 +37,7 @@ public class World {
     private ArrayList<Town> towns = new ArrayList<Town>();
     private ArrayList<Tree> trees = new ArrayList<Tree>();
     private ArrayList<Agent> agents = new ArrayList<Agent>();
+    private ArrayList<Item> agentItems = new ArrayList<Item>();
     private ClipsEnvironment clipsEnv;
     private OknoMapy om;
   
@@ -75,6 +76,7 @@ public class World {
         CourierStatistics cs = new CourierStatistics();
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", cs, mapFrame, om);
+        //courier.getPackages().add("paczka1grod1");
         
         this.agents.add(woodman);
         this.agents.add(courier);
@@ -197,12 +199,23 @@ public class World {
 
         ArrayList<Object> visibleObjects = new ArrayList<Object>();
         //dodajemy informacje o agencie
-        for (Agent agent : this.agents) {
-        	if (agent.getId().equalsIgnoreCase(agentId)) {
-        		visibleObjects.add(agent.toString());
-        		break;
-        	}
-        }
+		for (Agent agent : this.agents) {
+			if (agent.getId().equalsIgnoreCase(agentId)) {
+				visibleObjects.add(agent.toString());
+
+				if (agent instanceof Courier) {
+					Courier courierTmp = (Courier) agent;
+					visibleObjects.addAll(courierTmp.findItems(clipsEnv));
+
+				} else if (agent instanceof Woodman) {
+					Woodman woodmanTmp = (Woodman) agent;
+					visibleObjects.addAll(woodmanTmp.findItems(clipsEnv));
+					
+				} // TODO > i tak dla wszystkich pozostalych agentow
+
+				break;
+			}
+		}
         
         
         for (int i = 0; i < pv.size(); i++) {
@@ -255,6 +268,7 @@ public class World {
     }
 
     private void loadAgents() {
+    	this.agentItems = new ArrayList<Item>();
     	loadWoodmens();
     	loadCouriers();
     }
@@ -268,10 +282,11 @@ public class World {
                 Woodman woodmanTmp = new Woodman();
                 woodmanTmp.loadFromClips(pv1.get(i));
                
-                
                 MapFrame mapFrame = this.getFrameById(woodmanTmp.getMapFrame().getId());
                 woodmanTmp.setMapFrame(mapFrame);
                 woodmanTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), woodmanTmp.getId(), 1662));
+                
+                this.agentItems.addAll(woodmanTmp.findItems(clipsEnv));
                 
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(woodmanTmp.getId())) {
@@ -295,10 +310,11 @@ public class World {
                 Courier courierTmp = new Courier();
                 courierTmp.loadFromClips(pv1.get(i));
                  
-                
                 MapFrame mapFrame = this.getFrameById(courierTmp.getMapFrame().getId());
                 courierTmp.setMapFrame(mapFrame);
                 courierTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), courierTmp.getId(), 1088));
+                
+                this.agentItems.addAll(courierTmp.findItems(clipsEnv));
                 
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(courierTmp.getId())) {
@@ -883,9 +899,9 @@ public class World {
             }
         }
         
-       // for (Agent agent : this.agents) {
-       // 	sbuf.append(agent.toString()).append("\n");
-       // }
+        for (Item item : this.agentItems) {
+        	sbuf.append(item.toString()).append("\n");
+        }
         
         return sbuf.toString();
     }

@@ -549,7 +549,8 @@
 =>
     (open "src/clips/results.txt" resultFile "a")
     (modify ?agent (paczki $?paczki ?idPaczki))
-
+    (modify ?paczka (grodStart nil))
+    
     (retract ?akcja)
 
     (printout resultFile "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
@@ -903,14 +904,12 @@
 (defrule kupTowarZGrodu (declare (salience 4))
     ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
     ?grod <- (grod (nazwa ?idGrodu))
-    ?przedmiot <- (przedmiot (id ?idPrzedmiotu))
     ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
 =>
 (open "src/clips/results.txt" resultFile "a")
 
-    (modify ?agent (przedmioty ?przedmioty ?idPrzedmiotu))
-    (printout resultFile "Kupiec o id: " ?id " kupil przedmiot o id: " ?idPrzedmiotu crlf)
-    (close)
+
+(close)
 )
 
 ;regula, ktora okresla jakie kratki widzi dany agent

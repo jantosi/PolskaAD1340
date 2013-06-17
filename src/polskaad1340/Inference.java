@@ -104,7 +104,7 @@ public class Inference {
 				,"Wynik wnioskowania agenta " + actualAgent.getId(), agentInfRes, "agent");
 		
 		System.out.println("fakty:");
-		//clipsEnv.displayAgentFacts();
+		clipsEnv.displayAgentFacts();
 		System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");
 		
 
