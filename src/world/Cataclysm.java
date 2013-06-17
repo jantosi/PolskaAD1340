@@ -1,33 +1,37 @@
 package world;
 
+import polskaad1340.window.ObiektPierwszegoPlanu;
+import polskaad1340.window.OknoMapy;
 import CLIPSJNI.PrimitiveValue;
 
 public class Cataclysm {
 
 	private String id;
-	private int mapFrame;
+	private MapFrame mapFrame;
 	private int treesDestroy;
 	private int energyLoss;
 	private int populationLoss;
 	private int livingTime;
+	private ObiektPierwszegoPlanu opp;
 
-	public Cataclysm(String id, int mapFrame, int treesDestroy, int energyLoss, int populationLoss,int livingTime) {
+	public Cataclysm(String id, MapFrame mapFrame, int treesDestroy, int energyLoss, int populationLoss, int livingTime, OknoMapy om) {
 		super();
 		this.id = id;
 		this.mapFrame = mapFrame;
 		this.treesDestroy = treesDestroy;
 		this.energyLoss = energyLoss;
 		this.populationLoss = populationLoss;
-		this.livingTime=livingTime;
+		this.livingTime = livingTime;
+		this.opp = om.nowyObiektPierwszegoPlanu(this.mapFrame.getX(), this.mapFrame.getY(), this.id, 7);
 	}
 
 	public Cataclysm() {
-
+		this.mapFrame = new MapFrame();
 	}
 
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
-			this.mapFrame = pv.getFactSlot("idKratki").intValue();
+			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
 			this.id = pv.getFactSlot("id").getValue().toString();
 			this.treesDestroy = pv.getFactSlot("niszczenieLasu").intValue();
 			this.energyLoss = pv.getFactSlot("oslabianieAgentow").intValue();
@@ -44,7 +48,7 @@ public class Cataclysm {
 		StringBuffer sbuf = new StringBuffer();
 		sbuf.append("(kleska ");
 		sbuf.append("(id ").append(id).append(") ");
-		sbuf.append("(idKratki ").append(mapFrame).append(") ");
+		sbuf.append("(idKratki ").append(mapFrame.getId()).append(") ");
 		sbuf.append("(niszczenieLasu ").append(treesDestroy).append(") ");
 		sbuf.append("(oslabianieAgentow ").append(energyLoss).append(") ");
 		sbuf.append("(czasTrwania ").append(livingTime).append(") ");
@@ -69,22 +73,6 @@ public class Cataclysm {
 		this.id = id;
 	}
 
-	public int getMapFrame() {
-		return mapFrame;
-	}
-
-	public void setMapFrame(int mapFrame) {
-		this.mapFrame = mapFrame;
-	}
-
-	public int getUpperLeftMapFrame() {
-		return mapFrame;
-	}
-
-	public void setUpperLeftMapFrame(int upperLeftMapFrame) {
-		this.mapFrame = upperLeftMapFrame;
-	}
-
 	public int getTreesDestroy() {
 		return treesDestroy;
 	}
@@ -107,5 +95,21 @@ public class Cataclysm {
 
 	public void setPopulationLoss(int populationLoss) {
 		this.populationLoss = populationLoss;
+	}
+
+	public MapFrame getMapFrame() {
+		return mapFrame;
+	}
+
+	public void setMapFrame(MapFrame mapFrame) {
+		this.mapFrame = mapFrame;
+	}
+
+	public ObiektPierwszegoPlanu getOpp() {
+		return opp;
+	}
+
+	public void setOpp(ObiektPierwszegoPlanu opp) {
+		this.opp = opp;
 	}
 }

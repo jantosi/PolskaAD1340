@@ -76,6 +76,7 @@
 
 ;CZYNNIK NIEDETERMINISTYCZNY
 (deftemplate rozbojnicy
+    (slot id)
 	(slot idKratki) ;kratka, na ktorej sie znajduja
 	(slot zabieraniePaczek) ;procent paczek, ktore zabieraja poslancom
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom

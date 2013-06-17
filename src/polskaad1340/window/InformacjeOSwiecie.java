@@ -50,7 +50,9 @@ public class InformacjeOSwiecie {
         
         opisyKafelkow.put(1175, "blokada");
         
-
+        opisyKafelkow.put(7, "kleska zywiolowa");
+        opisyKafelkow.put(1064, "rozbojnicy");
+        
     }
     
     public InformacjeOSwiecie() {

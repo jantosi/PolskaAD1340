@@ -110,6 +110,7 @@ public class World {
         	roadIds.add(tmp);
         }
 
+        int index = 0;
         for (String roadId : roadIds) {
             ArrayList<Road> actualRoad = new ArrayList<Road>();
             for (Road road : this.roads) {
@@ -117,18 +118,21 @@ public class World {
                     actualRoad.add(road);
                 }
             }
-
+            
+            String id = "rozbojnicy" + (index+1);
             int numberOfBandits = 0;
             double packageLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
             double goldLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
 
             while (numberOfBandits < (actualRoad.get(0).getMaxPartNo() * actualRoad.get(0).getRobberyProbability())) {
                 int frame = actualRoad.get(random.nextInt(actualRoad.size())).getMapFrame();
-                Bandits bandits = new Bandits(packageLoss, goldLoss, frame);
+                Bandits bandits = new Bandits(id, packageLoss, goldLoss, this.getFrameById(frame), this.om);
                 this.bandits.add(bandits);
                 numberOfBandits++;
             }
+            index++;
         }
+        
     }
 
     
@@ -150,8 +154,8 @@ public class World {
             for (int x = frameStartX; x < (frameStartX + size); x++) {
                 for (int y = frameStartY; y < (frameStartY + size); y++) {
                     if (x < this.width && x >= 0 && y < this.height && y >= 0) {
-                        Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i + 1), this.mapFrames[x][y].getId(),
-                        				randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss,randomizedLiveTime);
+                        Cataclysm tmpCataclysm = new Cataclysm("cataclysm" + (i + 1), this.mapFrames[x][y],
+                        				randomizedTreesDestroy, randomizedEnergyLoss, randomizedPopulationLoss, randomizedLiveTime, this.om);
                         this.cataclysms.add(tmpCataclysm);
                     }
                 }
@@ -357,6 +361,11 @@ public class World {
             for (int i = 0; i < pv1.size(); i++) {
                 Bandits temp = new Bandits();
                 temp.loadFromClips(pv1.get(i));
+                
+                MapFrame mapFrame = this.getFrameById(temp.getMapFrame().getId());
+                temp.setMapFrame(mapFrame);
+                temp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), temp.getId(), 1064));
+                
                 this.bandits.add(temp);
             }
 
@@ -394,6 +403,10 @@ public class World {
             for (int i = 0; i < pv1.size(); i++) {
                 Cataclysm temp = new Cataclysm();
                 temp.loadFromClips(pv1.get(i));
+                
+                MapFrame mapFrame = this.getFrameById(temp.getMapFrame().getId());
+                temp.setMapFrame(mapFrame);
+                temp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), temp.getId(), 7));
                 this.cataclysms.add(temp);
             }
 

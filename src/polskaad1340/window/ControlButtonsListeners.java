@@ -43,6 +43,9 @@ public class ControlButtonsListeners {
 				}
 			}
 			
+			for (Cataclysm cataclysm : inference.getWorld().getCataclysms()) {
+				om.getForegroundTileGrid().get(cataclysm.getOpp().y).set(cataclysm.getOpp().x, om.tileFromNumber(0));
+			}
 			
 			if (cataclysms) {
 				inference.getWorld().randomCataclysms();
@@ -50,7 +53,9 @@ public class ControlButtonsListeners {
 				inference.getWorld().setCataclysms(new ArrayList<Cataclysm>());
 			}
 
-			
+			for (Bandits bandit : inference.getWorld().getBandits()) {
+				om.getForegroundTileGrid().get(bandit.getOpp().y).set(bandit.getOpp().x, om.tileFromNumber(0));
+			}
 			if (bandits) {
 				inference.getWorld().randomBandits();
 			} else {

@@ -66,11 +66,6 @@ public class Inference {
 		//clipsEnv.displayWorldFacts();
 		System.out.println("</wnioskowanie swiata>");
 		
-		ArrayList<Agent> agentsBeforeMoving = new ArrayList<Agent>();
-		for (Agent agentTmp : this.world.getAgents()) {
-			agentsBeforeMoving.add(agentTmp);
-		}
-		
 		this.world.loadFromClips();
 		
 		this.agentsWhoDidntInfer = new int[this.world.getAgents().size()];
