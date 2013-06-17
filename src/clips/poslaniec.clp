@@ -19,7 +19,7 @@
    (assert (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?mozliwyRuch)(docelowyGrod ?celPodrozy)))
    (assert (podjetoAkcje))
         
-   (printout resultFile "Agent: " ?id " wybral trase i postanowil isc trasa do grodu: " ?celPodrozy crlf)   
+   (printout resultFile "Agent: " ?id " wybral trase i postanowil isc do grodu: " ?celPodrozy crlf)   
    (close)
 )
 

@@ -322,8 +322,8 @@ public final class OknoMapy extends javax.swing.JFrame {
     	horizontal.setValue( x * this.tileSize - 10 * this.tileSize);
     }
     
-    public void displayInferenceResults(int x, int y, String header, String inferenceMessage) {
-    	this.displayContextPanelWithInferenceResults(x, y, header, inferenceMessage);
+    public void displayInferenceResults(int x, int y, String header, String inferenceMessage, String type) {
+    	this.displayContextPanelWithInferenceResults(x, y, header, inferenceMessage, type);
     }
     
     public ArrayList<ArrayList<JLabel>> getForegroundTileGrid() {
@@ -650,12 +650,18 @@ public final class OknoMapy extends javax.swing.JFrame {
         contextPanel.setVisible(true);
     }
     
-    public void displayContextPanelWithInferenceResults(int x, int y, String header, String message) {
+    public void displayContextPanelWithInferenceResults(int x, int y, String header, String message, String type) {
     	contextPanel.setVisible(false);
         ((JPanel) contextPanel.getComponent(0)).removeAll();
 
         contextPanel.setBounds(this.contextPanelDefaultRect);
-        Rectangle rect = new Rectangle(x, y, contextPanel.getWidth() + 50, contextPanel.getHeight());
+        Rectangle rect;
+        if (type.equals("world")) {
+        	rect = new Rectangle(x, y, contextPanel.getWidth() + 110, contextPanel.getHeight() + 180);
+        } else {
+        	rect = new Rectangle(x, y, contextPanel.getWidth() + 80, contextPanel.getHeight());
+        }
+        
         if (rect.y > this.getContentPane().getHeight() - rect.height) {
             rect.y -= rect.height;
         }

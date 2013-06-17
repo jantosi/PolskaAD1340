@@ -57,8 +57,8 @@ public class Inference {
 		this.clipsEnv.getWorldEnv().run();
 		String worldInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/results.txt");
 		System.out.println(worldInfRes);
-		om.setScrollFocusOn(15, 15);
-		this.om.displayInferenceResults(20 * this.om.tileSize, 20 * this.om.tileSize, "Wynik wnioskowania swiata", worldInfRes);
+		om.setScrollFocusOn(10, 10);
+		this.om.displayInferenceResults(20 * this.om.tileSize, 20 * this.om.tileSize, "Wynik wnioskowania swiata", worldInfRes, "world");
 		System.out.println("fakty:");
 		//clipsEnv.displayWorldFacts();
 		System.out.println("</wnioskowanie swiata>");
@@ -87,8 +87,8 @@ public class Inference {
 		this.clipsEnv.getAgentEnv().run();
 		String agentInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/agentResults.txt");
 		System.out.println(agentInfRes);
-		om.displayInferenceResults(actualAgent.getMapFrame().getX() * om.tileSize + 10, actualAgent.getMapFrame().getY() * om.tileSize + 10
-				,"Wynik wnioskowania agenta", agentInfRes);
+		om.displayInferenceResults(actualAgent.getMapFrame().getX() * om.tileSize + 25, actualAgent.getMapFrame().getY() * om.tileSize + 10
+				,"Wynik wnioskowania agenta " + actualAgent.getId(), agentInfRes, "agent");
 		System.out.println("fakty:");
 		//clipsEnv.displayAgentFacts();
 		System.out.println("</wnioskowanie agenta " + actualAgent.getId() + " >");

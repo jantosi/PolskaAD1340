@@ -16,6 +16,7 @@ public class ControlButtonsListeners {
 	private class BtnNextIterListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			om.deleteHighlightedBorders();
 			//konczymy zaczeta runde
 			inference.realizeRound();
 			
