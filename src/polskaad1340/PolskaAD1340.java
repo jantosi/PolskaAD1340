@@ -36,7 +36,6 @@ public class PolskaAD1340 {
 			om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
 			om.drawAllTiles();
 			
-
 			ClipsEnvironment clipsEnv = new ClipsEnvironment();
 			World world = new World(clipsEnv, lm, om);
 

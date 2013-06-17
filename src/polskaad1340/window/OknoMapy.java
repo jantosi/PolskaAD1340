@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -310,6 +311,14 @@ public final class OknoMapy extends javax.swing.JFrame {
     			this.backgroundTileGrid.get(y).get(x).setBorder(null);
     		}
     	}
+    }
+    
+    public void focusOnAgent(Agent agent) {
+    	JScrollBar vertical = jScrollPane1.getVerticalScrollBar();
+    	vertical.setValue( agent.getMapFrame().getY() * this.tileSize - 5 * this.tileSize);
+    	
+    	JScrollBar horizontal = jScrollPane1.getHorizontalScrollBar();
+    	horizontal.setValue( agent.getMapFrame().getX() * this.tileSize - 10 * this.tileSize);
     }
     
     public ArrayList<ArrayList<JLabel>> getForegroundTileGrid() {

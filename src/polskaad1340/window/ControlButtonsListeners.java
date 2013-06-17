@@ -30,6 +30,7 @@ public class ControlButtonsListeners {
 			try {
 				om.deleteHighlightedBorders();
 				om.highlightVisibleFrames(agent);
+				om.focusOnAgent(agent);
 				inference.performAgentInference(agent);
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -51,6 +52,7 @@ public class ControlButtonsListeners {
 				try {
 					om.deleteHighlightedBorders();
 					om.highlightVisibleFrames(agent);
+					om.focusOnAgent(agent);
 					inference.performAgentInference(agent);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -71,22 +73,23 @@ public class ControlButtonsListeners {
 		//rozpoczynamy nowa runde swiata
 		inference.performWorldInference();
 		
-		om.getTextFieldIter().setText(String.valueOf(inference.getActualIteration()));
+		this.om.getTextFieldIter().setText(String.valueOf(inference.getActualIteration()));
 		
 		//wnioskuje rowniez pierwszy agent
 		Agent agent = inference.getWorld().getAgents().get(0);
 		
 		try {
-			om.deleteHighlightedBorders();
-			om.highlightVisibleFrames(agent);
-			inference.performAgentInference(agent);
+			this.om.deleteHighlightedBorders();
+			this.om.highlightVisibleFrames(agent);
+			this.om.focusOnAgent(agent);
+			this.inference.performAgentInference(agent);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		om.getTextFieldAgent().setText(agent.getId());
-		inference.getAgentsWhoDidntInfer()[0] = -1;
+		this.om.getTextFieldAgent().setText(agent.getId());
+		this.inference.getAgentsWhoDidntInfer()[0] = -1;
 		
-		agentsWhoInferedNum = 1;
+		this.agentsWhoInferedNum = 1;
 	}
 	
 	public void activateListeners() {
