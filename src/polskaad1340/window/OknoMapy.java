@@ -6,6 +6,7 @@ package polskaad1340.window;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -26,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicBorders;
 
+import world.Blockade;
 import agents.Agent;
 
 /**
@@ -41,7 +43,8 @@ public final class OknoMapy extends javax.swing.JFrame {
     private int defaultBgTileID = 72;
     public BasicBorders.FieldBorder defaultBorder;
     private boolean isTileBordered = false;
-    ArrayList<ObiektPierwszegoPlanu> foregroundList = new ArrayList<>();
+    private ArrayList<ObiektPierwszegoPlanu> foregroundList = new ArrayList<>();
+    private LadowanieMapy lm;
     
     
     private javax.swing.JPanel backgroundPanel;
@@ -65,6 +68,12 @@ public final class OknoMapy extends javax.swing.JFrame {
     private JTextField textFieldIter;
     private JTextField textFieldAgent;
     private Rectangle contextPanelDefaultRect;
+    private JLabel lblBlockades;
+    private JButton btnBlockades;
+    private JLabel lblCataclysms;
+    private JButton btnCataclysms;
+    private JLabel lblBandits;
+    private JButton btnBandits;
 
     public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
@@ -103,8 +112,9 @@ public final class OknoMapy extends javax.swing.JFrame {
         return jl;
     }
 
-    public OknoMapy() {
-
+    public OknoMapy(LadowanieMapy lm) {
+    	this.lm = lm;
+    	
         /* Set native look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -179,6 +189,7 @@ public final class OknoMapy extends javax.swing.JFrame {
 
     public void setTileAt(ArrayList<ArrayList<JLabel>> tileGrid, int tiledX, int tiledY, JLabel jl) {
         tileGrid.get(tiledY).get(tiledX).setIcon(jl.getIcon());
+        tileGrid.get(tiledY).get(tiledX).setBackground(jl.getBackground());
     }
 
     public void drawAllTiles() {
@@ -300,6 +311,20 @@ public final class OknoMapy extends javax.swing.JFrame {
     
     public void displayInferenceResults(int x, int y, String header, String inferenceMessage, String type) {
     	this.displayContextPanelWithInferenceResults(x, y, header, inferenceMessage, type);
+    }
+    
+    public void displayBlockades(ArrayList<Blockade> blockades) {
+    	for (Blockade blockade : blockades) {
+    		int x = blockade.getMapFrame().getX();
+    		int y = blockade.getMapFrame().getY();
+    		
+    		blockade.setReplacedTile(this.backgroundTileGrid.get(y).get(x));
+    		this.setTileAt(this.backgroundTileGrid, x, y, blockade.getTile());
+    	}
+    }
+    
+    public void hideBlockades(ArrayList<Blockade> blockades) {
+    	this.importBackgroundTileGrid(this.lm.getMap());
     }
     
     public ArrayList<ArrayList<JLabel>> getForegroundTileGrid() {
@@ -444,6 +469,45 @@ public final class OknoMapy extends javax.swing.JFrame {
         textFieldAgent.setEditable(false);
         controlPanel.add(textFieldAgent);
         textFieldAgent.setColumns(10);
+        
+        lblBlockades = new JLabel("BLOKADY");
+        lblBlockades.setBounds(10, 360, 81, 19);
+        controlPanel.add(lblBlockades);
+        
+        btnBlockades = new JButton("WYLACZONE");
+        btnBlockades.setFont(new Font("Tahoma", Font.PLAIN, 8));
+        btnBlockades.setForeground(Color.RED);
+        btnBlockades.setBounds(10, 378, 83, 23);
+        btnBlockades.setFocusable(false);
+        btnBlockades.setToolTipText("<html>Po wlaczeniu/wylaczeniu przy NASTEPNEJ iteracji<br>" +
+        		"zostana wlaczone/wylaczone wylosowane blokady</html>");
+        controlPanel.add(btnBlockades);
+        
+        lblCataclysms = new JLabel("KLESKI");
+        lblCataclysms.setBounds(10, 412, 81, 19);
+        controlPanel.add(lblCataclysms);
+        
+        btnCataclysms = new JButton("WYLACZONE");
+        btnCataclysms.setFont(new Font("Tahoma", Font.PLAIN, 8));
+        btnCataclysms.setForeground(Color.RED);
+        btnCataclysms.setFocusable(false);
+        btnCataclysms.setBounds(10, 430, 83, 23);
+        btnCataclysms.setToolTipText("<html>Po wlaczeniu/wylaczeniu przy NASTEPNEJ iteracji<br>" +
+        		"zostana wlaczone/wylaczone wylosowane kleski<html>");
+        controlPanel.add(btnCataclysms);
+        
+        lblBandits = new JLabel("ROZBOJNICY");
+        lblBandits.setBounds(10, 464, 81, 19);
+        controlPanel.add(lblBandits);
+        
+        btnBandits = new JButton("WYLACZONE");
+        btnBandits.setForeground(Color.RED);
+        btnBandits.setFont(new Font("Tahoma", Font.PLAIN, 8));
+        btnBandits.setFocusable(false);
+        btnBandits.setBounds(10, 482, 83, 23);
+        btnBandits.setToolTipText("<html>Po wlaczeniu przy KAZDEJ iteracji<br>" +
+        		"beda losowani na nowo rozbojnicy<html>");
+        controlPanel.add(btnBandits);
         
         jMenu3.setText("Widok");
 
@@ -704,5 +768,29 @@ public final class OknoMapy extends javax.swing.JFrame {
 
 	public void setTileSize(int tileSize) {
 		this.tileSize = tileSize;
+	}
+
+	public JButton getBtnBlockades() {
+		return btnBlockades;
+	}
+
+	public void setBtnBlockades(JButton btnBlockades) {
+		this.btnBlockades = btnBlockades;
+	}
+
+	public JButton getBtnCataclysms() {
+		return btnCataclysms;
+	}
+
+	public void setBtnCataclysms(JButton btnCataclysms) {
+		this.btnCataclysms = btnCataclysms;
+	}
+
+	public JButton getBtnBandits() {
+		return btnBandits;
+	}
+
+	public void setBtnBandits(JButton btnBandits) {
+		this.btnBandits = btnBandits;
 	}
 }

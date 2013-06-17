@@ -39,6 +39,7 @@ public class Road {
         this.isPaid = other.isPaid;
         this.currentPartNo = other.currentPartNo;
         this.maxPartNo = other.maxPartNo;
+        this.robberyProbability = other.robberyProbability;
     }
 
     public void loadFromClips(PrimitiveValue pv) {
@@ -51,6 +52,7 @@ public class Road {
             this.isPaid = Boolean.parseBoolean(pv.getFactSlot("platna").getValue().toString());
             this.currentPartNo = pv.getFactSlot("nrOdcinka").intValue();
             this.maxPartNo = pv.getFactSlot("maxOdcinek").intValue();
+            this.robberyProbability = pv.getFactSlot("prawdopodobienstoNapasci").doubleValue();
         } catch (Exception e) {
             e.printStackTrace();
         }

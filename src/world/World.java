@@ -51,9 +51,9 @@ public class World {
 
     private void initializeWorld() {
         initializeAgents();
-    	randomBlockades();
-        randomCataclysms();
-        randomBandits();
+    	//randomBlockades();
+        //randomCataclysms();
+        //randomBandits();
 
         Set<String> visited = new HashSet<String>();
         for (Town town : this.towns) {
@@ -95,7 +95,7 @@ public class World {
         	while (roadWithBlockades.contains(randomRoad.getMapFrame())) {
         		randomRoad = this.roads.get(random.nextInt(this.roads.size()));
         	}
-        	Blockade blockade = new Blockade("blokada" + (i+1), randomRoad.getMapFrame());
+        	Blockade blockade = new Blockade("blokada" + (i+1), this.getFrameById(randomRoad.getMapFrame()), this.om);
         	this.blockades.add(blockade);
         }
     }
@@ -232,7 +232,7 @@ public class World {
             }
 
             for (Blockade blockade : this.blockades) {
-                if (blockade.getMapFrame() == visibleFrameId) {
+                if (blockade.getMapFrame().getId() == visibleFrameId) {
                     visibleObjects.add(blockade);
                 }
             }
@@ -372,8 +372,11 @@ public class World {
             PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
 
             for (int i = 0; i < pv1.size(); i++) {
-                Blockade temp = new Blockade();
+                Blockade temp = new Blockade(this.om);
                 temp.loadFromClips(pv1.get(i));
+                MapFrame mapFrame = this.getFrameById(temp.getMapFrame().getId());
+                temp.setMapFrame(mapFrame);
+                
                 this.blockades.add(temp);
             }
 

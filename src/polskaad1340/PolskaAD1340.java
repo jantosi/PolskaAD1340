@@ -27,11 +27,13 @@ public class PolskaAD1340 {
         //bugfix, patrz http://stackoverflow.com/questions/13575224/comparison-method-violates-its-general-contract-timsort-and-gridlayout
 
         // TODO code application logic here
-        OknoMapy om = new OknoMapy();
-        om.setVisible(true);
+       
 
 		try {
 			LadowanieMapy lm = new LadowanieMapy("/maps/example.json");
+		    OknoMapy om = new OknoMapy(lm);
+		    om.setVisible(true);
+		        
 			om.importBackgroundTileGrid(lm.getMap());
 			om.setForegroundTileGrid(om.createTileGrid(lm.getMapSize(), 0));
 			om.drawAllTiles();

@@ -48,6 +48,8 @@ public class InformacjeOSwiecie {
         opisyKafelkow.put(1088, "poslaniec");
         opisyKafelkow.put(1662, "drwal");
         
+        opisyKafelkow.put(1175, "blokada");
+        
 
     }
     
