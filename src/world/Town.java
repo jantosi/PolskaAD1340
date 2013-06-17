@@ -13,16 +13,16 @@ import java.util.Random;
 import CLIPSJNI.PrimitiveValue;
 
 public class Town {
-	private String nazwa;
+	private String id;
 	private int mapFrame;
 	private int population;
 	private float guardsActivity;
 
 	private ArrayList<Item> items;
 	
-	public Town(String nazwa, int mapFrame, int population, float guardsActivity) {
+	public Town(String id, int mapFrame, int population, float guardsActivity) {
 		super();
-		this.nazwa = nazwa;
+		this.id = id;
 		this.mapFrame = mapFrame;
 		this.population = population;
 		this.guardsActivity = guardsActivity;
@@ -53,7 +53,7 @@ public class Town {
 			int price = (int)(0.7 * capacity);
 			
 			Vehicle vehicle = new Vehicle("woz" + (i+1), capacity, price);
-			vehicle.setTownId(this.getNazwa());
+			vehicle.setTownId(this.getId());
 			this.items.add(vehicle);
 		}
 	}
@@ -65,12 +65,12 @@ public class Town {
 		for (int i = 0; i < packsNum; i++) {
 			int mass = random.nextInt(15) + 2;
 			String destTownId = "grod" + (random.nextInt(4) + 1);
-			while (destTownId.equalsIgnoreCase(this.getNazwa())) {
+			while (destTownId.equalsIgnoreCase(this.getId())) {
 				destTownId = "grod" + (random.nextInt(3) + 1);
 			}
 			
 			Pack pack = new Pack("paczka" + (i+1), mass);
-			pack.setSourceTown(this.getNazwa());
+			pack.setSourceTown(this.getId());
 			pack.setDestinationTown(destTownId);
 			this.items.add(pack);
 		}
@@ -115,7 +115,7 @@ public class Town {
 			}
 			
 			Horse horse = new Horse("kon" + (i+1), velocity, capacity, price, wearSpeed, riderTiredness);
-			horse.setTownId(this.getNazwa());
+			horse.setTownId(this.getId());
 			horse.setLevelOfWear(levelOfWear);
 			this.items.add(horse);
 			
@@ -150,7 +150,7 @@ public class Town {
 			}
 			}			
 			
-			Ax ax = new Ax("siekiera" + (i+1), axTypes[axTypesIndex], price, wearSpeed, this.getNazwa());
+			Ax ax = new Ax("siekiera" + (i+1), axTypes[axTypesIndex], price, wearSpeed, this.getId());
 			ax.setLevelOfWear(levelOfWear);
 			this.items.add(ax);
 		}
@@ -167,7 +167,7 @@ public class Town {
 			int wearSpeed = random.nextInt(5) + 5;
 			int price = (int) (0.4 * (value + levelOfWear - wearSpeed)) + 2;
 		
-			Armor armor = new Armor("zbroja" + (i+1), value, price, wearSpeed, this.nazwa);
+			Armor armor = new Armor("zbroja" + (i+1), value, price, wearSpeed, this.id);
 			armor.setLevelOfWear(levelOfWear);
 			
 			this.items.add(armor);
@@ -179,7 +179,7 @@ public class Town {
 			this.mapFrame = pv.getFactSlot("idKratki").intValue();
 			this.population = pv.getFactSlot("liczbaMieszkancow").intValue();
 			this.guardsActivity = pv.getFactSlot("wspAktywnosciStrazy").floatValue();
-			this.nazwa = pv.getFactSlot("nazwa").getValue().toString();
+			this.id = pv.getFactSlot("nazwa").getValue().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -190,7 +190,7 @@ public class Town {
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
 		sbuf.append("(grod ");
-		sbuf.append("(nazwa ").append(nazwa).append(") ");
+		sbuf.append("(nazwa ").append(id).append(") ");
 		sbuf.append("(idKratki ").append(mapFrame).append(") ");
 		sbuf.append("(liczbaMieszkancow ").append(population).append(") ");
 		sbuf.append("(wspAktywnosciStrazy ").append(guardsActivity).append(")");
@@ -207,12 +207,12 @@ public class Town {
 		this.mapFrame = mapFrame;
 	}
 
-	public String getNazwa() {
-		return nazwa;
+	public String getId() {
+		return id;
 	}
 
-	public void setNazwa(String nazwa) {
-		this.nazwa = nazwa;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public int getPopulation() {

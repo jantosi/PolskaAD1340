@@ -1,6 +1,11 @@
 package world;
 
+import items.Armor;
+import items.Ax;
+import items.Horse;
 import items.Item;
+import items.Pack;
+import items.Vehicle;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -51,8 +56,8 @@ public class World {
 
         Set<String> visited = new HashSet<String>();
         for (Town town : this.towns) {
-            if (!visited.contains(town.getNazwa())) {
-                visited.add(town.getNazwa());
+            if (!visited.contains(town.getId())) {
+                visited.add(town.getId());
                 town.randomItems();
             }
         }
@@ -401,17 +406,93 @@ public class World {
             String evalString = "(find-all-facts ((?k grod)) TRUE)";
             PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
 
+            Set<String> visited = new HashSet<String>();
             for (int i = 0; i < pv1.size(); i++) {
                 Town temp = new Town(pv1.get(i));
+                
+                if (!visited.contains(temp.getId())) {
+                	visited.add(temp.getId());
+                	
+                	loadItems(temp);
+                	
+                }
+                
                 this.towns.add(temp);
             }
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
         }
     }
 
+    private void loadItems(Town town) {
+    	
+        try {
+        	String evalString = "(find-all-facts ((?z zbroja))(eq ?z:grod " + town.getId() + ") )";
+        	PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+            	Armor armor = new Armor(pv1.get(i));
+            	town.getItems().add(armor);
+            }
+
+        } catch (Exception e) {
+
+        }
+        
+        try {
+        	String evalString = "(find-all-facts ((?s siekiera))(eq ?s:idGrodu " + town.getId() + ") )";
+        	PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+            	Ax ax = new Ax(pv1.get(i));
+            	town.getItems().add(ax);
+            }
+
+        } catch (Exception e) {
+
+        }
+        
+        try {
+        	String evalString = "(find-all-facts ((?k kon))(eq ?k:grod " + town.getId() + ") )";
+        	PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+            	Horse horse = new Horse(pv1.get(i));
+            	town.getItems().add(horse);
+            }
+
+        } catch (Exception e) {
+
+        }
+        
+        try {
+        	String evalString = "(find-all-facts ((?p paczka))(eq ?p:grodStart " + town.getId() + ") )";
+        	PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+            	Pack pack = new Pack(pv1.get(i));
+            	town.getItems().add(pack);
+            }
+
+        } catch (Exception e) {
+
+        }
+        
+        try {
+        	String evalString = "(find-all-facts ((?w woz))(eq ?w:idGrodu " + town.getId() + ") )";
+        	PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+            	Vehicle vehicle = new Vehicle(pv1.get(i));
+            	town.getItems().add(vehicle);
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+    
     private void loadTrees() {
         try {
             String evalString = "(find-all-facts ((?k drzewo)) TRUE)";
@@ -628,7 +709,7 @@ public class World {
                         int find = this.towns.indexOf(new Town("", mapFrame, 0, 0));
                         
                         if (find != -1) {
-                            grodID = this.towns.get(find).getNazwa();
+                            grodID = this.towns.get(find).getId();
                             break;
                         }
 

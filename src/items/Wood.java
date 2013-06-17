@@ -16,9 +16,9 @@ public class Wood extends Item {
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("(drewno ")
-		   .append("(id ").append(this._id).append(") ")
+		   .append("(id ").append(this.id).append(") ")
 		   .append("(waga ").append(this.mass).append(") ")
-		   .append("(cena ").append(this._price).append(")) ");
+		   .append("(cena ").append(this.price).append(")) ");
 		
 		return buf.toString();
 	}

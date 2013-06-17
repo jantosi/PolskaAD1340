@@ -1,5 +1,7 @@
 package items;
 
+import CLIPSJNI.PrimitiveValue;
+
 /**
  * Klasa definiująca uzbrojenie rycerza.
  * @author Piotrek
@@ -10,7 +12,7 @@ public class Armor extends Item {
      * Wartość określająca wytrzymałość zbroi.
      * @var int
      */
-    protected int _value;
+    protected int value;
     
     /**
      * Konstruktor. Ustawienie domyślnej wartości, ceny i szybkości zużycia.
@@ -24,22 +26,23 @@ public class Armor extends Item {
         this.setValue(value);
         this.setTownId(town);
     }
+    public Armor(PrimitiveValue pv) throws Exception {
+    	
+    	this.id = pv.getFactSlot("id").toString();
+    	this.townId = pv.getFactSlot("grod").toString();
+    	this.levelOfWear = pv.getFactSlot("zuzycie").intValue();
+    	this.price = pv.getFactSlot("cena").intValue();
+    	this.value = pv.getFactSlot("wytrzymalosc").intValue();
+    	this.wearSpeed = pv.getFactSlot("szybkoscZuzycia").intValue();
     
-    /**
-     * Getter dla wytrzymałości zbroi.
-     * @return int
-     */
-    public int getValue() {
-        return this._value;
     }
     
-    /**
-     * Setter dla wytrzymałości zbroi.
-     * @param int value
-     * @return Armor
-     */
+    public int getValue() {
+        return this.value;
+    }
+    
     public Armor setValue(int value) {
-        this._value = value;
+        this.value = value;
         
         return this;
     }
@@ -48,19 +51,19 @@ public class Armor extends Item {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("(zbroja (wytrzymalosc ");
-		builder.append(_value);
+		builder.append(value);
 		builder.append(") (");
 		
 		builder.append("id ");
-		builder.append(_id);
+		builder.append(id);
 		builder.append(") (");
 		
 		builder.append("cena ");
-		builder.append(_price);
+		builder.append(price);
 		builder.append(") (zuzycie ");
-		builder.append(_levelOfWear);
+		builder.append(levelOfWear);
 		builder.append(") (szybkoscZuzycia ");
-		builder.append(_wearSpeed);
+		builder.append(wearSpeed);
 		builder.append(") (grod ");
 		builder.append(townId);
 		builder.append("))");

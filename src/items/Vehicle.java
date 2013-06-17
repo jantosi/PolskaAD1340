@@ -1,5 +1,7 @@
 package items;
 
+import CLIPSJNI.PrimitiveValue;
+
 /**
  * Klasa definiująca narzędzie: Wóz dla drwala.
  * @author Piotrek
@@ -10,7 +12,7 @@ public class Vehicle extends Item {
      * Pojemność wozu.
      * @var int
      */
-    protected int _capacity;
+    protected int capacity;
     
     /**
      * Konstruktor. Ustawienie domyślnej pojemności, ceny i szybkości zużycia.
@@ -23,22 +25,19 @@ public class Vehicle extends Item {
         
         this.setCapacity(capacity);
     }
-    
-    /**
-     * Getter dla pojemności wozu.
-     * @return int
-     */
-    public int getCapacity() {
-        return this._capacity;
+    public Vehicle(PrimitiveValue pv) throws Exception {
+    	this.id = pv.getFactSlot("id").toString();
+    	this.capacity = pv.getFactSlot("udzwig").intValue();
+    	this.price = pv.getFactSlot("cena").intValue();
+    	this.townId = pv.getFactSlot("idGrodu").toString();
     }
     
-    /**
-     * Setter dla pojemności wozu.
-     * @param int capacity
-     * @return Vehicle
-     */
+    public int getCapacity() {
+        return this.capacity;
+    }
+    
     public Vehicle setCapacity(int capacity) {
-        this._capacity = capacity;
+        this.capacity = capacity;
         
         return this;
     }
@@ -47,13 +46,13 @@ public class Vehicle extends Item {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("(woz (udzwig ");
-		builder.append(_capacity);
+		builder.append(capacity);
 		builder.append(") (");
 		builder.append("id ");
-		builder.append(_id);
+		builder.append(id);
 		builder.append(") (");
 		builder.append("cena ");
-		builder.append(_price);
+		builder.append(price);
 		builder.append(") (idGrodu ");
 		builder.append(townId);
 		builder.append("))");

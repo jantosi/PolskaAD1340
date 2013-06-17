@@ -1,5 +1,7 @@
 package items;
 
+import CLIPSJNI.PrimitiveValue;
+
 /**
  * Klasa definiująca narzędzie: Siekiera.
  * 
@@ -21,7 +23,14 @@ public class Ax extends Item {
         this.type = type;
         this.townId = townId;
     }
- 
+
+    public Ax(PrimitiveValue pv) throws Exception {
+    	this.id = pv.getFactSlot("id").toString();
+    	this.type = pv.getFactSlot("typ").toString();
+    	this.levelOfWear = pv.getFactSlot("zuzycie").intValue();
+    	this.townId = pv.getFactSlot("idGrodu").toString();
+    	this.price = pv.getFactSlot("cena").intValue();
+    }
 
 	public String getType() {
 		return type;
@@ -40,12 +49,12 @@ public class Ax extends Item {
 		builder.append(type);
 		builder.append(") (");
 		builder.append("id ");
-		builder.append(_id);
+		builder.append(id);
 		builder.append(") (");
 		builder.append("cena ");
-		builder.append(_price);
+		builder.append(price);
 		builder.append(") (zuzycie ");
-		builder.append(_levelOfWear);
+		builder.append(levelOfWear);
 		builder.append(") (");
 		builder.append("idGrodu ");
 		builder.append(townId);

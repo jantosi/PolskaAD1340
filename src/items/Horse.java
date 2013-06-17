@@ -1,7 +1,6 @@
 package items;
 
 import CLIPSJNI.PrimitiveValue;
-import clips.ClipsEnvironment;
 
 /**
  * Klasa definiująca konie.
@@ -20,23 +19,24 @@ public class Horse extends Item {
      * Prędkość konia.
      * @var int
      */
-    protected int _velocity;
+    protected int velocity;
     
     /**
      * Udźwig konia
      * @var int
      */
-    protected int _capacity;
+    protected int capacity;
     
-    public Horse(PrimitiveValue pv, int agentId, ClipsEnvironment clipsEnv) {        
-        super.loadFromClips(pv, agentId, clipsEnv);
-        
-        try {
-            this.setVelocity(pv.getFactSlot("predkosc").intValue());
-            this.setCapacity(pv.getFactSlot("udzwig").intValue());
-        } catch (Exception e) {
-		e.printStackTrace();
-	}
+    
+    public Horse(PrimitiveValue pv) throws Exception {        
+    	this.id = pv.getFactSlot("id").toString();
+    	this.townId = pv.getFactSlot("grod").toString();
+    	this.capacity = pv.getFactSlot("udzwig").intValue();
+    	this.velocity = pv.getFactSlot("predkosc").intValue();
+    	this.riderTiredness = pv.getFactSlot("zmeczenieJezdzcy").intValue();
+    	this.price = pv.getFactSlot("cena").intValue();
+    	this.levelOfWear = pv.getFactSlot("zuzycie").intValue();
+    	this.wearSpeed = pv.getFactSlot("predkoscZuzycia").intValue();
     }
     
     /**
@@ -51,44 +51,27 @@ public class Horse extends Item {
     public Horse(String id, int velocity, int capacity, int price, int wearSpeed, int riderTiredness) {
     	super(price, wearSpeed, id);
     	
-    	this._velocity = velocity;
-        this._capacity = capacity;
+    	this.velocity = velocity;
+        this.capacity = capacity;
+        this.riderTiredness = riderTiredness;
     }
     
-    /**
-     * Getter dla prędkości konia.
-     * @return int
-     */
     public int getVelocity() {
-        return this._velocity;
+        return this.velocity;
     }
     
-    /**
-     * Setter dla prędkości konia
-     * @param int velocity
-     * @return Horse
-     */
     public Horse setVelocity(int velocity) {
-        this._velocity = velocity;
+        this.velocity = velocity;
         
         return this;
     }
     
-    /**
-     * Getter dla udźwigu.
-     * @return int
-     */
     public int getCapacity() {
-        return this._capacity;
+        return this.capacity;
     }
     
-    /**
-     * Setter dla udźwigu.
-     * @param int capacity
-     * @return Horse 
-     */
     public Horse setCapacity(int capacity) {
-        this._capacity = capacity;
+        this.capacity = capacity;
         
         return this;
     }

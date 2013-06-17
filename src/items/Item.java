@@ -1,7 +1,4 @@
 package items;
-import world.Town;
-import CLIPSJNI.PrimitiveValue;
-import clips.ClipsEnvironment;
 
 /**
  * Klasa abstrakcyjna definiująca narzędnia przedawane przez kupca.
@@ -14,25 +11,25 @@ abstract public class Item {
      * Identyfikator przedmiotu
      * @var int
      */
-    protected String _id;
+    protected String id;
 	
     /**
      * Cena narzędnia.
      * @var double
      */
-    protected int _price;
+    protected int price;
     
     /**
      * Poziom zużycia narzędzia w procentach.
      * @var int
      */
-    protected int _levelOfWear;
+    protected int levelOfWear;
     
     /**
      * Szybkość zużycia narzędzia.
      * @var int
      */
-    protected int _wearSpeed;
+    protected int wearSpeed;
     
     protected String townId;
     
@@ -61,7 +58,7 @@ abstract public class Item {
      * @return int
      */
     public int getPrice() {
-        return this._price;
+        return this.price;
     }
     
     /**
@@ -69,7 +66,7 @@ abstract public class Item {
      * @param int price
      */
     public void setPrice(int price) {
-        this._price = price;
+        this.price = price;
     }
     
     /**
@@ -77,7 +74,7 @@ abstract public class Item {
      * @return int
      */
     public int getLevelOfWear() {
-        return this._levelOfWear;
+        return this.levelOfWear;
     }
     
     /**
@@ -86,7 +83,7 @@ abstract public class Item {
      * @return Item
      */
     public Item setLevelOfWear(int levelOfWear) {
-        this._levelOfWear = levelOfWear;
+        this.levelOfWear = levelOfWear;
         
         return this;
     }
@@ -96,7 +93,7 @@ abstract public class Item {
      * @return int
      */
     public int getWearSpeed() {
-        return this._wearSpeed;
+        return this.wearSpeed;
     }
     
     /**
@@ -105,7 +102,7 @@ abstract public class Item {
      * @return Item
      */
     public Item setWearSpeed(int wearSpeed) {
-        this._wearSpeed = wearSpeed;
+        this.wearSpeed = wearSpeed;
         
         return this;
     }
@@ -119,32 +116,14 @@ abstract public class Item {
     }
 
     public String getId() {
-	return _id;
+	return id;
     }
 
     public Item setId(String id) {
-	this._id = id;
+	this.id = id;
         return this;
     }
     
-    public void loadFromClips(PrimitiveValue pv, int agentId, ClipsEnvironment clipsEnv) {
-        try {
-            this.setPrice(pv.getFactSlot("cena").intValue());
-            this.setId(pv.getFactSlot("id").stringValue());
-            this.setWearSpeed(pv.getFactSlot("predkoscZuzycia").intValue());
-            this.setLevelOfWear(pv.getFactSlot("zuzycie").intValue());
-            
-            if(clipsEnv != null) {
-                String townFind = "(find-fact ((?k grod)) (eq ?k:nazwa "+pv.getFactSlot("grod").stringValue()+"))";
-                PrimitiveValue townPv = clipsEnv.getWorldEnv().eval(townFind);
-                Town itemTown = new Town(townPv);
-                this.setTownId(itemTown.getNazwa());
-            }
-        } catch (Exception e) {
-		e.printStackTrace();
-	}
-    }
-
 	public String getTownId() {
 		return townId;
 	}
