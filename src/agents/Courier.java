@@ -53,12 +53,11 @@ public class Courier extends Agent {
     
     /**
      * Konstruktor. Nadanie domyślnego udźwigu.
-     * @param capacity 
      */
     public Courier(String id, String pathToClipsFile, CourierStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
         super(id, pathToClipsFile);
 
-        this.capacity = 5;
+        this.capacity = 100;
         this.packages = new ArrayList<String>();
         this.setHorse(null);
         this.statistics = stat;

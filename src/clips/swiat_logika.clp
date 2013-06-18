@@ -144,7 +144,7 @@
         )
         (if (eq ?czyDrogaNieutwardzona TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 0))        
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))        
         )       
         
         (if (< ?dodatPredkosc 0)
@@ -252,6 +252,37 @@
     (close)
     
 )
+;regula pozwalajaca przeniesc agenta z grodu na droge
+(defrule przeniesZGroduNaDroge (declare (salience 1))
+    (or	
+		(and 
+            ?agent <- (poslaniec (id ?id))
+		    (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
+        )
+        ?agent <- (rycerz (id ?id))
+		?agent <- (drwal (id ?id))
+		?agent <- (kupiec (id ?id))
+		?agent <- (zlodziej (id ?id))
+		?agent <- (smok (id ?id))
+    )
+    ?akcja <- (akcjaZGroduNaDroge (idAgenta ?id)(idKratki ?kratkaId))
+    (kratka (id ?kratkaId)(pozycjaX ?x)(pozycjaY ?y))
+    (droga (idKratki ?kratkaId)(id ?drogaId))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
+    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciAgenta (idAgenta ?id))
+=>
+    (open "src/clips/results.txt" resultFile "a")   
+     
+    (modify ?agent (idKratki ?kratkaId)) 
+
+    (printout resultFile "Agent: " ?id " zostal przeniesiony z grodu na poczatek drogi: " ?drogaId crlf)
+    
+    ;modyfikujemy dodatek predkosci zwiazany z polozeniem na nowym polu
+    (retract ?modyfikacjaPredkosci)
+    (retract ?akcja)
+    (close) 
+)
+
 
 ;przemieszczanie agentow po kratkach
 (defrule przemieszczanie (declare (salience 1))

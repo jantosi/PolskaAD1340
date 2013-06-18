@@ -226,6 +226,11 @@
     (slot idBlokady)
     (slot podjetaAkcja) ;ominiecie lub postoj
 )
+(deftemplate akcjaZGroduNaDroge 
+    (slot idAgenta)
+    (slot idKratki)
+)
+
 ;mozliwa tylko wtedy, gdy dany agent spotyka kupca
 ;w przypadku kupca chodzi o kupowanie z grodu lub drewna od drwala
 (deftemplate akcjaKupowanie

@@ -4,9 +4,21 @@
 ; 3. jak jestem w grodzi to kupuje konia - oczywiscie jak mam zloto na niego
 ; 4. biore paczke
 
+(defrule poslaniecDotarlDoCelu (declare (salience 30))
+    ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel))
+    (grod (nazwa ?cel)(idKratki ?idKratki))
+=>
+    (open "src/clips/agentResults.txt" resultFile "a")
+    
+    (printout resultFile "Agent: " ?id " aktualnie osiagnal cel podrozy" crlf)     
+    (modify ?agent (cel nil))
+    (close)
+)
+
 (defrule poslaniecWybierzTrase (declare (salience 20))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(skadGrod ?skadGrod)(dokadGrod ?dokadGrod)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
+    (not (grod (idKratki ?idKratki)))    
     (not (podjetoAkcje))
     (test (eq ?cel nil))
 =>        
@@ -26,6 +38,73 @@
         
    (printout resultFile "Agent: " ?id " wybral trase i postanowil isc do grodu: " ?celPodrozy crlf)   
    (close)
+)
+
+(defrule poslaniecWybierzTraseZGrodu (declare (salience 8))
+    ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(paczki $?paczki)(cel ?cel))
+    ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
+    (not (podjetoAkcje))
+    (test (eq ?cel nil))    
+=>
+    (open "src/clips/agentResults.txt" resultFile "a")   
+    
+    ;jesli ma jakas paczke i z danego grodu jest bezposrednio droga tam gdzie ma dostarczyc paczke
+    ;to ja wybiera, w przeciwnym wypadku wybiera droge najkrotsza
+    (bind ?czyNajkrotsza FALSE)
+    (if (> (length $?paczki) 0)
+    then
+        (printout resultFile "wchodzi" crlf)
+        (bind ?posiadanaPaczkaId (nth$ 1 (create$ $?paczki)))
+        (bind ?paczka (nth$ 1 (find-fact ((?p paczka))(eq ?p:id ?posiadanaPaczkaId))))
+        
+        (printout resultFile "paka: " (fact-slot-value ?paczka id) crlf)        
+        (bind ?czyJestBezposrednia (any-factp ((?d droga))(and (eq ?d:skadGrod ?idGrodu)(eq ?d:dokadGrod (fact-slot-value ?paczka grodKoniec)))))
+        
+        (if (eq ?czyJestBezposrednia TRUE)
+         then
+            (bind ?bezpDroga (nth$ 1 (find-fact((?d droga))(and (eq ?d:skadGrod ?idGrodu)(eq ?d:dokadGrod (fact-slot-value ?paczka grodKoniec))))))
+            
+            (assert (akcjaZGroduNaDroge (idAgenta ?id)(idKratki (fact-slot-value ?bezpDroga idKratki))))
+            (modify ?agent (cel (fact-slot-value ?paczka grodKoniec)))
+            (assert (podjetoDecyzje))
+                        
+            (printout resultFile "Agent postanowil isc do grodu: " (fact-slot-value ?paczka grodKoniec) ", poniewaz posiada do niego paczke" crlf)
+        else
+            (bind ?czyNajkrotsza TRUE) 
+            (bind ?powod brak_bezposredniej)       
+        )
+    else
+        (bind ?czyNajkrotsza TRUE)
+        (bind ?powod brak_paczki)
+    )
+    
+    (if (eq ?czyNajkrotsza TRUE)
+    then
+        (bind $?dostepneTrasy (create$ (find-all-facts ((?d droga))(eq ?d:skadGrod ?idGrodu))))
+        (bind ?najkrotszaDroga (nth$ 1 $?dostepneTrasy))
+        (loop-for-count (?i 2 (length $?dostepneTrasy)) do
+            (bind ?aktualDroga (nth$ ?i $?dostepneTrasy))   
+            (if (< (fact-slot-value ?aktualDroga maxOdcinek) (fact-slot-value ?najkrotszaDroga maxOdcinek))
+            then
+                (bind ?najkrotszaDroga ?aktualDroga)
+            )
+        )
+        
+        (assert (akcjaZGroduNaDroge (idAgenta ?id)(idKratki (fact-slot-value ?najkrotszaDroga idKratki))))
+        (modify ?agent (cel (fact-slot-value ?najkrotszaDroga dokadGrod)))
+        (assert (podjetoDecyzje))
+                  
+        (if (eq ?powod brak_bezposredniej)
+        then
+            (printout resultFile "Z powodu braku bezposredniej drogi by zaniesc paczke agent: " ?id " wybral najkrotsza droge i idzie do grodu: "(fact-slot-value ?najkrotszaDroga dokadGrod) crlf)
+        else
+            (printout resultFile "Z powodu braku paczki agent: " ?id " wybral najkrotsza droge i idzie do grodu: "(fact-slot-value ?najkrotszaDroga dokadGrod) crlf)
+        )
+            
+    )
+        
+    (assert (podjetoDecyzje))
+    (close)
 )
 
 (defrule poslaniecIdz (declare (salience 19))
@@ -73,7 +152,7 @@
 )
 
 ;zawsze bierze najciezsze paczki i zawsze tylko jedna
-(defrule poslaniecWezPaczke (declare (salience 5))
+(defrule poslaniecWezPaczke (declare (salience 9))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(zloto ?zloto)(paczki $?paczki)(udzwig ?udzwig))
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (not (podjetoAkcje))
@@ -101,7 +180,10 @@
     
     (if  (>= ?udzwig (fact-slot-value ?najciezszaPaczka waga) )
     then      
-         (bind ?czyJest TRUE)       
+        (bind ?czyJest TRUE)       
+         
+    else 
+        (bind ?czyJest FALSE)  
     )   
     (if (eq ?czyJest TRUE)
     then  
@@ -116,5 +198,6 @@
     
     (close)
 )
+
 
 

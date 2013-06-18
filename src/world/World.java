@@ -232,7 +232,27 @@ public class World {
                     for (Item item : town.getItems()) {
                         visibleObjects.add(item);
                     }
-                }
+                    
+                    //kazdy bedacy w grodzie widzi jeszcze wszystkie drogi, ktore z niego wychodza
+                    MapFrame mapFrame = this.getFrameById(visibleFrameId);
+					int[][] possibleMoves = {{-1, 0}, {1, 0},{0, 1},{0, -1}};
+    
+					for (int p = 0; p < possibleMoves.length; p++) {
+                    	int actualX = mapFrame.getX() + possibleMoves[p][0];
+    					int actualY = mapFrame.getY() + possibleMoves[p][1];
+
+    					if (actualX >= 0 && actualX < this.width && actualY >= 0 && actualY < this.height) {
+    						int roadFrameId = this.getFrameIdByCoords(actualX, actualY);
+
+    						for (Road road : this.roads) {
+    							if (road.getMapFrame() == roadFrameId && road.getSourceTown().equals(town.getId())) {
+    								visibleObjects.add(road);
+    								break;
+    							}
+    						}
+    					}
+					}
+				}
             }
 
             for (Blockade blockade : this.blockades) {
@@ -821,7 +841,7 @@ public class World {
                     String sourceTown = roadBackPart.getSourceTown();
                     roadBackPart.setSourceTown(roadBackPart.getDestinationTown());
                     roadBackPart.setDestinationTown(sourceTown);
-
+                    
                     //change progress accordingly
                     roadBackPart.setCurrentPartNo(roadForwards.size() - j);
 
