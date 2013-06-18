@@ -448,6 +448,25 @@
     (close)
 )
 
+(defrule sprawdzDostarczeniePaczki (declare (salience 120))
+    ?agent <- (poslaniec (id ?id)(paczki $?tmp ?paczkaId $?tmp2 )(idKratki ?idKratki)(dostarczonePaczki ?dostarczone)(zloto ?zloto)(czasyDostarczenia $?czasy))
+    ?paczka <- (paczka (id ?paczkaId)(iteracjaStartDostarczenie ?itStart)(grodKoniec ?grodKoniec)(waga ?waga))
+    (grod (nazwa ?grodKoniec)(idKratki ?idKratki)) 
+    (iteracja ?it)
+=>
+    (open "src/clips/results.txt" resultFile "a")  
+    
+    (bind ?czasDostarczenia (- ?it ?itStart))
+    (bind ?zarobek (* 6 ?waga))
+    
+    (modify ?agent (dostarczonePaczki (+ ?dostarczone 1))(zloto (+ ?zloto ?zarobek)) (cel nil)(czasyDostarczenia $?czasy ?czasDostarczenia)(paczki $?tmp $?tmp2))
+    (retract ?paczka)
+        
+    (printout resultFile "Agent: " ?id " dostarczyl paczke do grodu: "?grodKoniec" w czasie: " ?czasDostarczenia " iteracji, zarobek: " ?zarobek " szt. zlota"  crlf)
+        
+    (close)
+       
+)
 (defrule uwzglednijZuzycieKonia (declare (salience 11))
     ?agent <- (poslaniec (id ?id)(kon ?kon))
     ?konik <- (kon (id ?kon)(zuzycie ?zuzycie)(predkoscZuzycia ?predkoscZuzycia))
@@ -463,7 +482,7 @@
         (retract ?modStrat)
         (retract ?modPredk)
         (retract ?konik)
-        (modify ?agent (kon nil))        
+        (modify ?agent (kon nil)(predkosc 1)(poleWidzenia 1))        
         (printout resultFile "Kon: " ?kon " agenta: " ?id " zuzyl sie" crlf)
     else
         (retract ?modStrat)
@@ -625,10 +644,11 @@
 
 
 (defrule wezPaczke (declare (salience 40))
-    ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki $?paczki))
+    ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki $?paczki)(otrzymanePaczki ?otrzymane))
     ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
     ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
     ?modyfikacja <- (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
+    (iteracja ?it)
 =>
     (open "src/clips/results.txt" resultFile "a")
     
@@ -649,8 +669,8 @@
     (if (>= ?udzwig ?sumaWagPaczek)
     then        
         (printout resultFile "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
-        (modify ?agent (paczki $?paczki ?idPaczki))
-        (modify ?paczka (grodStart nil))
+        (modify ?agent (paczki $?paczki ?idPaczki)(otrzymanePaczki (+ ?otrzymane 1)))
+        (modify ?paczka (grodStart nil)(iteracjaStartDostarczenie ?it))
         
         ;jeszcze raz musimy zmodyfikowac jego straty energii        
         (retract ?modyfikacja)

@@ -36,6 +36,7 @@
 	(slot waga)
 	(slot grodStart) ;grod, w ktorym paczka sie znajduje
 	(slot grodKoniec) ;grod, do ktorego paczka jest przeznaczona
+    (slot iteracjaStartDostarczenie)
 )
 
 (deftemplate zbroja
@@ -98,6 +99,11 @@
 	(slot mozliwyRuch)
 	(slot idKratki)
     (slot cel) ;dokad zmierza dany agent , np. nazwa grodu, "zabicieSmoka", "rabanieDrewna" itp.
+    (slot dostarczonePaczki)
+	(slot otrzymanePaczki)
+    (multislot czasyDostarczenia)
+    (slot sredniCzasDostarczenia)
+    (slot dostarczoneDoOtrzymane) 
 )
 
 ;agent KUPIEC

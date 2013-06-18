@@ -234,17 +234,25 @@ public class ControlButtonsListeners {
 			
 			
 			Agent agentTmp = ((AgentMenuItem)((JMenuItem)e.getSource())).getAgent();
-			System.out.println(agentTmp.toString());
-			String tmp = agentTmp.toString().replaceAll("\\(\\w* ", "");
-			tmp = tmp.replaceAll(" \\) ", "</font><br>");
-			tmp = tmp.replaceAll("\\( ", "");
-			tmp = tmp.replaceAll(" ", " : <font color=\"green\">");
-			tmp = tmp.replaceAll("\\)", "");
+			System.out.println(agentTmp);
+			String tmp = agentTmp.toString().replaceAll(" \\) \\( ", "<br>");
+			tmp = tmp.replaceAll("\\(\\w* \\( ", "");
+			tmp = tmp.replaceAll(" \\) \\)", "");
+			String[] tmp2 = tmp.split("<br>");
+
 			StringBuffer buf = new StringBuffer();
-			buf.append("<html>")
-			   .append(tmp)
-			   .append("</html>");
-			
+			buf.append("<html>");
+			for (int i = 0; i < tmp2.length; i++) {
+				String[] splitedRow = tmp2[i].split(" ");
+				buf.append(splitedRow[0]);
+				buf.append("<font color=\"green\"> : ");
+				for (int j = 1; j < splitedRow.length; j++) {
+					buf.append(splitedRow[j]).append(" ");
+				}
+				buf.append("</font><br>");
+			}
+			buf.append("</html>");
+
 			JLabel content = new JLabel(buf.toString());
 			content.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			scrollPanel.setViewportView(content);

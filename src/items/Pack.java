@@ -23,6 +23,7 @@ public class Pack extends Item {
     
     private String sourceTown;
 	private String destinationTown;
+	private int startDeliveryIteration;
     
     /**
      * Konstruktor. Nadanie paczce masy.
@@ -45,6 +46,7 @@ public class Pack extends Item {
 		this.mass = pv.getFactSlot("waga").intValue();
 		this.sourceTown = pv.getFactSlot("grodStart").toString();
 		this.destinationTown = pv.getFactSlot("grodKoniec").toString();
+		this.startDeliveryIteration = pv.getFactSlot("iteracjaStartDostarczenie").intValue();
 	}
     
 	public Pack() {
@@ -59,6 +61,7 @@ public class Pack extends Item {
 		sbuf.append("(waga ").append(mass).append(") ");
 		sbuf.append("(grodStart ").append(sourceTown).append(") ");
 		sbuf.append("(grodKoniec ").append(destinationTown).append(")");
+		sbuf.append("(iteracjaStartDostarczenie ").append(this.startDeliveryIteration).append(")");
 		sbuf.append(")");
 		return sbuf.toString();
 	}

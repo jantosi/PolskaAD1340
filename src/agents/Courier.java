@@ -22,33 +22,33 @@ public class Courier extends Agent {
     
     /**
      * Udźwig.
-     * @var int
      */
     protected int capacity;
     
     /**
      * Lista paczek.
-     * @var ArrayList<Pack>
      */
     protected ArrayList<String> packages;
     
     /**
      * Statystyki posłańca.
-     * @var CourierStatistics_Interface
      */
     protected CourierStatistics_Interface statistics;
     
     /**
      * Koń.
-     * @var Horse
      */
     protected String horse;
-    
+    protected int deliveredPacks;
+    protected int allPacks;
+    protected int[] deliveryTimes;
+    protected double deliveredToAll;
+    protected double meanDeliveryTime;
     
     public Courier() {
     	this.mapFrame = new MapFrame();
     	this.packages = new ArrayList<String>();
-    	
+    	this.deliveryTimes = new int[0];
     }
     
     /**
@@ -66,6 +66,7 @@ public class Courier extends Agent {
         this.fieldOfView = 1;
         this.possibleMove = 1;
         this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1088);
+        this.deliveryTimes = new int[0];
     }
     
     
@@ -84,6 +85,24 @@ public class Courier extends Agent {
 			this.target = !pv.getFactSlot("cel").toString().equalsIgnoreCase("nil")? pv.getFactSlot("cel").toString() : null;
 			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
 			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
+			this.deliveredPacks = pv.getFactSlot("dostarczonePaczki").intValue();
+			this.allPacks = pv.getFactSlot("otrzymanePaczki").intValue();
+			
+			String deliveryTimesTmp = pv.getFactSlot("czasyDostarczenia").toString();
+			String[] deliveryTimesTmp2 = deliveryTimesTmp.replace("(", "").replace(")", "").split(" ");
+			this.deliveryTimes = new int[deliveryTimesTmp2.length];
+			double meanTime = 0;
+			for (int i = 0; i < deliveryTimesTmp2.length; i++) {
+				if (!deliveryTimesTmp2[i].equals("")) {
+					this.deliveryTimes[i] = Integer.valueOf(deliveryTimesTmp2[i]);
+					meanTime += this.deliveryTimes[i]; 
+				}
+			}
+			this.meanDeliveryTime = meanTime/(double)this.deliveredPacks;
+			
+			if (this.allPacks != 0) {
+				this.deliveredToAll = (double)this.deliveredPacks / (double)this.allPacks * 100.0;
+			}
 			
 			String packsTmp = pv.getFactSlot("paczki").toString();
 			String[] packs = packsTmp.replace("(", "").replace(")", "").split(" ");
@@ -136,43 +155,14 @@ public class Courier extends Agent {
         return this;
     }
     
-    /**
-     * Dostarczanie przesyłki.
-     * @param Pack pack
-     * @return Courier
-     * @TODO Obsługa przypadku, w którym próbujemy dostarczyć przesyłkę, której nie ma przy sobie.
-     */
-	public Courier deliveryPackage(Pack pack) {
-		// Zwiększenie wielkości mieszka.
-		this.setGold(this.getGold() + pack.getPrice());
-		// Zwiększenie przychodu.
-		this.getStatistics().setIncome(this.getStatistics().getIncome() + pack.getPrice());
-		// Zwiększenie zysku.
-		this.getStatistics().setProfit(this.getStatistics().getProfit() + pack.getPrice());
-		// Zwiększenie liczby dostarczonych przesyłek.
-		this.getStatistics().setNumberOfDeliveriedPacks(this.getStatistics().getNumberOfDeliveriedPacks() + 1);
-		// Zwiększenie całkowitego czasy dostawy.
-		this.getStatistics().setTotalDeliveryTime(this.getStatistics().getTotalDeliveryTime() + pack.getDeliveryTime());
-
-		return this;
-	}
     
     
-    /**
-     * Setter dla statystyk posłańca.
-     * @param CourierStatistics_Interface statistics
-     * @return Courier
-     */
     public Courier setStatistics(CourierStatistics_Interface statistics) {
         this.statistics = statistics;
         
         return this;
     }
     
-    /**
-     * Getter dla statystyk posłańca.
-     * @return CourierStatistics_Interface
-     */
     public CourierStatistics_Interface getStatistics() {
         return this.statistics;
     }
@@ -194,6 +184,16 @@ public class Courier extends Agent {
 			}
 			buffer.append(")");
 		}
+		
+		if (this.deliveryTimes.length > 0) {
+			buffer.append(" ( czasyDostarczenia ");
+			for (int i = 0; i < this.deliveryTimes.length; i++) {
+				buffer.append(this.deliveryTimes[i]);
+				buffer.append(" ");
+			}
+			buffer.append(")");
+		}
+		
 		if (horse != null) {
 			buffer.append(" ( kon ");
 			buffer.append(this.horse).append(" )");
@@ -212,6 +212,14 @@ public class Courier extends Agent {
 		buffer.append(this.energyLoss);
 		buffer.append(" ) ( odnawianieEnergii ");
 		buffer.append(this.energyRecovery);
+		buffer.append(" ) ( dostarczonePaczki ");
+		buffer.append(this.deliveredPacks);
+		buffer.append(" ) ( otrzymanePaczki ");
+		buffer.append(this.allPacks);
+		buffer.append(" ) ( dostarczoneDoOtrzymane ");
+		buffer.append(this.deliveredToAll);
+		buffer.append(" ) ( sredniCzasDostarczenia ");
+		buffer.append(this.meanDeliveryTime);
 		buffer.append(" ) ( zloto ");
 		buffer.append(this.gold);
 		buffer.append(" ) ( mozliwyRuch ");

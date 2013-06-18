@@ -221,7 +221,7 @@
     (close)
 )
 
-;jesli jest na platnej drodze i ma mniej niz 40 pkt. energii to zawsze odpoczywa 3 iteracje, bo mu sie najlepiej oplaca to
+;jesli jest na platnej drodze i ma mniej niz 40 pkt. energii to zawsze odpoczywa 5 iteracji, bo mu sie najlepiej oplaca to
 (defrule poslaniecOdpoczywaj (declare (salience 100))
     (poslaniec (id ?id)(energia ?energia)(idKratki ?idKratki))
     (droga (id ?drogaId)(idKratki ?idKratki)(platna ?platna))
@@ -231,9 +231,9 @@
 =>
     (open "src/clips/agentResults.txt" resultFile "a")
 
-    (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 3))))   
+    (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 5))))   
     (assert (podjetoAkcje))
-    (printout resultFile "Agent: " ?id " bedzie odpoczywal 8 iteracje poniewaz szybko sie zregeneruje na tej drodze" crlf) 
+    (printout resultFile "Agent: " ?id " bedzie odpoczywal 5 iteracji poniewaz szybko sie zregeneruje na tej drodze" crlf) 
  
     (close)
 )
