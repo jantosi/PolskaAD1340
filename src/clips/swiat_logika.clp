@@ -167,16 +167,16 @@
 (defrule przemieszczaniePoDrodze (declare (salience 1))
     (or	
 		(and 
-            ?agent <- (poslaniec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
+            ?agent <- (poslaniec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
 		    (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
         )
-        ?agent <- (rycerz (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
-		?agent <- (drwal (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
-		?agent <- (kupiec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
-		?agent <- (zlodziej (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
-		?agent <- (smok (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE))
+        ?agent <- (rycerz (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
+		?agent <- (drwal (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
+		?agent <- (kupiec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
+		?agent <- (zlodziej (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
+		?agent <- (smok (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
 	)
-    ?droga <- (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrOdc)(maxOdcinek ?maxOdcinek))    
+    ?droga <- (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrOdc)(maxOdcinek ?maxOdcinek)(platna ?platna))    
     ?akcja <- (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?ileKratek)(docelowyGrod ?cel))
     (iteracja ?iteracja)
     (not (akcjaOdpoczywanie (idAgenta ?id)))
@@ -236,10 +236,14 @@
         
         (bind ?tmp (nth$ 1 (find-fact ((?k kratka))(eq ?k:id ?nowaKratkaId))))
     
-                
+        (bind ?kosztPrzejscia 0)
+         (if (eq ?platna TRUE)
+         then
+             (bind ?kosztPrzejscia (* ?ilePrzesunac 1))
+         )       
         ;przesuwamy agenta odejmujac mu przy tym punkty ruchu
-        (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac))(energia (- ?energia ?potrzebnaEnergia)))  
-        (printout resultFile "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId " x: " (fact-slot-value ?tmp pozycjaX) " y: " (fact-slot-value ?tmp pozycjaY) ", ile kratek: " ?ilePrzesunac ", strata energii: " ?potrzebnaEnergia crlf) 
+        (modify ?agent (idKratki ?nowaKratkaId)(mozliwyRuch (- ?mozliwyRuch ?ilePrzesunac))(energia (- ?energia ?potrzebnaEnergia))(zloto (- ?zloto ?kosztPrzejscia)) )  
+        (printout resultFile "Przesunieto agenta: " ?id " wzdluz drogi: " ?drogaId ", stara kratka: " ?idKratki ", nowa: " ?nowaKratkaId " x: " (fact-slot-value ?tmp pozycjaX) " y: " (fact-slot-value ?tmp pozycjaY) ", ile kratek: " ?ilePrzesunac ", strata energii: " ?potrzebnaEnergia ", koszt przejscia: " ?kosztPrzejscia crlf) 
         
         ;po przesunieciu agenta znow musimy wyznaczyc dodatek predkosci zwiazany z polozeniem na nowym terenie
         (retract ?modyfikacjaPredkosci)   

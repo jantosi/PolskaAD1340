@@ -57,7 +57,7 @@ public class Courier extends Agent {
     public Courier(String id, String pathToClipsFile, CourierStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
         super(id, pathToClipsFile);
 
-        this.capacity = 100;
+        this.capacity = 15;
         this.packages = new ArrayList<String>();
         this.setHorse(null);
         this.statistics = stat;
