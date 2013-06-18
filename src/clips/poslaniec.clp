@@ -35,3 +35,34 @@
     (printout resultFile "Agent: " ?id " kontuunuje podroz do grodu: " ?cel crlf)   
     (close)
 )
+
+;kupuje konia w grodze jesli go nie mam i jesli mam kase na niego
+(defrule poslaniecKupKoniaWGrodzie
+    ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(zloto ?zloto)(kon ?kon))
+    ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
+    (test (eq ?kon nil))
+    (not (podjetoAkcje))
+=>
+    (open "src/clips/agentResults.txt" resultFile "a")     
+    
+    ;znajduje najtanszego konia
+    (bind $?dostepneKonie (create$ (find-all-facts ((?k kon))(eq ?k:grod ?idGrodu))))
+    (bind ?najtanszyKon (nth$ 1 $?dostepneKonie))
+    (loop-for-count (?i 2 (length $?dostepneKonie)) do
+        (bind ?aktualKon (nth$ ?i $?dostepneKonie))   
+        (if (< (fact-slot-value ?aktualKon cena) (fact-slot-value ?najtanszyKon cena))
+        then
+            (bind ?najtanszyKon ?aktualKon)
+        )
+    )
+    
+    ;jesli ma kase na dowolnego konia to go kupuje - kupuje zawsze najtanszego
+    (if (> ?zloto (fact-slot-value ?najtanszyKon cena))
+    then
+        (printout resultFile "Agent: " ?id " kupi konia: " (fact-slot-value ?najtanszyKon id) " za cene: " (fact-slot-value ?najtanszyKon cena) crlf)
+        (assert (kupienieKonia (idAgenta ?id)(idKonia (fact-slot-value ?najtanszyKon id))))  
+        (assert (podjetoAkcje))       
+    )       
+       
+    (close)
+)

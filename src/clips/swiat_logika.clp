@@ -12,11 +12,12 @@
 ;regula okresla parametry poslanca po zakupieniu konia, czyli
 ;po sprawdzeniu istnienia faktu kupienieKonia
 (defrule sprawdzKupienieKoniaPoslaniec (declare (salience 4))
-    ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
+    ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon)(zloto ?zloto))
     ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
-    ?konik <- (kon(id ?kupionyKon))
+    ?konik <- (kon(id ?kupionyKon)(cena ?cena))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
+    (open "src/clips/results.txt" resultFile "a")
     ;pobieramy index kupionego konia z bazy wiedzy        
     (bind ?kupionyKon (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kupionyKon))))        
      
@@ -24,28 +25,32 @@
     (bind ?konId (fact-slot-value ?kupionyKon id))        
     (bind ?konUdzwig (fact-slot-value ?kupionyKon udzwig))
     (bind ?konPredkosc (fact-slot-value ?kupionyKon predkosc))        
-    
-    ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
-    (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc) (kon ?konId))   
+    (if (> ?zloto ?cena)
+    then
+        ;modyfikujemy parametry poslanca uzwgledniajac zakupionego konia
+        (modify ?poslaniec (udzwig ?konUdzwig) (predkosc ?konPredkosc) (poleWidzenia ?konPredkosc)(kon ?konId)(zloto (- ?zloto ?cena)))   
         
-    (open "src/clips/results.txt" resultFile "a")
-    (printout resultFile "Poslaniec: " ?poslaniecId " kupil konia o predkosci: " ?konPredkosc crlf)
-    (close resultFile)
+        (printout resultFile "Poslaniec: " ?poslaniecId " kupil konia o predkosci: " ?konPredkosc crlf)
+     
+        ;kupiony kon nie posiada juz idGrodu
+        (modify ?konik (grod nil))
+            
+        ;jak poslaniec kupi konia to nalezy jeszcze raz wywolac regule obliczajaca straty energii
+        ;co robimy poprzez usuniecie akcji blokujacej: modyfikacjaStratEnergiiPoslanca
+        (bind ?czyModyfikacjaPoslanca (any-factp ((?m modyfikacjaStratEnergiiPoslanca)) (eq ?m:idPoslanca ?poslaniecId)))
+        (if (eq ?czyModyfikacjaPoslanca TRUE)
+        then
+            (bind ?modyfikacjaStratEnergiiPoslancaId (nth$ 1 (find-fact ((?m modyfikacjaStratEnergiiPoslanca)) (eq ?m:idPoslanca ?poslaniecId))))     
+            (retract ?modyfikacjaStratEnergiiPoslancaId )  
+        )
+    else
+        (printout resultFile "Poslaniec: " ?poslaniecId " chcial kupic konia ale nie mial odpowiedniej ilosci zlota" crlf)     
+    )
     
     ;usuwamy akcje kupienia konia        
     (retract ?kupienieKonia)
     
-    ;kupiony kon nie posiada juz idGrodu
-    (modify ?konik (grod nil))
-    
-    ;jak poslaniec kupi konia to nalezy jeszcze raz wywolac regule obliczajaca straty energii
-    ;co robimy poprzez usuniecie akcji blokujacej: modyfikacjaStratEnergiiPoslanca
-    (bind ?czyModyfikacjaPoslanca (any-factp ((?m modyfikacjaStratEnergiiPoslanca)) (eq ?m:idPoslanca ?poslaniecId)))
-    (if (eq ?czyModyfikacjaPoslanca TRUE)
-    then
-        (bind ?modyfikacjaStratEnergiiPoslancaId (nth$ 1 (find-fact ((?m modyfikacjaStratEnergiiPoslanca)) (eq ?m:idPoslanca ?poslaniecId))))     
-        (retract ?modyfikacjaStratEnergiiPoslancaId )  
-    )
+    (close resultFile)
 )
 
 ;regula aktualizujaca straty energii poslanca z uwzglednieniem paczek jakie niesie
@@ -77,7 +82,7 @@
         (bind ?konIndex (nth$ 1 (find-fact ((?konTmp kon)) (eq ?konTmp:id ?kon))))
         (bind ?konZmeczenieJezdzcy (fact-slot-value ?konIndex zmeczenieJezdzcy))
         
-        (bind ?strataEnergii (round (- ?strataEnergii (* ?strataEnergii ?konZmeczenieJezdzcy))))
+        (bind ?strataEnergii (round (- ?strataEnergii (* ?strataEnergii (/ ?konZmeczenieJezdzcy 100)))))
     )    
     
     (open "src/clips/results.txt" resultFile "a")
