@@ -78,7 +78,7 @@
 (deftemplate rozbojnicy
     (slot id)
 	(slot idKratki) ;kratka, na ktorej sie znajduja
-	(slot zabieraniePaczek) ;procent paczek, ktore zabieraja poslancom
+	(slot zabieranieEnergii) ;procent energii, ktora zabieraja agentom
 	(slot zabieranieZlota) ;procent zlota, jakie zabieraja agentom
 )
 

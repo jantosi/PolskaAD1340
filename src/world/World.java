@@ -121,12 +121,12 @@ public class World {
             
             String id = "rozbojnicy" + (index+1);
             int numberOfBandits = 0;
-            double packageLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
-            double goldLoss = random.nextDouble() * (0.6 - 0.3) + 0.3;
+            double energyLoss = random.nextDouble() * 0.2;
+            double goldLoss = random.nextDouble() * 0.2;
 
             while (numberOfBandits < (actualRoad.get(0).getMaxPartNo() * actualRoad.get(0).getRobberyProbability())) {
                 int frame = actualRoad.get(random.nextInt(actualRoad.size())).getMapFrame();
-                Bandits bandits = new Bandits(id, packageLoss, goldLoss, this.getFrameById(frame), this.om);
+                Bandits bandits = new Bandits(id, energyLoss, goldLoss, this.getFrameById(frame), this.om);
                 this.bandits.add(bandits);
                 numberOfBandits++;
             }

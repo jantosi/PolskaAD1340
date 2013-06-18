@@ -6,15 +6,15 @@ import polskaad1340.window.OknoMapy;
 import CLIPSJNI.PrimitiveValue;
 
 public class Bandits {
-	private double packageLoss;
+	private double energyLoss;
 	private double goldLoss;
 	private String id;
 	private MapFrame mapFrame;
 	private ObiektPierwszegoPlanu opp;
 	
 
-	public Bandits(String id, double packageLoss, double goldLoss, MapFrame mapFrame, OknoMapy om) {
-		this.packageLoss = packageLoss;
+	public Bandits(String id, double energyLoss, double goldLoss, MapFrame mapFrame, OknoMapy om) {
+		this.energyLoss = energyLoss;
 		this.goldLoss = goldLoss;
 		this.mapFrame = mapFrame;
 		this.id = id;
@@ -27,8 +27,8 @@ public class Bandits {
 		try {
 			this.id = pv.getFactSlot("id").toString();
 			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
-			this.goldLoss = pv.getFactSlot("zabieraniePaczek").floatValue();
-			this.packageLoss = pv.getFactSlot("zabieranieZlota").floatValue();
+			this.goldLoss = pv.getFactSlot("zabieranieEnergii").floatValue();
+			this.energyLoss = pv.getFactSlot("zabieranieZlota").floatValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,18 +40,12 @@ public class Bandits {
 		sbuf.append("(rozbojnicy ");
 		sbuf.append("(id ").append(this.id).append(") ");
 		sbuf.append("(idKratki ").append(mapFrame.getId()).append(") ");
-		sbuf.append("(zabieraniePaczek ").append(packageLoss).append(") ");
+		sbuf.append("(zabieranieEnergii ").append(energyLoss).append(") ");
 		sbuf.append("(zabieranieZlota ").append(goldLoss).append(")");
 		sbuf.append(")");
 		return sbuf.toString();
 	}
 
-	public double getPackageLoss() {
-		return packageLoss;
-	}
-	public void setPackageLoss(double packageLoss) {
-		this.packageLoss = packageLoss;
-	}
 	public double getGoldLoss() {
 		return goldLoss;
 	}
@@ -75,6 +69,12 @@ public class Bandits {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public double getEnergyLoss() {
+		return energyLoss;
+	}
+	public void setEnergyLoss(double energyLoss) {
+		this.energyLoss = energyLoss;
 	}
 
 }

@@ -4,6 +4,7 @@
 (deftemplate zregenerowanoAgenta (slot idAgenta))
 (deftemplate okreslonoWidocznosc (slot idAgenta))
 (deftemplate dzialanieKleskiNaAgenta(slot idAgenta) (slot idKleski))
+(deftemplate dzialanieRozbojnikaNaAgenta(slot idAgenta))
 (deftemplate kleskaLas(slot idKleski))
 (deftemplate kleskaGrod(slot idKleski))
 (deftemplate uaktualnianieKlesk(slot idKleski))
@@ -938,8 +939,8 @@
         (modify ?drwal (siekiera ?idSiekiery)
         (zloto (- ?zlotoDrwala ?cenaSiekiery))  
         )    
-        ;naprawiamy siekierę. Przecież musi być nowa :)
-        (modify ?nowaSiekiera (zuzycie 0))
+        ;naprawiamy siekierę. Przecież musi być nowa :) - nie musi :P
+        ;(modify ?nowaSiekiera (zuzycie 0))
         (printout resultFile "Drwal: " ?id " kupil siekiere typu " ?typSiekiery " za " ?cenaSiekiery " sztuk zlota." crlf)
     else
         (printout resultFile "Drwal: " ?id "ma za malo zlota zeby kupić siekiere. " crlf)
@@ -971,17 +972,6 @@
     (printout resultFile "Drwal o id: " ?id " sprzedal drewno" crlf)
     (retract ?akcja)
     (close)
-)
-; TODO: Sprawdzenie, czy ma miejsce w magazynie.
-(defrule kupTowarZGrodu (declare (salience 4))
-    ?agent <- (kupiec (id ?id)(pojemnoscMagazynu ?pojemnosc)(przedmioty ?przedmioty))
-    ?grod <- (grod (nazwa ?idGrodu))
-    ?akcja <- (akcjaKupowanie (idAgenta ?id)(idPrzedmiotu ?idPrzedmiotu)(idSprzedawcy ?idGrodu))
-=>
-(open "src/clips/results.txt" resultFile "a")
-
-
-(close)
 )
 
 ;regula, ktora okresla jakie kratki widzi dany agent
@@ -1024,6 +1014,33 @@
     (printout resultFile "Agent: " ?agentId " widzi " ?kratki " kratek" crlf)
     (close)
 )
+
+;REGULA DO ROZBOJNIKOW
+(defrule rozbojnicyDzialanie (declare (salience 10))
+    (or	
+		?agent <- (poslaniec (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
+		?agent <- (rycerz (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
+		?agent <- (drwal (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
+		?agent <- (kupiec (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
+		?agent <- (zlodziej (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
+		?agent <- (smok (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
+	)
+    (rozbojnicy (id ?idRozboj) (idKratki ?idKratki) (zabieranieEnergii ?odbiorEnergii)(zabieranieZlota ?odbiorZlota))
+    (not (dzialanieRozbojnikaNaAgenta (idAgenta ?id )))
+=>
+   (open "src/clips/results.txt" resultFile "a")
+       
+   (bind ?strataE (round (* ?odbiorEnergii ?energia)))
+   (bind ?strataZlota (round (* ?odbiorZlota ?zloto)))
+           
+   (modify ?agent (energia (- ?energia ?strataE))(zloto (- ?zloto ?strataZlota)))   
+   (assert (dzialanieRozbojnikaNaAgenta (idAgenta ?id )))
+   (printout resultFile "Rozbojnicy o id: " ?idRozboj " zabrali agentowi: " ?id " "?strataZlota" sztuk zlota oraz " ?strataE " pkt. energii" crlf)       
+       
+   (close) 
+)
+
+
 ; REGULY DO KLESKI
 ; niszczenie lasu
 (defrule kleskaNiszczLas (declare (salience 10))
