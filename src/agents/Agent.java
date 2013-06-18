@@ -87,7 +87,7 @@ abstract public class Agent implements Cloneable{
         this.setEnergyLoss(2);
         this.setEnergyRecovery(2);
         this.setId(id);
-        this.gold = 100;
+        this.gold = 25;
         this.pathToClipsFile = pathToClipsFile;
     }
     

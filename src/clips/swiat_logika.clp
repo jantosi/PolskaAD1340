@@ -546,19 +546,44 @@
    (close)     
 )
 
-; TODO: Sprawdzenie, czy poslaniec moze wziac wiecej paczek.
+
 (defrule wezPaczke (declare (salience 4))
     ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki $?paczki))
     ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
     ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
+    ?modyfikacja <- (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
 =>
     (open "src/clips/results.txt" resultFile "a")
-    (modify ?agent (paczki $?paczki ?idPaczki))
-    (modify ?paczka (grodStart nil))
     
-    (retract ?akcja)
+    (bind ?sumaWagPaczek 0)
+    (loop-for-count (?i 1 (length $?paczki)) do 
+        (printout resultFile "Weszlo" crlf)
+        ;pobieramy id kolejnej, posiadanej przez agenta paczki        
+        (bind ?paczkaId (nth$ ?i $?paczki))
+        
+        ;znajdujemy index faktu paczki w bazie wiedzy
+        (bind ?paczkaTmp (nth$ 1 (find-fact ((?p paczka))(eq ?p:id ?paczkaId))))
+                
+        (bind ?paczkaWaga (fact-slot-value ?paczkaTmp waga))
+        (bind ?sumaWagPaczek (+ ?sumaWagPaczek ?paczkaWaga))                
+    )
+        
+    (bind ?sumaWagPaczek (+ ?sumaWagPaczek ?waga))    
+    (if (>= ?udzwig ?sumaWagPaczek)
+    then        
+        (printout resultFile "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
+        (modify ?agent (paczki $?paczki ?idPaczki))
+        (modify ?paczka (grodStart nil))
+        
+        ;jeszcze raz musimy zmodyfikowac jego straty energii        
+        (retract ?modyfikacja)
+    else
+        (printout resultFile "Poslaniec : " ?id " chcial wziac paczke ale nie mial juz miejsca" crlf)     
+    )
+   
 
-    (printout resultFile "Poslaniec : " ?id " wzial paczke o id: " ?idPaczki crlf)
+    (retract ?akcja)
+    
     (close)
 )
 

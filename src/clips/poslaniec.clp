@@ -1,5 +1,10 @@
+;kolejnosc podejmowanych decyzji
+; 1. zawsze wybieram trase jesli nie mam celu
+; 2. jak mam cel to ide
+; 3. jak jestem w grodzi to kupuje konia - oczywiscie jak mam zloto na niego
+; 4. biore paczke
 
-(defrule poslaniecWybierzTrase
+(defrule poslaniecWybierzTrase (declare (salience 20))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(skadGrod ?skadGrod)(dokadGrod ?dokadGrod)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
@@ -23,7 +28,7 @@
    (close)
 )
 
-(defrule poslaniecIdz
+(defrule poslaniecIdz (declare (salience 19))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
@@ -37,7 +42,7 @@
 )
 
 ;kupuje konia w grodze jesli go nie mam i jesli mam kase na niego
-(defrule poslaniecKupKoniaWGrodzie
+(defrule poslaniecKupKoniaWGrodzie (declare (salience 10))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(zloto ?zloto)(kon ?kon))
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (test (eq ?kon nil))
@@ -66,3 +71,50 @@
        
     (close)
 )
+
+;zawsze bierze najciezsze paczki i zawsze tylko jedna
+(defrule poslaniecWezPaczke (declare (salience 5))
+    ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(zloto ?zloto)(paczki $?paczki)(udzwig ?udzwig))
+    ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
+    (not (podjetoAkcje))
+    (test (< (length $?paczki) 1))
+=>
+    (open "src/clips/agentResults.txt" resultFile "a")
+    
+    ;znajduje najciezsza paczke, ktora jest w stanie udzwignac
+    (bind $?dostepnePaczki (create$ (find-all-facts ((?p paczka))(eq ?p:grodStart ?idGrodu))))
+    
+    (bind ?czyJest FALSE)
+    (bind ?najciezszaPaczka (nth$ 1 $?dostepnePaczki))
+    (loop-for-count (?i 2 (length $?dostepnePaczki)) do
+        (bind ?aktualPaczka (nth$ ?i $?dostepnePaczki))   
+        (if  (>= ?udzwig (fact-slot-value ?aktualPaczka waga) )
+        then   
+            (bind ?czyJest TRUE)
+            
+            (if (> (fact-slot-value ?aktualPaczka waga) (fact-slot-value ?najciezszaPaczka waga))            
+            then
+               (bind ?najciezszaPaczka ?aktualPaczka)            
+            )
+        )
+    )   
+    
+    (if  (>= ?udzwig (fact-slot-value ?najciezszaPaczka waga) )
+    then      
+         (bind ?czyJest TRUE)       
+    )   
+    (if (eq ?czyJest TRUE)
+    then  
+            
+        (assert (akcjaWezPaczke (idAgenta ?id)(idPaczki (fact-slot-value ?najciezszaPaczka id))))
+    
+        (printout resultFile "Agent: " ?id " bedzie chcial wziac paczke: " (fact-slot-value ?najciezszaPaczka id) " o wadze: " (fact-slot-value ?najciezszaPaczka waga) crlf)
+        (assert (podjetoAkcje))       
+    else
+        (printout resultFile "Agent: " ?id " nie znalazl w grodzie zadnej paczki, ktora moglby udzwignac" crlf)   
+    )    
+    
+    (close)
+)
+
+
