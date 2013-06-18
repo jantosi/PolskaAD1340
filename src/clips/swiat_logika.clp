@@ -295,7 +295,29 @@
     (retract ?akcja)
     (close) 
 )
+;przesuwanie na kratke
+(defrule przesunNaKratke(declare (salience 1))
+(or	
+		(and
+            ?agent <- (poslaniec (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
+            (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
+        )		
+        ?agent <- (rycerz (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
+		?agent <- (drwal (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
+		?agent <- (kupiec (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
+		?agent <- (zlodziej (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
+		?agent <- (smok (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
+)
 
+?akcja <- (akcjaPrzesunNaKratke (idAgenta ?id) (idKratki ?nowaKratka))
+(not (akcjaOdpoczywanie (idAgenta ?id)))
+=>
+(modify ?agent (idKratki ?nowaKratka))
+ (open "src/clips/results.txt" resultFile "a")
+ (printout resultFile "Agent: " ?id " przeniesiony na kratke " ?nowaKratka  crlf)
+(close)
+(retract ?akcja)
+)
 
 ;przemieszczanie agentow po kratkach
 (defrule przemieszczanie (declare (salience 10))
@@ -793,7 +815,7 @@
 
 ;regula do sciecia drzew
 (defrule zetnijDrzewo (declare (salience 30))
-    ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) 
+    ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) (drewnoOgolem ?drewnoOgolem)
      (siekiera ?idSiekiery) (udzwig ?udzwig) ( maxUdzwig ?maxUdzwig) (energia ?energia) (strataEnergii ?strataEnergii))
     ?drzewo <- (drzewo (idKratki ?idKratki) (stan ?stanDrzewa) (rodzajDrzewa ?rodzajDrzewa)) 
     ?siekiera <- (siekiera (id ?idSiekiery) (typ ?typSiekiery) (zuzycie ?zuzycie))
@@ -885,6 +907,7 @@
                     (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b)
                             (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna))
                             (energia ( - ?energia (* 2 ?strataEnergii)))
+							(drewnoOgolem (+ ?drewnoOgolem 2))
                             (siekiera nil)
                     )
                  (printout resultFile "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
@@ -894,6 +917,7 @@
                     (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b)
                             (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna))
                             (energia ( - ?energia (* 2 ?strataEnergii)))
+							(drewnoOgolem (+ ?drewnoOgolem 2))
                     )
                 )
                 (printout resultFile "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
@@ -928,6 +952,7 @@
                     (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b ?idDrewna_c)
                             (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna ?wagaDrewna))
                             (energia ( - ?energia (* 2 ?strataEnergii)))
+							(drewnoOgolem (+ ?drewnoOgolem 3))
                             (siekiera nil)
                     )
                  (printout resultFile "Drwal: " ?id " stracil swa siekiere " ?idSiekiery". " crlf)
@@ -937,6 +962,7 @@
                     (modify ?drwal (scieteDrewno ?drewnoDrwala ?idDrewna_a ?idDrewna_b ?idDrewna_c )
                             (udzwig  (+ ?udzwig ?wagaDrewna ?wagaDrewna ?wagaDrewna))
                             (energia ( - ?energia (* 2 ?strataEnergii)))
+							(drewnoOgolem (+ ?drewnoOgolem 3))
                     )
                 )
                 (printout resultFile "Drwal: " ?id " scial drzewo na kratce " ?idKratki " " crlf)
@@ -1017,10 +1043,13 @@
     
     (bind ?drewnoId (nth$ (+ ?i 1) $?drewno))
  
+  (if (neq ?drewnoId nil)
+then
     (bind ?cena (fact-slot-value (nth$ 1 (find-fact ((?d drewno))(eq ?d:id ?drewnoId))) cena ) )
     (bind ?zysk (+ ?zysk ?cena))
 
    (retract (nth$ 1(find-fact ((?d drewno))(eq ?d:id ?drewnoId))))
+)
 )
     (modify ?drwal(scieteDrewno nil) (udzwig 0) (zloto (+ ?zlotoDrwala ?zysk)))
     (printout resultFile "Drwal o id: " ?id " sprzedal drewno" crlf)

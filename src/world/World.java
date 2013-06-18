@@ -69,7 +69,9 @@ public class World {
     	
     	WoodmanStatistics ws = new WoodmanStatistics();
     	MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Woodman woodman = new Woodman("drwal1", "src/clips/poslaniec.clp", ws, mapFrame, om);
+        Woodman woodman = new Woodman("drwal1", "src/clips/drwal_1.clp", ws, mapFrame, om);
+        //siekierka dla drwala
+        woodman.setAx("siekiera1grod1");
         
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", mapFrame, om);

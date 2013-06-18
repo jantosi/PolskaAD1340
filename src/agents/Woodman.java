@@ -3,6 +3,7 @@ package agents;
 import items.Ax;
 import items.Item;
 import items.Vehicle;
+import items.Wood;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,16 @@ public class Woodman extends Agent {
      * @var ArrayList<Wood>
      */
     private ArrayList<String> woods;
+    private int allWoods;
     
+    public int getAllWoods() {
+		return allWoods;
+	}
+
+	public void setAllWoods(int allWoods) {
+		this.allWoods = allWoods;
+	}
+	
     /**
      * Statystyki drwala.
      * @var WoodmanStatistics_Interface
@@ -52,6 +62,7 @@ public class Woodman extends Agent {
     public Woodman() {
     	this.mapFrame = new MapFrame();
     	this.woods = new ArrayList<String>();
+		this.woods.add("");
     }
     
     public Woodman(String id, String pathToClipsFile, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
@@ -77,6 +88,7 @@ public class Woodman extends Agent {
 			this.ax = !pv.getFactSlot("siekiera").toString().equalsIgnoreCase("nil")? pv.getFactSlot("siekiera").toString() : null;
 			this.vehicle = !pv.getFactSlot("woz").toString().equalsIgnoreCase("nil")? pv.getFactSlot("woz").toString() : null;
 			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
+			this.allWoods =pv.getFactSlot("drewnoOgolem").intValue();
 			
 			String woodsTmp = pv.getFactSlot("scieteDrewno").toString();
 			String[] woods = woodsTmp.replace("(", "").replace(")", "").split(" ");
@@ -122,7 +134,22 @@ public class Woodman extends Agent {
 
 			}
 		}
-		
+		//drewno
+		if(!woods.isEmpty()){
+		for (String woodId:woods){
+			if ( !woodId.equals("")){
+			try {
+				String evalString = "(find-all-facts ((?w drewno))(eq ?w:id " + woodId + "))";
+				PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+				Wood vehicleTmp = new Wood(pv1.get(0));
+				foundItems.add(vehicleTmp);
+			} catch (Exception e) {
+
+			}
+			}
+		}
+		}
+	
 		return foundItems;
     }
     
@@ -174,12 +201,12 @@ public class Woodman extends Agent {
 		buffer.append(" ) ");
 		
 		if (ax != null) {
-			buffer.append(" ( siekiera ");
+			buffer.append("( siekiera ");
 			buffer.append(this.ax);
 			buffer.append(" ) ");
 		}
 		if (vehicle != null) {
-			buffer.append(" ( woz ");
+			buffer.append("( woz ");
 			buffer.append(this.vehicle);
 			buffer.append(" ) ");
 		}
@@ -205,6 +232,8 @@ public class Woodman extends Agent {
 		buffer.append(this.energyLoss);
 		buffer.append(" ) ( odnawianieEnergii ");
 		buffer.append(this.energyRecovery);
+		buffer.append(" ) ( drewnoOgolem ");
+		buffer.append(this.allWoods);
 		buffer.append(" ) ( zloto ");
 		buffer.append(this.gold);
 		if (this.target != null) {

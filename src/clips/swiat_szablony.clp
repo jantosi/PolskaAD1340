@@ -164,6 +164,7 @@
 	(slot siekiera) 
 	(slot woz) 
 	(multislot scieteDrewno) 
+	(slot drewnoOgolem)
 	(slot id) 
 	(slot mozliwyRuch) 
 	(slot idKratki) 
@@ -270,7 +271,10 @@
 	(slot idAgenta) ;chodzi o id z�odzieja
 	(slot rozmiarSkoku) ;chodzi o okreslenie rozmiarow skoku: ma�y, �redni, du�y 
 )
-
+(deftemplate akcjaPrzesunNaKratke
+    (slot idAgenta)
+    (slot idKratki)
+)
 ;AKCJE DRWAL
 (deftemplate akcjaZetnijDrzewo
 	(slot idAgenta) ;chodzi oczywi�cie o id drwala
