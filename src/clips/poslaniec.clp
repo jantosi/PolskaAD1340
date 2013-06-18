@@ -233,7 +233,7 @@
 
     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 3))))   
     (assert (podjetoAkcje))
-    (printout resultFile "Agent: " ?id " bedzie odpoczywal 3 iteracje poniewaz szybko sie zregeneruje na tej drodze" crlf) 
+    (printout resultFile "Agent: " ?id " bedzie odpoczywal 8 iteracje poniewaz szybko sie zregeneruje na tej drodze" crlf) 
  
     (close)
 )
