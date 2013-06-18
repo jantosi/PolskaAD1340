@@ -81,7 +81,7 @@ public class Courier extends Agent {
 			this.gold = pv.getFactSlot("zloto").intValue();
 			this.fieldOfView = pv.getFactSlot("poleWidzenia").intValue();
 			this.capacity = pv.getFactSlot("udzwig").intValue();
-			this.horse = pv.getFactSlot("kon").toString();
+			this.horse = !pv.getFactSlot("kon").toString().equalsIgnoreCase("nil") ? pv.getFactSlot("kon").toString() : null;
 			this.target = !pv.getFactSlot("cel").toString().equalsIgnoreCase("nil")? pv.getFactSlot("cel").toString() : null;
 			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
 			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
@@ -110,7 +110,6 @@ public class Courier extends Agent {
 		}
 
 		if (!this.packages.isEmpty()) {
-			System.out.println("weszlo");
 			for (String pack : this.packages) {
 				try {
 					if (!pack.equals("")) {
@@ -183,49 +182,48 @@ public class Courier extends Agent {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("(poslaniec (udzwig ");
+		buffer.append("(poslaniec ( udzwig ");
 		buffer.append(this.capacity);
-		buffer.append(")"); 
+		buffer.append(" )"); 
 		if (!this.packages.isEmpty()) {
-			buffer.append("(paczki ");
+			buffer.append(" ( paczki ");
 			for (int i = 0; i < this.packages.size(); i++) {
-				buffer.append(this.packages.get(i));
-				
-				if (i < this.packages.size() - 1) {
+				if (!this.packages.get(i).equals("")) {
+					buffer.append(this.packages.get(i));
 					buffer.append(" ");
 				}
 			}
 			buffer.append(")");
 		}
 		if (horse != null) {
-			buffer.append(" (kon ");
-			buffer.append(this.horse).append(")");
+			buffer.append(" ( kon ");
+			buffer.append(this.horse).append(" )");
 		}
-		buffer.append(" (id ");
+		buffer.append(" ( id ");
 		buffer.append(this.id);
-		buffer.append(") (poleWidzenia ");
+		buffer.append(" ) ( poleWidzenia ");
 		buffer.append(this.fieldOfView);
-		buffer.append(") (predkosc ");
+		buffer.append(" ) ( predkosc ");
 		buffer.append(this.velocity);
-		buffer.append(") (dodatekPredkosc ");
+		buffer.append(" ) ( dodatekPredkosc ");
 		buffer.append(this.extraVelocity);
-		buffer.append(") (energia ");
+		buffer.append(" ) ( energia ");
 		buffer.append(this.energy);
-		buffer.append(") (strataEnergii ");
+		buffer.append(" ) ( strataEnergii ");
 		buffer.append(this.energyLoss);
-		buffer.append(") (odnawianieEnergii ");
+		buffer.append(" ) ( odnawianieEnergii ");
 		buffer.append(this.energyRecovery);
-		buffer.append(") (zloto ");
+		buffer.append(" ) ( zloto ");
 		buffer.append(this.gold);
-		buffer.append(") (mozliwyRuch ");
+		buffer.append(" ) ( mozliwyRuch ");
 		buffer.append(this.possibleMove);
-		buffer.append(") (idKratki ");
+		buffer.append(" ) ( idKratki ");
 		buffer.append(this.mapFrame.getId());
 		if (this.target != null) {
-			buffer.append(") (cel ");
+			buffer.append(" ) ( cel ");
 			buffer.append(this.target);
 		}
-		buffer.append("))");
+		buffer.append(" ) )");
 		return buffer.toString();
 	}
 

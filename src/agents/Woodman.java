@@ -165,61 +165,54 @@ public class Woodman extends Agent {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("(drwal (udzwig ");
+		buffer.append("(drwal ( udzwig ");
 		buffer.append(this.capacity);
-		buffer.append(") ");
+		buffer.append(" ) ");
 		
-		buffer.append("(maxUdzwig ");
+		buffer.append("( maxUdzwig ");
 		buffer.append(this.maxCapacity);
-		buffer.append(") ");
+		buffer.append(" ) ");
 		
 		if (ax != null) {
-			buffer.append(" (siekiera ");
+			buffer.append(" ( siekiera ");
 			buffer.append(this.ax);
-			buffer.append(")");
+			buffer.append(" ) ");
 		}
 		if (vehicle != null) {
-			buffer.append(" (woz ");
+			buffer.append(" ( woz ");
 			buffer.append(this.vehicle);
-			buffer.append(")");
+			buffer.append(" ) ");
 		}
-		buffer.append(" (scieteDrewno ");
+		buffer.append("( scieteDrewno ");
 		for (int i = 0; i < this.woods.size(); i++) {
 			buffer.append(this.woods.get(i)).append(" ");
 		}
-		buffer.append(")");
-
-		buffer.append(" (id ");
+		buffer.append(") ( id ");
 		buffer.append(this.id);
-		buffer.append(")");
-
-		buffer.append(" (mozliwyRuch ");
+		buffer.append(" ) ( mozliwyRuch ");
 		buffer.append(this.possibleMove);
-		buffer.append(")");
-
-		buffer.append(" (idKratki ");
+		buffer.append(" ) ( idKratki ");
 		buffer.append(this.mapFrame.getId());
-		buffer.append(")");
-		buffer.append(" (poleWidzenia ");
+		buffer.append(" ) ( poleWidzenia ");
 		buffer.append(this.fieldOfView);
-		buffer.append(") (predkosc ");
+		buffer.append(" ) ( predkosc ");
 		buffer.append(this.velocity);
-		buffer.append(") (dodatekPredkosc ");
+		buffer.append(" ) ( dodatekPredkosc ");
 		buffer.append(this.extraVelocity);
-		buffer.append(") (energia ");
+		buffer.append(" ) ( energia ");
 		buffer.append(this.energy);
-		buffer.append(") (strataEnergii ");
+		buffer.append(" ) ( strataEnergii ");
 		buffer.append(this.energyLoss);
-		buffer.append(") (odnawianieEnergii ");
+		buffer.append(" ) ( odnawianieEnergii ");
 		buffer.append(this.energyRecovery);
-		buffer.append(") (zloto ");
+		buffer.append(" ) ( zloto ");
 		buffer.append(this.gold);
 		if (this.target != null) {
-			buffer.append(") (cel ");
+			buffer.append(" ) ( cel ");
 			buffer.append(this.target);
 		}
 		
-		buffer.append("))");
+		buffer.append(" ) )");
 		return buffer.toString();
 	}
 

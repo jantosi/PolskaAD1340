@@ -1,14 +1,28 @@
 package polskaad1340.window;
 
+import items.Item;
+
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 import polskaad1340.Inference;
 import world.Bandits;
 import world.Blockade;
 import world.Cataclysm;
+import world.MapFrame;
+import world.Town;
 import agents.Agent;
 
 public class ControlButtonsListeners {
@@ -26,6 +40,8 @@ public class ControlButtonsListeners {
 	private boolean bandits;
 	
 	private boolean changePrices;
+	
+	private MapFrame heighlitedTown;
 	
 	private class BtnNextIterListener implements ActionListener {
 		@Override
@@ -171,6 +187,118 @@ public class ControlButtonsListeners {
 		
 	}
 	
+	private class MenuBrowseListener extends MouseAdapter {
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			om.getMnBrowseAgents().removeAll();
+			for (Agent agent : inference.getWorld().getAgents()) {
+				JMenuItem newMenuItem = new AgentMenuItem(agent);
+				newMenuItem.addActionListener(new MenuBrowseAgentsListener());
+				
+				om.getMnBrowseAgents().add(newMenuItem);
+			}
+			
+			om.getMnBrowseTowns().removeAll();
+			Set<String> visitedTowns = new HashSet<String>();
+			for (Town town : inference.getWorld().getTowns()) {
+				if (!visitedTowns.contains(town.getId())) {
+					visitedTowns.add(town.getId());
+					JMenuItem newMenuItem = new TownMenuItem(town);
+					newMenuItem.addActionListener(new MenuBrowseTownsListener());
+					
+					om.getMnBrowseTowns().add(newMenuItem);
+				}
+			}
+		}
+		
+	}
+	
+	private class MenuBrowseAgentsListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (heighlitedTown != null) {
+				om.getBackgroundTileGrid().get(heighlitedTown.getY()).get(heighlitedTown.getX()).setBorder(null);
+				heighlitedTown = null;
+			}
+			
+			om.getBrowseDetailFrame().setVisible(false);
+			om.getBrowseDetailFrame().getContentPane().removeAll();
+			
+			om.getBrowseDetailFrame().setBounds(400, 100, 350, 350);
+			
+			JScrollPane scrollPanel = new JScrollPane();
+			scrollPanel.getVerticalScrollBar().setUnitIncrement(8);
+			om.getBrowseDetailFrame().getContentPane().add(scrollPanel);
+			
+			
+			Agent agentTmp = ((AgentMenuItem)((JMenuItem)e.getSource())).getAgent();
+			System.out.println(agentTmp.toString());
+			String tmp = agentTmp.toString().replaceAll("\\(\\w* ", "");
+			tmp = tmp.replaceAll(" \\) ", "</font><br>");
+			tmp = tmp.replaceAll("\\( ", "");
+			tmp = tmp.replaceAll(" ", " : <font color=\"green\">");
+			tmp = tmp.replaceAll("\\)", "");
+			StringBuffer buf = new StringBuffer();
+			buf.append("<html>")
+			   .append(tmp)
+			   .append("</html>");
+			
+			JLabel content = new JLabel(buf.toString());
+			content.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			scrollPanel.setViewportView(content);
+			
+			om.getBrowseDetailFrame().setTitle("Szczegoly " + agentTmp.getId());
+			om.getBrowseDetailFrame().setVisible(true);
+			om.getBrowseDetailFrame().setClosable(true);
+			om.getBrowseDetailFrame().validate();
+		}
+		
+	}
+	
+	private class MenuBrowseTownsListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (heighlitedTown != null) {
+				om.getBackgroundTileGrid().get(heighlitedTown.getY()).get(heighlitedTown.getX()).setBorder(null);
+				heighlitedTown = null;
+			}
+			om.getBrowseDetailFrame().setVisible(false);
+			om.getBrowseDetailFrame().getContentPane().removeAll();
+			om.getBrowseDetailFrame().setBounds(300, 100, 400, 320);
+			
+			JScrollPane scrollPanel = new JScrollPane();
+			scrollPanel.getVerticalScrollBar().setUnitIncrement(8);
+			om.getBrowseDetailFrame().getContentPane().add(scrollPanel);
+			
+			Town townTmp = ((TownMenuItem)((JMenuItem)e.getSource())).getTown();
+			StringBuffer buf = new StringBuffer();
+			buf.append("<html>");
+			buf.append(townTmp.toString()).append("<br><br>");
+			for (Item item : townTmp.getItems()) {
+				buf.append(item.toString()).append("<br>");
+			}
+			buf.append("</html>");
+				
+			JLabel content = new JLabel(buf.toString());
+			scrollPanel.setViewportView(content);
+			
+			MapFrame mapFrame = inference.getWorld().getFrameById(townTmp.getMapFrame());
+			om.setScrollFocusOn(mapFrame.getX(), mapFrame.getY());
+			om.getBackgroundTileGrid().get(mapFrame.getY()).get(mapFrame.getX()).setBorder(new LineBorder(Color.YELLOW, 3, true));
+			heighlitedTown = mapFrame;
+			
+			om.getBrowseDetailFrame().setTitle("Szczegoly " + townTmp.getId());
+			om.getBrowseDetailFrame().setVisible(true);
+			om.getBrowseDetailFrame().setClosable(true);
+			om.getBrowseDetailFrame().validate();
+
+		}
+		
+	}
+	
 	public ControlButtonsListeners(OknoMapy om, Inference inference) {
 		this.om = om;
 		this.inference = inference;
@@ -181,6 +309,8 @@ public class ControlButtonsListeners {
 		this.om.getTextFieldIter().setText(String.valueOf(inference.getActualIteration()));
 		om.getTextFieldAgent().setText("SWIAT");
 		this.agentsWhoInferedNum = 0;
+		
+		this.heighlitedTown = null;
 	}
 	
 	public void activateListeners() {
@@ -190,5 +320,9 @@ public class ControlButtonsListeners {
 		this.om.getBtnCataclysms().addActionListener(new BtnCataclysmsListener());
 		this.om.getBtnBandits().addActionListener(new BtnBanditsListener());
 		this.om.getBtnChangePrices().addActionListener(new BtnChangePricesListener());
+		
+		this.om.getMnBrowse().addMouseListener(new MenuBrowseListener());
+		this.om.getMnBrowseAgents().addActionListener(new MenuBrowseAgentsListener());
+		this.om.getMnBrowseTowns().addActionListener(new MenuBrowseTownsListener());
 	}
 }

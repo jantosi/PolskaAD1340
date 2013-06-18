@@ -18,7 +18,9 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
@@ -77,6 +79,10 @@ public final class OknoMapy extends javax.swing.JFrame {
     private JLabel lblChangePrices;
     private JButton btnChangePrices;
     private JLabel lblPricesChanged;
+    private JInternalFrame browseDetailFrame;
+    private JMenu mnBrowse;
+    private JMenu mnBrowseAgents;
+    private JMenu mnBrowseTowns;
 
     public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
@@ -137,7 +143,7 @@ public final class OknoMapy extends javax.swing.JFrame {
         this.tileSize = 32;
         this.defaultBorder = new BasicBorders.FieldBorder(Color.lightGray, new Color(0, true), new Color(0, true), new Color(0, true));
         jCheckBoxMenuItem1.setSelected(false);
-
+        
         addTileGridToWindow(createTileGrid(100, defaultBgTileID), overallBackgroundPanel);
 
         drawAllTiles();
@@ -416,6 +422,15 @@ public final class OknoMapy extends javax.swing.JFrame {
                 foregroundPanelMouseClicked(evt);
             }
         });
+        
+        browseDetailFrame = new JInternalFrame("Szczegoly");
+        browseDetailFrame.setBounds(0, 0, 700, 320);
+        browseDetailFrame.setLocation(300, 100);
+        getContentPane().add(browseDetailFrame);
+        browseDetailFrame.getContentPane().setLayout(new BoxLayout(browseDetailFrame.getContentPane(), BoxLayout.Y_AXIS));
+        browseDetailFrame.setVisible(false);
+        
+        
         foregroundPanel.setLayout(new java.awt.GridLayout(1, 0));
         bulkPanel.add(foregroundPanel);
         foregroundPanel.setBounds(0, 0, 750, 400);
@@ -531,7 +546,8 @@ public final class OknoMapy extends javax.swing.JFrame {
         controlPanel.add(lblPricesChanged);
         
         jMenu3.setText("Widok");
-
+        jMenuBar1.add(jMenu3);
+        
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem1.setText("Dopasuj do ekranu");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -550,7 +566,14 @@ public final class OknoMapy extends javax.swing.JFrame {
         });
         jMenu3.add(jCheckBoxMenuItem1);
 
-        jMenuBar1.add(jMenu3);
+        mnBrowse = new JMenu("Przegladaj");
+        jMenuBar1.add(mnBrowse);
+        
+        mnBrowseAgents = new JMenu("agenci");
+        mnBrowse.add(mnBrowseAgents);
+        
+        mnBrowseTowns = new JMenu("grody");
+        mnBrowse.add(mnBrowseTowns);
 
         setJMenuBar(jMenuBar1);
 
@@ -829,5 +852,37 @@ public final class OknoMapy extends javax.swing.JFrame {
 
 	public void setLblPricesChanged(JLabel lblPricesChanged) {
 		this.lblPricesChanged = lblPricesChanged;
+	}
+
+	public JMenu getMnBrowseAgents() {
+		return mnBrowseAgents;
+	}
+
+	public void setMnBrowseAgents(JMenu mnBrowseAgents) {
+		this.mnBrowseAgents = mnBrowseAgents;
+	}
+
+	public JMenu getMnBrowseTowns() {
+		return mnBrowseTowns;
+	}
+
+	public void setMnBrowseTowns(JMenu mnBrowseTowns) {
+		this.mnBrowseTowns = mnBrowseTowns;
+	}
+
+	public JMenu getMnBrowse() {
+		return mnBrowse;
+	}
+
+	public void setMnBrowse(JMenu mnBrowse) {
+		this.mnBrowse = mnBrowse;
+	}
+
+	public JInternalFrame getBrowseDetailFrame() {
+		return browseDetailFrame;
+	}
+
+	public void setBrowseDetailFrame(JInternalFrame browseDetailFrame) {
+		this.browseDetailFrame = browseDetailFrame;
 	}
 }
