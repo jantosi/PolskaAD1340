@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import polskaad1340.window.OknoMapy;
-import statistics.CourierStatistics_Interface;
 import world.MapFrame;
 import CLIPSJNI.PrimitiveValue;
 import clips.ClipsEnvironment;
@@ -31,11 +30,6 @@ public class Courier extends Agent {
     protected ArrayList<String> packages;
     
     /**
-     * Statystyki posłańca.
-     */
-    protected CourierStatistics_Interface statistics;
-    
-    /**
      * Koń.
      */
     protected String horse;
@@ -54,13 +48,12 @@ public class Courier extends Agent {
     /**
      * Konstruktor. Nadanie domyślnego udźwigu.
      */
-    public Courier(String id, String pathToClipsFile, CourierStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
+    public Courier(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
         super(id, pathToClipsFile);
 
         this.capacity = 15;
         this.packages = new ArrayList<String>();
         this.setHorse(null);
-        this.statistics = stat;
         this.mapFrame = mapFrame;
         this.velocity = 1;
         this.fieldOfView = 1;
@@ -155,19 +148,6 @@ public class Courier extends Agent {
         return this;
     }
     
-    
-    
-    public Courier setStatistics(CourierStatistics_Interface statistics) {
-        this.statistics = statistics;
-        
-        return this;
-    }
-    
-    public CourierStatistics_Interface getStatistics() {
-        return this.statistics;
-    }
-    
-
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();

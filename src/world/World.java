@@ -16,7 +16,6 @@ import java.util.Set;
 import polskaad1340.window.InformacjeOSwiecie;
 import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
-import statistics.CourierStatistics;
 import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;
 import agents.Agent;
@@ -72,14 +71,15 @@ public class World {
     	MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Woodman woodman = new Woodman("drwal1", "src/clips/poslaniec.clp", ws, mapFrame, om);
         
-        
-        CourierStatistics cs = new CourierStatistics();
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", cs, mapFrame, om);
-        //courier.getPackages().add("paczka1grod1");
+        Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", mapFrame, om);
+        
+        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
         
         this.agents.add(woodman);
         this.agents.add(courier);
+        this.agents.add(courier2);
         om.drawAllTiles();
     }
     
@@ -205,6 +205,24 @@ public class World {
         
         //dodajemy informacje o aktualnej iteracji
         visibleObjects.add("(iteracja " + actualIter + ")");
+        
+        //jesli byly jakies odpoczynki to jes tez ladujemy
+        String evalString2 = "(find-all-facts ((?a akcjaOdpoczywanie)) TRUE)";
+    	PrimitiveValue pv2 = this.clipsEnv.getWorldEnv().eval(evalString2);
+    	try {
+			for (int i = 0; i < pv2.size(); i++) {
+				PrimitiveValue tmpPv = pv2.get(i);
+				StringBuffer buf = new StringBuffer();
+				
+				buf.append("(akcjaOdpoczywanie ")
+				   .append("(idAgenta ").append(tmpPv.getFactSlot("idAgenta").toString()).append(") ")
+				   .append("(iteracjaKoniec ").append(tmpPv.getFactSlot("iteracjaKoniec").toString()).append(")) ");
+				
+				visibleObjects.add(buf.toString());
+			}
+		} catch (Exception e) {
+		}
+        
         //dodajemy informacje o agencie
 		for (Agent agent : this.agents) {
 			if (agent.getId().equalsIgnoreCase(agentId)) {
