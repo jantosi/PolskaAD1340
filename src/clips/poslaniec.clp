@@ -199,5 +199,25 @@
     (close)
 )
 
+;jak widzi przeszkode to ma skakac jesli ma wiecej niz 30 pkt. energii, innaczej czeka
+(defrule poslaniecReagujNaPrzeszkode (declare (salience 100))
+    (poslaniec (id ?id)(energia ?energia))
+    (blokada (id ?idBlokady))
+    (iteracja ?it)
+    (not (okreslonoAkcjeNaBlokade))
+=>
+    (open "src/clips/agentResults.txt" resultFile "a")
 
+    (if (> ?energia 30)
+    then
+        (assert (akcjaZobaczenieBlokady (idAgenta ?id)(idBlokady ?idBlokady)(podjetaAkcja ominiecie)))
+        (printout resultFile "Agent: " ?id " jesli napotka blokade bedzie skakal poniewaz ma wiecej niz 30 pkt. energii" crlf) 
+    else
+        (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 4))))   
+        (printout resultFile "Agent: " ?id " jesli napotka blokade odpoczywal 4 rundy, poniewaz ma mnie niz 30 pkt. energii" crlf) 
+    )
+    
+    (assert (okreslonoAkcjeNaBlokade))
+    (close)
+)
 

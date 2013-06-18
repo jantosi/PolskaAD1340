@@ -197,11 +197,14 @@ public class World {
         loadAgents();
     }
 
-    public ArrayList<Object> getVisibleWorld(String agentId) throws Exception {
+    public ArrayList<Object> getVisibleWorld(String agentId, int actualIter) throws Exception {
         String evalString = "(find-all-facts ((?w widzialnaCzescSwiata)) (eq ?w:idAgenta " + agentId + "))";
         PrimitiveValue pv = this.clipsEnv.getWorldEnv().eval(evalString);
 
         ArrayList<Object> visibleObjects = new ArrayList<Object>();
+        
+        //dodajemy informacje o aktualnej iteracji
+        visibleObjects.add("(iteracja " + actualIter + ")");
         //dodajemy informacje o agencie
 		for (Agent agent : this.agents) {
 			if (agent.getId().equalsIgnoreCase(agentId)) {

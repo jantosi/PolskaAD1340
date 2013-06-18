@@ -483,12 +483,12 @@
         (bind ?kratkaZaBlokadaId (fact-slot-value (nth$ 1 (find-fact ((?k kratka)) (eq ?k:id (fact-slot-value ?odcinekZaBlokada idKratki)) )) id))
         (if (eq ?akcja ominiecie)      
         then
-            (if (>= ?mozliwyRuch 4)
+            (if (>= ?mozliwyRuch 3)
             then
-                (bind ?potrzebnaEnergia (+ (* ?strE 4) 2))
+                (bind ?potrzebnaEnergia (+ (* ?strE 3) 2))
                 (if (> (- ?energia ?potrzebnaEnergia) 6 )
                 then
-                    (modify ?agent (idKratki ?kratkaZaBlokadaId)(mozliwyRuch (- ?mozliwyRuch 4))(energia (- ?energia ?potrzebnaEnergia)))
+                    (modify ?agent (idKratki ?kratkaZaBlokadaId)(mozliwyRuch (- ?mozliwyRuch 3))(energia (- ?energia ?potrzebnaEnergia)))
                     (printout resultFile "Agent: " ?id  " przeskoczyl przeszkode, strata energii: " ?potrzebnaEnergia crlf) 
                     (retract ?akcjaBlokada)              
                 else
@@ -532,12 +532,12 @@
         
         (if (eq ?akcja ominiecie)      
         then
-            (if (>= ?mozliwyRuch 4)
+            (if (>= ?mozliwyRuch 3)
             then
-                (bind ?potrzebnaEnergia (+ (* ?strE 4) 2))
+                (bind ?potrzebnaEnergia (+ (* ?strE 3) 2))
                 (if (> (- ?energia ?potrzebnaEnergia) 6 )
                 then
-                    (modify ?agent (idKratki ?kratkaPoSkokuId)(mozliwyRuch (- ?mozliwyRuch 4))(energia (- ?energia ?potrzebnaEnergia)))
+                    (modify ?agent (idKratki ?kratkaPoSkokuId)(mozliwyRuch (- ?mozliwyRuch 3))(energia (- ?energia ?potrzebnaEnergia)))
                     (printout resultFile "Agent: " ?id  " przeskoczyl przeszkode, strata energii: " ?potrzebnaEnergia crlf) 
                     (retract ?akcjaBlokada)              
                 else

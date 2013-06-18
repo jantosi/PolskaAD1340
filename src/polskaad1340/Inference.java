@@ -79,7 +79,7 @@ public class Inference {
 	}
 
 	public void performAgentInference(Agent actualAgent) throws Exception {
-		ArrayList<Object> visibleObjects = this.world.getVisibleWorld(actualAgent.getId());
+		ArrayList<Object> visibleObjects = this.world.getVisibleWorld(actualAgent.getId(), (this.actualIteration + 1));
 
 		this.clipsEnv.getAgentEnv().reset();
 		this.clipsEnv.getAgentEnv().load(actualAgent.getPathToClipsFile());
