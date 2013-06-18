@@ -577,8 +577,13 @@
     then 
         (printout resultFile "Agent: " ?id " skonczyl odpoczywac" crlf)
         (retract ?odpoczynek)    
-    else  ;jezeli przestal odpoczywac to usuwamy akcjeOdpoczynku i 
-        (modify ?agent (energia (+ ?energia ?odnawianieE)))
+    else  ;jezeli przestal odpoczywac to usuwamy akcjeOdpoczynku i
+        (bind ?poRegeneracji (+ ?energia ?odnawianieE))
+        (if (> ?poRegeneracji 100)
+        then
+            (bind ?poRegeneracji 100)
+        ) 
+        (modify ?agent (energia ?poRegeneracji))
 
         ;tworzymy fakt kontrolny, ze juz w tej iteracji zregenerowano agenta
         (assert (zregenerowanoAgenta (idAgenta ?id)))
