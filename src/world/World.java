@@ -870,8 +870,12 @@ public class World {
     	String[] roadTypes = {"utwardzona", "nieutwardzona"};
     	Random random = new Random();
     	for (String roadId : roadsId) {
-    		String roadType = roadTypes[random.nextInt(roadTypes.length)];
-    		
+    		String roadType;
+    		if (roadId.contains("nieplatna")) {
+    			roadType = roadTypes[random.nextInt(roadTypes.length)];
+    		} else {
+    			roadType = "utwardzona";
+    		}
     		double robberyProbabilityFreeRoad = random.nextDouble() * 0.3 + 0.3;
     		double robberyProbabilityPaidRoad = random.nextDouble() * 0.3;
     		for (Road road : this.roads) {

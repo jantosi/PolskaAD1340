@@ -1,6 +1,6 @@
 ;template'y kontrolne
 (deftemplate modyfikacjaStratEnergiiPoslanca (slot idPoslanca))
-(deftemplate modyfikacjaPredkosciAgenta (slot idAgenta))
+(deftemplate modyfikacjaPredkosciRegeneracjiAgenta (slot idAgenta))
 (deftemplate zregenerowanoAgenta (slot idAgenta))
 (deftemplate okreslonoWidocznosc (slot idAgenta))
 (deftemplate dzialanieKleskiNaAgenta(slot idAgenta) (slot idKleski))
@@ -98,7 +98,7 @@
 )
 
 ;regula okreslajaca dodatki predkosci zwiazane z tym po jakiej nawierzchni się on porusza
-(defrule okreslDodatekPredkosciRuchuAgenta (declare (salience 3)) 
+(defrule okreslDodatekPredkosciOrazRegeneracjeAgenta (declare (salience 3)) 
     (or	
 		?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
 		?agent <- (rycerz (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
@@ -108,43 +108,50 @@
 		?agent <- (smok (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
 	) 
     ;fakt kontrolny, zapobiegajacy nieskonczonemu wywolywaniu tej reguly
-    (not (modyfikacjaPredkosciAgenta (idAgenta ?id)))
+    (not (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id)))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>   
-    (bind ?dodatPredkosc 0)    
+    (bind ?dodatPredkosc 0)
+    (bind ?odnawianieEnergii 2)      
     (if (not (eq (sub-string 1 4 ?id) "smok") )
     then
         ;w zaleznosci od tego na czym stoi agent, tym otrzymuje inny bonus do predkosci        
         (bind ?czyDrzewo (any-factp ((?drz drzewo))(and (eq ?drz:idKratki ?idKratki) (eq ?drz:stan niesciete))))
         (bind ?czyScieteDrzewo (any-factp ((?drz drzewo)) (and (eq ?drz:idKratki ?idKratki) (eq ?drz:stan sciete))))        
-        (bind ?czyDrogaBezplatna (any-factp ((?d droga)) (and (eq ?d:idKratki ?idKratki) (eq ?d:platna false))))        
-        (bind ?czyDrogaPlatna (any-factp ((?d droga)) (and (eq ?d:idKratki ?idKratki) (eq ?d:platna true))))
+        (bind ?czyDrogaBezplatna (any-factp ((?d droga)) (and (eq ?d:idKratki ?idKratki) (eq ?d:platna FALSE))))        
+        (bind ?czyDrogaPlatna (any-factp ((?d droga)) (and (eq ?d:idKratki ?idKratki) (eq ?d:platna TRUE))))
         (bind ?czyDrogaUtwardzona (any-factp ((?d droga)) (and (eq ?d:idKratki ?idKratki) (eq ?d:nawierzchnia utwardzona))))
         (bind ?czyDrogaNieutwardzona (any-factp ((?d droga)) (and (eq ?d:idKratki ?idKratki) (eq ?d:nawierzchnia nieutwardzona))))
         
         (if (eq ?czyDrzewo TRUE)
         then
-            (bind ?dodatPredkosc (- ?dodatPredkosc 2))            
+            (bind ?dodatPredkosc (- ?dodatPredkosc 2))  
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 0))          
         )
         (if (eq ?czyScieteDrzewo TRUE)
         then
-            (bind ?dodatPredkosc (- ?dodatPredkosc 1))     
+            (bind ?dodatPredkosc (- ?dodatPredkosc 1))
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 1))        
         ) 
         (if (eq ?czyDrogaBezplatna TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 0))      
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 0))   
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 2))       
         ) 
         (if (eq ?czyDrogaPlatna TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))      
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 3))         
         ) 
         (if (eq ?czyDrogaUtwardzona TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))     
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 2))    
         )
         (if (eq ?czyDrogaNieutwardzona TRUE)
         then
-            (bind ?dodatPredkosc (+ ?dodatPredkosc 1))        
+            (bind ?dodatPredkosc (+ ?dodatPredkosc 1)) 
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 1))           
         )       
         
         (if (< ?dodatPredkosc 0)
@@ -156,12 +163,12 @@
     )    
     
     ;modyfikujemy dodatek predkosci agenta oraz jego pole widzenia
-    (modify ?agent (dodatekPredkosc ?dodatPredkosc)(poleWidzenia (+ ?dodatPredkosc ?predkosc))(mozliwyRuch (+ ?dodatPredkosc ?predkosc)))    
+    (modify ?agent (dodatekPredkosc ?dodatPredkosc)(poleWidzenia (+ ?dodatPredkosc ?predkosc))(mozliwyRuch (+ ?dodatPredkosc ?predkosc))(odnawianieEnergii ?odnawianieEnergii))    
     (open "src/clips/results.txt" resultFile "a")    
-    (printout resultFile "Zmodyfikowano dodatek predkosci agenta: " ?id ", dodatek predkosci = " ?dodatPredkosc crlf)
+    (printout resultFile "Zmodyfikowano dodatek predkosci agenta: " ?id ", dodatek predkosci = " ?dodatPredkosc " oraz regeneracje energii: " ?odnawianieEnergii crlf)
     (close)    
     ;umieszczamy fakt kontrolny, ze dla danego agenta dodatkowa predkosc zostala juz zmodyfikowana
-    (assert (modyfikacjaPredkosciAgenta (idAgenta ?id)))
+    (assert (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id)))
 )
 ;regula pozwalajaca przmieszczac agentow wzdluz danej drogi
 (defrule przemieszczaniePoDrodze (declare (salience 1))
@@ -180,7 +187,7 @@
     ?akcja <- (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?ileKratek)(docelowyGrod ?cel))
     (iteracja ?iteracja)
     (not (akcjaOdpoczywanie (idAgenta ?id)))
-    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciAgenta (idAgenta ?id))
+    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id))
 =>
     (open "src/clips/results.txt" resultFile "a")    
     sprawdzamy o ile moze sie przesunac dany agent
@@ -273,7 +280,7 @@
     (kratka (id ?kratkaId)(pozycjaX ?x)(pozycjaY ?y))
     (droga (idKratki ?kratkaId)(id ?drogaId))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
-    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciAgenta (idAgenta ?id))
+    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id))
 =>
     (open "src/clips/results.txt" resultFile "a")   
      
@@ -307,7 +314,7 @@
 	(mapa ?height ?width)
     (iteracja ?iteracja)
     (not (akcjaOdpoczywanie (idAgenta ?id)))
-    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciAgenta (idAgenta ?id))
+    ?modyfikacjaPredkosci <- (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id))
 =>
     (open "src/clips/results.txt" resultFile "a")
 	(bind ?ilePrzesunac 0)
@@ -461,7 +468,7 @@
     ?akcjaBlokada <- (akcjaZobaczenieBlokady (idAgenta ?id)(idBlokady ?blokadaId)(podjetaAkcja ?akcja))
     (not (akcjaOdpoczywanie (idAgenta ?id)))
     (iteracja ?iteracja)
-    (modyfikacjaPredkosciAgenta (idAgenta ?id))
+    (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id))
 =>  
     (open "src/clips/results.txt" resultFile "a")
     ;jezeli agent porusza sie po drodze
