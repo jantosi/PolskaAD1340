@@ -8,11 +8,12 @@
 (deftemplate kleskaLas(slot idKleski))
 (deftemplate kleskaGrod(slot idKleski))
 (deftemplate uaktualnianieKlesk(slot idKleski))
+(deftemplate uwzglednionoZuzycieKonia(slot idKonia))
 
 ;REGULY
 ;regula okresla parametry poslanca po zakupieniu konia, czyli
 ;po sprawdzeniu istnienia faktu kupienieKonia
-(defrule sprawdzKupienieKoniaPoslaniec (declare (salience 4))
+(defrule sprawdzKupienieKoniaPoslaniec (declare (salience 40))
     ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon)(zloto ?zloto))
     ?kupienieKonia <- (kupienieKonia (idAgenta ?poslaniecId)(idKonia ?kupionyKon))
     ?konik <- (kon(id ?kupionyKon)(cena ?cena))
@@ -55,7 +56,7 @@
 )
 
 ;regula aktualizujaca straty energii poslanca z uwzglednieniem paczek jakie niesie
-(defrule obliczStartyEnergiiPoslanca (declare (salience 2))
+(defrule obliczStartyEnergiiPoslanca (declare (salience 20))
     ?poslaniec <- (poslaniec (id ?poslaniecId) (kon ?kon) (paczki $?paczki))
     
     ;sprawdzamy czy poslaniec w danej turze nie byl jeszcze modyfikowany
@@ -99,7 +100,7 @@
 )
 
 ;regula okreslajaca dodatki predkosci zwiazane z tym po jakiej nawierzchni się on porusza
-(defrule okreslDodatekPredkosciOrazRegeneracjeAgenta (declare (salience 3)) 
+(defrule okreslDodatekPredkosciOrazRegeneracjeAgenta (declare (salience 30)) 
     (or	
 		?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
 		?agent <- (rycerz (id ?id)(idKratki ?idKratki)(predkosc ?predkosc))
@@ -172,7 +173,7 @@
     (assert (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id)))
 )
 ;regula pozwalajaca przmieszczac agentow wzdluz danej drogi
-(defrule przemieszczaniePoDrodze (declare (salience 1))
+(defrule przemieszczaniePoDrodze (declare (salience 10))
     (or	
 		(and 
             ?agent <- (poslaniec (id ?id)(mozliwyRuch ?mozliwyRuch)(idKratki ?idKratki)(cel ?cel)(energia ?energia)(strataEnergii ?strE)(zloto ?zloto))
@@ -265,7 +266,7 @@
     
 )
 ;regula pozwalajaca przeniesc agenta z grodu na droge
-(defrule przeniesZGroduNaDroge (declare (salience 1))
+(defrule przeniesZGroduNaDroge (declare (salience 10))
     (or	
 		(and 
             ?agent <- (poslaniec (id ?id))
@@ -297,7 +298,7 @@
 
 
 ;przemieszczanie agentow po kratkach
-(defrule przemieszczanie (declare (salience 1))
+(defrule przemieszczanie (declare (salience 10))
 	(or	
 		(and
             ?agent <- (poslaniec (id ?id)(mozliwyRuch ?ruch)(idKratki ?idKratki)(energia ?energia)(strataEnergii ?strE))
@@ -447,9 +448,37 @@
     (close)
 )
 
+(defrule uwzglednijZuzycieKonia (declare (salience 11))
+    ?agent <- (poslaniec (id ?id)(kon ?kon))
+    ?konik <- (kon (id ?kon)(zuzycie ?zuzycie)(predkoscZuzycia ?predkoscZuzycia))
+    (not (uwzglednionoZuzycieKonia(idKonia ?kon)))
+    ?modStrat <- (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
+    ?modPredk <- (modyfikacjaPredkosciRegeneracjiAgenta (idAgenta ?id))
+=>
+    (open "src/clips/results.txt" resultFile "a")
+
+    (bind ?stanPoModyfikacji (+ ?zuzycie ?predkoscZuzycia))
+    (if (> ?stanPoModyfikacji 100)
+    then
+        (retract ?modStrat)
+        (retract ?modPredk)
+        (retract ?konik)
+        (modify ?agent (kon nil))        
+        (printout resultFile "Kon: " ?kon " agenta: " ?id " zuzyl sie" crlf)
+    else
+        (retract ?modStrat)
+        (retract ?modPredk)
+        (modify ?konik (zuzycie ?stanPoModyfikacji))
+        (assert (uwzglednionoZuzycieKonia(idKonia ?kon)))
+        (printout resultFile "Kon: " ?kon " agenta: " ?id " zyzywa sie. Aktualny stan zuzycia: " ?zuzycie crlf)
+    )
+    
+    (close)
+)
+
 ;regula realizujaca akcje podjete przez agentow w momencie natrafienia na blokade
 ;moga oni albo ja przeskoczyc albo odpoczac i poczekac az zostanie usunieta
-(defrule omijaniePrzeszkod (declare (salience 1))
+(defrule omijaniePrzeszkod (declare (salience 10))
     (or	
 		(and
             ?agent <- (poslaniec (id ?id)(energia ?energia)(strataEnergii ?strE)(cel ?cel)(mozliwyRuch ?mozliwyRuch)(idKratki ?agentKratka))
@@ -557,7 +586,7 @@
 )
 
 ;regula realizujaca odpoczynek agentów, regenerujac im przy tym energie
-(defrule odpoczywanie (declare (salience 8))
+(defrule odpoczywanie (declare (salience 80))
     (or	
 		?agent <- (poslaniec (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
 		?agent <- (rycerz (id ?id)(energia ?energia)(odnawianieEnergii ?odnawianieE))
@@ -595,7 +624,7 @@
 )
 
 
-(defrule wezPaczke (declare (salience 4))
+(defrule wezPaczke (declare (salience 40))
     ?agent <- (poslaniec (id ?id)(udzwig ?udzwig)(paczki $?paczki))
     ?paczka <- (paczka (id ?idPaczki)(waga ?waga))
     ?akcja <- (akcjaWezPaczke (idAgenta ?id)(idPaczki ?idPaczki))
@@ -636,7 +665,7 @@
 )
 
 ;WIP: Ataki pomiedzy rycerzem a smokiem
-(defrule atakujSmoka (declare (salience 3))
+(defrule atakujSmoka (declare (salience 30))
     ?smok <- (smok (id ?idSmoka) (idKratki ?idKratkiSmoka) (energia ?energiaSmoka) (zloto ?zlotoSmoka) (strataEnergii ?strataEnergiiSmoka))
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
     ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
@@ -689,7 +718,7 @@
     (close)
 )
 
-(defrule atakujRycerza (declare (salience 3))
+(defrule atakujRycerza (declare (salience 30))
     ?smok <- (smok (id ?idSmoka) (idKratki ?idKratkiSmoka) (energia ?energiaSmoka) (zloto ?zlotoSmoka) (strataEnergii ?strataEnergiiSmoka))
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
     ?akcja <- (akcjaAtak (idAgenta ?idAgenta) (idOfiary ?idOfiary) (rodzajAtaku ?rodzajAtaku))
@@ -743,7 +772,7 @@
 )
 
 ;regula do sciecia drzew
-(defrule zetnijDrzewo (declare (salience 3))
+(defrule zetnijDrzewo (declare (salience 30))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (scieteDrewno $?drewnoDrwala) 
      (siekiera ?idSiekiery) (udzwig ?udzwig) ( maxUdzwig ?maxUdzwig) (energia ?energia) (strataEnergii ?strataEnergii))
     ?drzewo <- (drzewo (idKratki ?idKratki) (stan ?stanDrzewa) (rodzajDrzewa ?rodzajDrzewa)) 
@@ -904,7 +933,7 @@
     (close)
 ) 
 ; kupowanie wozu z grodu przez drwala
-(defrule kupWozZGrodu (declare (salience 4))
+(defrule kupWozZGrodu (declare (salience 40))
     ?drwal <- (drwal (id ?id) (idKratki ?idKratki) (zloto ?zlotoDrwala))
     ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
     ?nowyWoz <-(woz (id ?idWozu) (cena ?cenaWozu)(udzwig ?udzwigNowegoWozu) 
@@ -955,7 +984,7 @@
    (close)
 )
 ;drwal zawsze sprzedaje całe drewno jakie ma
-(defrule sprzedajDrewnoWGrodzie (declare (salience 2))
+(defrule sprzedajDrewnoWGrodzie (declare (salience 20))
 ?drwal <- (drwal (id ?id) (idKratki ?idKratki)   (zloto ?zlotoDrwala) (scieteDrewno $?drewno) )
     ?grod <- (grod (nazwa ?nazwaGrodu) (idKratki ?idKratki))
     ?akcja <- (akcjaSprzedajDrewno (idAgenta ?id) )
@@ -1021,7 +1050,7 @@
 )
 
 ;REGULA DO ROZBOJNIKOW
-(defrule rozbojnicyDzialanie (declare (salience 10))
+(defrule rozbojnicyDzialanie (declare (salience 100))
     (or	
 		?agent <- (poslaniec (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
 		?agent <- (rycerz (id ?id)(energia ?energia)(zloto ?zloto)(idKratki ?idKratki))
@@ -1048,7 +1077,7 @@
 
 ; REGULY DO KLESKI
 ; niszczenie lasu
-(defrule kleskaNiszczLas (declare (salience 10))
+(defrule kleskaNiszczLas (declare (salience 100))
     ?drzewo <- (drzewo  (idKratki ?idKratki) )
     ?kleska <- (kleska (id ?idKleski) (idKratki ?idKratki) (niszczenieLasu ?niszczenie))
 
@@ -1088,7 +1117,7 @@
 )
 
 ; zranienie agentow
-(defrule kleskaZranAgentow (declare (salience 10))
+(defrule kleskaZranAgentow (declare (salience 100))
  (or	
 		?agent <- (poslaniec (id ?id)(energia ?energia) (idKratki ?idKratki))
 		?agent <- (rycerz (id ?id)(energia ?energia) (idKratki ?idKratki))
@@ -1115,7 +1144,7 @@
 
 )
 ; update klesk
-(defrule kleskaUaktualnij (declare (salience 9))
+(defrule kleskaUaktualnij (declare (salience 90))
 ?kleska<- (kleska (id ?idKleski) (czasTrwania ?czas) )
 (iteracja ?iteracja)
 (not (uaktualnianieKlesk ( idKleski ?idKleski)))
