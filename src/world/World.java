@@ -242,7 +242,7 @@ public class World {
             }
 
             for (Tree tree : this.trees) {
-                if (tree.getWorldFrame() == visibleFrameId) {
+                if (tree.getMapFrame().getId() == visibleFrameId) {
                     visibleObjects.add(tree);
                 }
             }
@@ -534,10 +534,16 @@ public class World {
                 Tree temp = new Tree();
                 temp.loadFromClips(pv1.get(i));
                 this.trees.add(temp);
+                MapFrame mapFrame = this.getFrameById(temp.getMapFrame().getId());
+                	
+                if (temp.getState().equalsIgnoreCase("sciete")) {
+                	this.om.setTileAt(this.om.getBackgroundTileGrid(), mapFrame.getX(), mapFrame.getY(), this.om.tileFromNumber(1379));
+                } else if (temp.getState().equalsIgnoreCase("niesciete")) {
+                	this.om.setTileAt(this.om.getBackgroundTileGrid(), mapFrame.getX(), mapFrame.getY(), this.om.tileFromNumber(1029));
+                }
             }
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -570,13 +576,13 @@ public class World {
 
                 if (InformacjeOSwiecie.getKluczeKafelka("las").contains(mapLoad.getMap().get(y).get(x))) {
                     Tree tree = new Tree();
-                    tree.setWorldFrame(mf.getId());
+                    tree.setMapFrame(this.getFrameById(mf.getId()));
                     tree.setType(woodTypes[random.nextInt(woodTypes.length)]);
                     trees.add(tree);
                 } else if (InformacjeOSwiecie.getKluczeKafelka("wycięty las").contains(mapLoad.getMap().get(y).get(x))) {
                     Tree tree = new Tree();
                     tree.setState("sciete");
-                    tree.setWorldFrame(mf.getId());
+                    tree.setMapFrame(this.getFrameById(mf.getId()));
                     trees.add(tree);
                 } else if (InformacjeOSwiecie.getKluczeKafelka("miasto1").contains(mapLoad.getMap().get(y).get(x))) {
 

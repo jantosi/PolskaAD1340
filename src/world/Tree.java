@@ -3,24 +3,25 @@ package world;
 import CLIPSJNI.PrimitiveValue;
 
 public class Tree {
-	private int worldFrame;
+	private MapFrame mapFrame;
 	private String type;
 	private String state;
 
-	public Tree(int worldFrame, String type, String state) {
+	public Tree(MapFrame mapFrame, String type, String state) {
 		super();
-		this.worldFrame = worldFrame;
+		this.mapFrame = mapFrame;
 		this.type = type;
 		this.state = state;
 	}
 
 	public Tree() {
+		this.mapFrame = new MapFrame();
 		this.state = "niesciete";
 	}
 
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
-			this.worldFrame = pv.getFactSlot("idKratki").intValue();
+			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
 			this.type = pv.getFactSlot("rodzajDrzewa").getValue().toString();
 			this.state = pv.getFactSlot("stan").getValue().toString();
 
@@ -35,19 +36,11 @@ public class Tree {
 		StringBuffer sbuf = new StringBuffer();
 		sbuf.append("(drzewo ");
 		sbuf.append("(rodzajDrzewa ").append(type).append(") ");
-		sbuf.append("(idKratki ").append(worldFrame).append(") ");
+		sbuf.append("(idKratki ").append(mapFrame.getId()).append(") ");
 		sbuf.append("(stan ").append(this.state).append(")");
 		sbuf.append(")");
 
 		return sbuf.toString();
-	}
-
-	public int getWorldFrame() {
-		return worldFrame;
-	}
-
-	public void setWorldFrame(int worldFrame) {
-		this.worldFrame = worldFrame;
 	}
 
 	public String getType() {
@@ -64,6 +57,14 @@ public class Tree {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public MapFrame getMapFrame() {
+		return mapFrame;
+	}
+
+	public void setMapFrame(MapFrame mapFrame) {
+		this.mapFrame = mapFrame;
 	}
 
 }
