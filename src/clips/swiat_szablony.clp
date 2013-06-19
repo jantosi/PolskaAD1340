@@ -289,6 +289,12 @@
     (slot idAgenta)
     (slot idSiekiery)
 )
+
+( deftemplate akcjaKupZbroje
+    (slot idAgenta)
+    (slot idZbroi)
+)
+
 ( deftemplate akcjaSprzedajDrewno
     (slot idAgenta)
 )
