@@ -48,6 +48,21 @@ then
 )
 )
 ;sprzedaje wszystko gdy jest w miescie
+(defrule drwalSprzedajDrewno
+ ?drwal <- (drwal (id ?id)(idKratki ?idKratki)(cel ?cel) (scieteDrewno $?drewno ))
+?grod<-(grod (nazwa ?idGrodu) (idKratki ?idKratki))
+(test (neq $?drewno nil))
+(test (neq ?cel drewno))
+(not (podjetoAkcje))
+=>
+(open "src/clips/agentResults.txt" resultFile "a")
+(printout resultFile "Drwal " ?id " postanawia sprzedać drewno" crlf) 
+(close)
+(modify ?drwal (cel drewno))
+(assert ( akcjaSprzedajDrewno  (idAgenta ?id)))
+(assert (podjetoAkcje))
+)
+;kupije tylko tytanową siekierę
 (defrule drwalKupSiekiere
  ?drwal <- (drwal (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch)
      ( udzwig ?udzwig)  
@@ -61,28 +76,41 @@ then
                (idGrodu ?idGrodu))
 (test (> ?zloto ?cenaSiekiery))
 (test (neq ?cel siekiera))
+(test (eq ?typSiekiery tytanowa))
 (not (podjetoAkcje))
 =>
 (open "src/clips/agentResults.txt" resultFile "a")
-(printout resultFile "Drwal " ?id " postanawia kupić siekiere" crlf) 
+(printout resultFile "Drwal " ?id " postanawia kupic tytanowa siekiere" crlf) 
 (close)
 (modify ?drwal (cel siekiera))
 (assert ( akcjaKupSiekiere  (idAgenta ?id)(idSiekiery ?idSiekiery)))
 (assert (podjetoAkcje))
 )
-(defrule drwalSprzedajDrewno
- ?drwal <- (drwal (id ?id)(idKratki ?idKratki) (scieteDrewno $?drewno ))
+
+(defrule drwalKupWoz
+ ?drwal <- (drwal (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch)
+     ( udzwig ?udzwig)  
+    ( maxUdzwig ?maxUdzwig)
+	( siekiera ?siekiera) 
+	( woz ?woz) 
+     (zloto ?zloto))
 ?grod<-(grod (nazwa ?idGrodu) (idKratki ?idKratki))
-(test (neq $?drewno nil))
+?nowyWoz <-(woz (id ?idWozu) (cena ?cenaWozu) 
+                (udzwig ?udzwigWozu) 
+               (idGrodu ?idGrodu))
+(test (> ?zloto ?cenaWozu))
+(test (neq ?cel woz))
+(test (> ?udzwigWozu ?maxUdzwig))
 (not (podjetoAkcje))
 =>
 (open "src/clips/agentResults.txt" resultFile "a")
-(printout resultFile "Drwal " ?id " postanawia sprzedać drewno" crlf) 
+(printout resultFile "Drwal " ?id " postanawia kupić woz" crlf) 
 (close)
-(assert ( akcjaSprzedajDrewno  (idAgenta ?id)))
+(modify ?drwal (cel woz))
+(assert ( akcjaKupWoz  (idAgenta ?id)(idWozu ?idWozu)))
 (assert (podjetoAkcje))
 )
-; kupuje pierwsza lepszą siekiere gdy jest w miescie
+
 
 ;; udaj się do grodu
 (defrule idzDoGrodu (declare (salience 20))
@@ -138,7 +166,7 @@ then
 (bind ?kierunek  (mod (random) 4) )
 (if (eq ?kierunek 0)
  then
-    (bind ?kierunek prawo)
+    (bind ?kierunek lewo)
 )
 (if (eq ?kierunek 1)
  then
@@ -150,7 +178,7 @@ then
 )
 (if (eq ?kierunek 3)
  then
-    (bind ?kierunek prawo)
+    (bind ?kierunek lewo)
 )
 (assert (podjetoAkcje))
 (assert (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?mozliwyRuch)(kierunek ?kierunek)))
@@ -179,9 +207,10 @@ then
 	( zloto ?zloto)
     ( cel ?cel) 
 )
-?drzewo <- (drzewo (idKratki ?kratkaDrzewa) (stan niesciete))
+?drzewo <- (drzewo (idKratki ?kratkaDrzewa) (stan niesciete) (rodzajDrzewa ?rodzaj))
 (test (neq ?siekiera nil))
 (test (>= ?maxUdzwig (+ ?udzwig 30) ))
+(test (eq ?rodzaj dab)) 
 (not (podjetoAkcje))
 =>
 (open "src/clips/agentResults.txt" resultFile "a")

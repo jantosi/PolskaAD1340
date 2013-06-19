@@ -85,15 +85,17 @@ then
 
 )
 (defrule drwalSprzedajDrewno
- ?drwal <- (drwal (id ?id)(idKratki ?idKratki) (scieteDrewno $?drewno ))
+ ?drwal <- (drwal (id ?id)(idKratki ?idKratki)(cel ?cel) (scieteDrewno $?drewno ))
 ?grod<-(grod (nazwa ?idGrodu) (idKratki ?idKratki))
 (test (neq $?drewno nil))
+(test (neq ?cel drewno))
 (not (podjetoAkcje))
 =>
 (open "src/clips/agentResults.txt" resultFile "a")
 (printout resultFile "Drwal " ?id " postanawia sprzedać drewno" crlf) 
 
 (close)
+(modify ?drwal (cel drewno))
 (assert ( akcjaSprzedajDrewno  (idAgenta ?id)))
 (assert (podjetoAkcje))
 )

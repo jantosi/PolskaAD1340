@@ -72,6 +72,9 @@ public class World {
         Woodman woodman = new Woodman("drwal1", "src/clips/drwal_1.clp", ws, mapFrame, om);
         //siekierka dla drwala
         woodman.setAx("siekiera1grod1");
+        Woodman woodman2 = new Woodman("drwal2", "src/clips/drwal_2.clp", ws, mapFrame, om);
+        //siekierka dla drwala
+        woodman.setAx("siekiera1grod2");
         
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", mapFrame, om);
@@ -80,6 +83,7 @@ public class World {
         Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
         
         this.agents.add(woodman);
+        this.agents.add(woodman2);
         this.agents.add(courier);
         this.agents.add(courier2);
         om.drawAllTiles();
