@@ -52,5 +52,45 @@ public class Dragon extends Agent {
         
         return this;
     }
+    
+    @Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("(smok");
+		buffer.append(" (ataki ");
+		for (int i = 0; i < this._attacks.size(); i++) {
+			buffer.append(_attacks.get(i).get_id());
+			if (i < this._attacks.size() - 1) {
+				buffer.append(" ");
+			}
+		}
+		buffer.append(")");
+
+		buffer.append(" (id ");
+		buffer.append(id);
+		buffer.append(")");
+		
+		buffer.append(" (mozliwyRuch ");
+		buffer.append(possibleMove);
+		buffer.append(")");
+
+		buffer.append(" (idKratki ");
+		buffer.append(this.mapFrame.getId());
+		buffer.append(")");
+		buffer.append(" (poleWidzenia ");
+		buffer.append(fieldOfView);
+		buffer.append(") (predkosc ");
+		buffer.append(velocity);
+		buffer.append(") (energia ");
+		buffer.append(energy);
+		buffer.append(") (strataEnergii ");
+		buffer.append(energyLoss);
+		buffer.append(") (odnawianieEnergii ");
+		buffer.append(energyRecovery);
+		buffer.append(") (zloto ");
+		buffer.append(gold);
+		buffer.append("))");
+		return buffer.toString();
+	}
 
 }
