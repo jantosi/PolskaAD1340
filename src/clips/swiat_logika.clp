@@ -706,7 +706,6 @@
     (close)
 )
 
-;WIP: Ataki pomiedzy rycerzem a smokiem
 (defrule atakujSmoka (declare (salience 30))
     ?smok <- (smok (id ?idSmoka) (idKratki ?idKratkiSmoka) (energia ?energiaSmoka) (zloto ?zlotoSmoka) (strataEnergii ?strataEnergiiSmoka))
     ?rycerz <- (rycerz (id ?idRycerza) (idKratki ?idKratki) (energia ?energia) (zloto ?zloto) (strataEnergii ?strataEnergii))
