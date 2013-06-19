@@ -18,9 +18,7 @@ import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
 import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;
-import agents.Agent;
-import agents.Courier;
-import agents.Woodman;
+import agents.*;
 import clips.ClipsEnvironment;
 
 public class World {
@@ -250,6 +248,9 @@ public class World {
 					Woodman woodmanTmp = (Woodman) agent;
 					visibleObjects.addAll(woodmanTmp.findItems(clipsEnv));
 					
+				} else if (agent instanceof Dragon) {
+					Dragon dragonTmp = (Dragon) agent;
+					
 				} // TODO > i tak dla wszystkich pozostalych agentow
 
 				break;
@@ -330,6 +331,7 @@ public class World {
     	this.agentItems = new ArrayList<Item>();
     	loadWoodmens();
     	loadCouriers();
+        loadDragons();
     }
     
     private void loadWoodmens() {
@@ -379,6 +381,33 @@ public class World {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(courierTmp.getId())) {
                 		courierTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
                 		this.agents.set(k, courierTmp);
+                		break;
+                	}
+                }
+            }
+
+        } catch (Exception e) {
+        }
+    }
+    
+    private void loadDragons() {
+    	try {
+            String evalString = "(find-all-facts ((?d smok)) TRUE)";
+            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+                Dragon dragonTmp = new Dragon();
+                dragonTmp.loadFromClips(pv1.get(i));
+               
+                MapFrame mapFrame = this.getFrameById(dragonTmp.getMapFrame().getId());
+                dragonTmp.setMapFrame(mapFrame);
+                dragonTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), dragonTmp.getId(), 1662));
+    
+                
+                for (int k = 0; k < this.agents.size(); k++) {
+                	if (this.agents.get(k).getId().equalsIgnoreCase(dragonTmp.getId())) {
+                		dragonTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		this.agents.set(k, dragonTmp);
                 		break;
                 	}
                 }

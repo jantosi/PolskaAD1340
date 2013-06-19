@@ -20,13 +20,16 @@ public class Dragon extends Agent {
      * @var ArrayList<Attack>
      */
     private ArrayList<Attack> _attacks;
+    public Dragon() {
+        this.mapFrame = new MapFrame();
+    }
 	
     public Dragon(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
     	super(id, pathToClipsFile);
     	 this.setGold(0);
          
         this.mapFrame = mapFrame;
-        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1088);
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1063);
     }
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
