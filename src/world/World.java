@@ -18,7 +18,12 @@ import polskaad1340.window.LadowanieMapy;
 import polskaad1340.window.OknoMapy;
 import statistics.WoodmanStatistics;
 import CLIPSJNI.PrimitiveValue;
-import agents.*;
+import agents.Agent;
+import agents.Courier;
+import agents.Dragon;
+import agents.Knight;
+import agents.Woodman;
+import agents.skills.Attack;
 import clips.ClipsEnvironment;
 
 public class World {
@@ -80,11 +85,31 @@ public class World {
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
         
-        mapFrame = this.getFrameById(this.mapFrames[(int)Math.random()*40][(int)Math.random()*40].getId());
-        Courier dragon1 = new Courier("dragon1", "src/clips/dragon_1.clp", mapFrame, om);
+        mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
+        Dragon dragon1 = new Dragon("smok1", "src/clips/dragon_1.clp", mapFrame, om);
+        dragon1.addAttack(new Attack(10, 5, "atak1"));
+        dragon1.addAttack(new Attack(20, 10, "atak2"));
+        dragon1.addAttack(new Attack(30, 15, "atak3"));
         
-        mapFrame = this.getFrameById(this.mapFrames[(int)Math.random()*40][(int)Math.random()*40].getId());
-        Courier dragon2 = new Courier("dragon1", "src/clips/dragon_2.clp", mapFrame, om);
+        mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
+        Dragon dragon2 = new Dragon("smok2", "src/clips/dragon_2.clp", mapFrame, om);
+        dragon2.addAttack(new Attack(10, 5, "atak1"));
+        dragon2.addAttack(new Attack(20, 10, "atak2"));
+        dragon2.addAttack(new Attack(30, 15, "atak3"));
+        
+        
+        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Knight knight1 = new Knight("rycerz1", "src/clips/rycerz_1.clp", mapFrame, om);
+        dragon1.addAttack(new Attack(10, 5, "atak1"));
+        dragon1.addAttack(new Attack(20, 10, "atak2"));
+        dragon1.addAttack(new Attack(30, 15, "atak3"));
+        
+        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Knight knight2 = new Knight("rycerz2", "src/clips/rycerz_2.clp", mapFrame, om);
+        dragon2.addAttack(new Attack(10, 5, "atak1"));
+        dragon2.addAttack(new Attack(20, 10, "atak2"));
+        dragon2.addAttack(new Attack(30, 15, "atak3"));
+        
         
         this.agents.add(woodman);
         this.agents.add(woodman2);
@@ -92,6 +117,8 @@ public class World {
         this.agents.add(courier2);
         this.agents.add(dragon1);
         this.agents.add(dragon2);
+        this.agents.add(knight1);
+        this.agents.add(knight2);
         om.drawAllTiles();
     }
     
@@ -332,6 +359,7 @@ public class World {
     	loadWoodmens();
     	loadCouriers();
         loadDragons();
+        loadKnights();
     }
     
     private void loadWoodmens() {
@@ -401,13 +429,40 @@ public class World {
                
                 MapFrame mapFrame = this.getFrameById(dragonTmp.getMapFrame().getId());
                 dragonTmp.setMapFrame(mapFrame);
-                dragonTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), dragonTmp.getId(), 1662));
+                dragonTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), dragonTmp.getId(), 1126));
     
                 
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(dragonTmp.getId())) {
                 		dragonTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
                 		this.agents.set(k, dragonTmp);
+                		break;
+                	}
+                }
+            }
+
+        } catch (Exception e) {
+        }
+    }
+    
+    private void loadKnights() {
+    	try {
+            String evalString = "(find-all-facts ((?r rycerz)) TRUE)";
+            PrimitiveValue pv1 = clipsEnv.getWorldEnv().eval(evalString);
+
+            for (int i = 0; i < pv1.size(); i++) {
+                Knight knightTmp = new Knight();
+                knightTmp.loadFromClips(pv1.get(i));
+               
+                MapFrame mapFrame = this.getFrameById(knightTmp.getMapFrame().getId());
+                knightTmp.setMapFrame(mapFrame);
+                knightTmp.setOpp(this.om.nowyObiektPierwszegoPlanu(mapFrame.getX(),mapFrame.getY(), knightTmp.getId(), 1274));
+    
+                
+                for (int k = 0; k < this.agents.size(); k++) {
+                	if (this.agents.get(k).getId().equalsIgnoreCase(knightTmp.getId())) {
+                		knightTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		this.agents.set(k, knightTmp);
                 		break;
                 	}
                 }

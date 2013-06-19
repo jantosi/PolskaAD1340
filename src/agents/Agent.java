@@ -295,6 +295,29 @@ abstract public class Agent implements Cloneable{
 		} catch (Exception e) {
 		
 		}
+    	
+    	evalString = "(find-all-facts ((?s smok)) TRUE)";
+    	pv = agentEnv.eval(evalString);
+    	try {
+				Dragon dragon = new Dragon();
+				dragon.loadFromClips(pv.get(0));
+				results.add(dragon.toString());
+				
+		} catch (Exception e) {
+		
+		}
+    	
+    	evalString = "(find-all-facts ((?r rycerz)) TRUE)";
+    	pv = agentEnv.eval(evalString);
+    	try {
+    			Knight knight = new Knight();
+    			knight.loadFromClips(pv.get(0));
+				results.add(knight.toString());
+				
+		} catch (Exception e) {
+		
+		}
+    	
 		evalString = "(find-all-facts ((?a akcjaPrzesunNaKratke)) TRUE)";
     	pv = agentEnv.eval(evalString);
     	try {

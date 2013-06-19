@@ -69,7 +69,7 @@
 
 ;Jeżeli rycerz się zmęczy to odpoczywa (<50)
 (defrule smokOdpoczywaj (declare (salience 100))
-    (smok (id ?id)(energia ?energia))
+    (rycerz (id ?id)(energia ?energia))
     (iteracja ?it)
     (test (< ?energia 50))
     (not (podjetoAkcje))
@@ -87,7 +87,7 @@
 //Atakuje smoka gdy ma wiecej niz 30 energii i atakuje najmocniejszym uderzeniem
 (defrule rycerzAtakujSmoka (declare (salience 100))
     (rycerz (id ?id)(energia ?energia))
-    (smok (id ?idRycerza))
+    (smok (id ?idSmoka))
     (iteracja ?it)
     (not (podjetoAkcje))
 =>
@@ -98,7 +98,7 @@
         ;wybierz sobie atak
         (bind ?atak  (3) )
         (assert (akcjaAtak (idAgenta ?id)(idOfiary ?idSmoka)(rodzajAtaku ?atak)))
-        (printout resultFile "Rycerz: " ?id " atakuje smoka: " ?idRycerza "." crlf)  
+        (printout resultFile "Rycerz: " ?id " atakuje smoka: " ?idSmoka "." crlf)  
     else
         ;rycerz ucieka w dowolnym kierunku.
         (bind ?kierunek  (mod (random) 4) )

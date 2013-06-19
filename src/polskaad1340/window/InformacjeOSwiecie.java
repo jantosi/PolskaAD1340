@@ -52,7 +52,8 @@ public class InformacjeOSwiecie {
         
         opisyKafelkow.put(7, "kleska zywiolowa");
         opisyKafelkow.put(1064, "rozbojnicy");
-        
+        opisyKafelkow.put(1126, "smok");
+        opisyKafelkow.put(1274, "rycerz");
     }
     
     public InformacjeOSwiecie() {

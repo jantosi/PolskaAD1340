@@ -5,7 +5,7 @@
 
 ;Rycerz porusza sie po mapie i patroluje
 (defrule rycerzPatroluj
-?rycerz <- (drwal  
+?rycerz <- (rycerz  
 	( id ?id) 
 	( mozliwyRuch ?mozliwyRuch) 
 	( idKratki ?idKratki) 
@@ -42,7 +42,7 @@
 ;jak widzi smoka to odrazu atakuje
 defrule rycerzAtakujSmoka (declare (salience 100))
     (rycerz (id ?id)(energia ?energia))
-    (smok (id ?idRycerza))
+    (smok (id ?idSmoka))
     (iteracja ?it)
     (not (podjetoAkcje))
 =>
@@ -51,7 +51,7 @@ defrule rycerzAtakujSmoka (declare (salience 100))
     ;wybiera atak losowo
     (bind ?atak  (mod (random) 3) )
     (assert (akcjaAtak (idAgenta ?id)(idOfiary ?idSmoka)(rodzajAtaku ?atak)))
-    (printout resultFile "Rycerz: " ?id " atakuje smoka: " ?idRycerza "." crlf)  
+    (printout resultFile "Rycerz: " ?id " atakuje smoka: " ?idSmoka "." crlf)  
     
     (assert (podjetoAkcje))
     (close)
@@ -59,7 +59,7 @@ defrule rycerzAtakujSmoka (declare (salience 100))
 
 ;Jeżeli rycerz się zmęczy to odpoczywa (<20)
 (defrule smokOdpoczywaj (declare (salience 100))
-    (smok (id ?id)(energia ?energia))
+    (rycerz (id ?id)(energia ?energia))
     (iteracja ?it)
     (test (< ?energia 20))
     (not (podjetoAkcje))

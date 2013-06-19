@@ -1,13 +1,11 @@
 package agents;
 
-import CLIPSJNI.PrimitiveValue;
 import java.util.ArrayList;
-
-import agents.skills.Attack;
-import java.util.Arrays;
 
 import polskaad1340.window.OknoMapy;
 import world.MapFrame;
+import CLIPSJNI.PrimitiveValue;
+import agents.skills.Attack;
 
 /**
  * Klasa definiująca smoka.
@@ -22,20 +20,25 @@ public class Dragon extends Agent {
     private ArrayList<Attack> _attacks;
     public Dragon() {
         this.mapFrame = new MapFrame();
+        this._attacks = new ArrayList<Attack>();
     }
 	
     public Dragon(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
     	super(id, pathToClipsFile);
-    	 this.setGold(0);
+    	 //this.setGold(0);
          
         this.mapFrame = mapFrame;
-        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1063);
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1126);
+        this._attacks = new ArrayList<Attack>();
+        this.setFieldOfView(5);
+        this.velocity = 5;
+        this.possibleMove = 5;
     }
 	public void loadFromClips(PrimitiveValue pv) {
 		try {
 			this.id = pv.getFactSlot("id").toString();
 			this.velocity = pv.getFactSlot("predkosc").intValue();
-			this.extraVelocity = pv.getFactSlot("dodatekPredkosc").intValue();
+			//this.extraVelocity = pv.getFactSlot("dodatekPredkosc").intValue();
 			this.energy = pv.getFactSlot("energia").intValue();
 			this.energyLoss = pv.getFactSlot("strataEnergii").intValue();
 			this.energyRecovery = pv.getFactSlot("odnawianieEnergii").intValue();
@@ -85,7 +88,7 @@ public class Dragon extends Agent {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("(smok");
-		buffer.append(" (ataki ");
+		buffer.append(" ( ataki ");
 		for (int i = 0; i < this._attacks.size(); i++) {
 			buffer.append(_attacks.get(i).get_id());
 			if (i < this._attacks.size() - 1) {
@@ -94,30 +97,30 @@ public class Dragon extends Agent {
 		}
 		buffer.append(")");
 
-		buffer.append(" (id ");
+		buffer.append(" ( id ");
 		buffer.append(id);
-		buffer.append(")");
+		buffer.append(" )");
 		
-		buffer.append(" (mozliwyRuch ");
+		buffer.append(" ( mozliwyRuch ");
 		buffer.append(possibleMove);
-		buffer.append(")");
+		buffer.append(" )");
 
-		buffer.append(" (idKratki ");
+		buffer.append(" ( idKratki ");
 		buffer.append(this.mapFrame.getId());
-		buffer.append(")");
-		buffer.append(" (poleWidzenia ");
+		buffer.append(" )");
+		buffer.append(" ( poleWidzenia ");
 		buffer.append(fieldOfView);
-		buffer.append(") (predkosc ");
+		buffer.append(" ) ( predkosc ");
 		buffer.append(velocity);
-		buffer.append(") (energia ");
+		buffer.append(" ) ( energia ");
 		buffer.append(energy);
-		buffer.append(") (strataEnergii ");
+		buffer.append(" ) ( strataEnergii ");
 		buffer.append(energyLoss);
-		buffer.append(") (odnawianieEnergii ");
+		buffer.append(" ) ( odnawianieEnergii ");
 		buffer.append(energyRecovery);
-		buffer.append(") (zloto ");
+		buffer.append(" ) ( zloto ");
 		buffer.append(gold);
-		buffer.append("))");
+		buffer.append(" ) )");
 		return buffer.toString();
 	}
 

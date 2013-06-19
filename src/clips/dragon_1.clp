@@ -54,7 +54,7 @@
 
 ;jak widzi rycerza i ma więcej niż 50 pkt energii to z nim walczy, jak nie to ucieka.
 (defrule smokReagujNaRycerza (declare (salience 100))
-    (smok (id ?id)(energia ?energia))
+    (smok (id ?id)(energia ?energia)(mozliwyRuch ?mozliwyRuch))
     (rycerz (id ?idRycerza))
     (iteracja ?it)
     (not (podjetoAkcje))

@@ -1,9 +1,10 @@
 package agents;
-import items.Armor;
-
 import java.util.ArrayList;
 
+import polskaad1340.window.OknoMapy;
 import statistics.KnightStatistics_Interface;
+import world.MapFrame;
+import CLIPSJNI.PrimitiveValue;
 import agents.skills.Attack;
 
 /**
@@ -16,7 +17,7 @@ public class Knight extends Agent {
      * Zbroja rycerza.
      * @var Armor
      */
-    private Armor _armor;
+    private String _armor;
     
     /**
      * Lista ataków agenta.
@@ -26,41 +27,39 @@ public class Knight extends Agent {
     
     private KnightStatistics_Interface _stat;
     
-    public Knight(String id, String pathToClipsFile, ArrayList<Attack> attacks, KnightStatistics_Interface stat) {
+    public Knight(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
     	super(id, pathToClipsFile);
-    	this.setGold(0);
-    	this._attacks = attacks;
-    	this._stat = stat;
+    	this._attacks = new ArrayList<Attack>();
+    	this.velocity = 2;
+    	this.fieldOfView = 2;
+    	this.possibleMove = 2;
+    	this.mapFrame = mapFrame;
+    	
+    	 this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1274);
     }
     
-    /**
-     * Setter dla zbroi.
-     * @param Armor armor
-     * @return Knight
-     */
-    public Knight setArmor(Armor armor) {
-        this._armor = armor;
-        
-        return this;
+    public Knight() {
+    	this.mapFrame = new MapFrame();
+    	this._attacks = new ArrayList<Attack>();
     }
     
-    
-    /**
-     * Getter dla zbroi.
-     * @return Armor
-     */
-    public Armor getArmor() {
-        return this._armor;
-    }
+    public void loadFromClips(PrimitiveValue pv) {
+		try {
+			this.id = pv.getFactSlot("id").toString();
+			this.velocity = pv.getFactSlot("predkosc").intValue();
+			//this.extraVelocity = pv.getFactSlot("dodatekPredkosc").intValue();
+			this.energy = pv.getFactSlot("energia").intValue();
+			this.energyLoss = pv.getFactSlot("strataEnergii").intValue();
+			this.energyRecovery = pv.getFactSlot("odnawianieEnergii").intValue();
+			this.gold = pv.getFactSlot("zloto").intValue();
+			this.fieldOfView = pv.getFactSlot("poleWidzenia").intValue();
+			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
+			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
+			this._armor = !pv.getFactSlot("zbroja").toString().equalsIgnoreCase("nil")? pv.getFactSlot("zbroja").toString() : null; 
 
-
-	public Armor get_armor() {
-		return _armor;
-	}
-
-
-	public void set_armor(Armor _armor) {
-		this._armor = _armor;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -68,9 +67,9 @@ public class Knight extends Agent {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("(rycerz");
 		if (_armor != null) {
-			buffer.append(" (zbroja ");
-			buffer.append(_armor.getId());
-			buffer.append(") ");
+			buffer.append(" ( zbroja ");
+			buffer.append(_armor);
+			buffer.append(" ) ");
 		}
 		buffer.append(" (ataki ");
 		for (int i = 0; i < this._attacks.size(); i++) {
@@ -81,30 +80,30 @@ public class Knight extends Agent {
 		}
 		buffer.append(")");
 
-		buffer.append(" (id ");
+		buffer.append(" ( id ");
 		buffer.append(id);
-		buffer.append(")");
+		buffer.append(" )");
 		
-		buffer.append(" (mozliwyRuch ");
+		buffer.append(" ( mozliwyRuch ");
 		buffer.append(possibleMove);
-		buffer.append(")");
+		buffer.append(" )");
 
-		buffer.append(" (idKratki ");
+		buffer.append(" ( idKratki ");
 		buffer.append(this.mapFrame.getId());
-		buffer.append(")");
-		buffer.append(" (poleWidzenia ");
+		buffer.append(" )");
+		buffer.append(" ( poleWidzenia ");
 		buffer.append(fieldOfView);
-		buffer.append(") (predkosc ");
+		buffer.append(" ) ( predkosc ");
 		buffer.append(velocity);
-		buffer.append(") (energia ");
+		buffer.append(" ) ( energia ");
 		buffer.append(energy);
-		buffer.append(") (strataEnergii ");
+		buffer.append(" ) ( strataEnergii ");
 		buffer.append(energyLoss);
-		buffer.append(") (odnawianieEnergii ");
+		buffer.append(" ) ( odnawianieEnergii ");
 		buffer.append(energyRecovery);
-		buffer.append(") (zloto ");
+		buffer.append(" ) ( zloto ");
 		buffer.append(gold);
-		buffer.append("))");
+		buffer.append(" ) )");
 		return buffer.toString();
 	}
 
