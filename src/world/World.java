@@ -82,10 +82,18 @@ public class World {
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
         
+        mapFrame = this.getFrameById(this.mapFrames[(int)Math.random()*40][(int)Math.random()*40].getId());
+        Courier dragon1 = new Courier("dragon1", "src/clips/dragon_1.clp", mapFrame, om);
+        
+        mapFrame = this.getFrameById(this.mapFrames[(int)Math.random()*40][(int)Math.random()*40].getId());
+        Courier dragon2 = new Courier("dragon1", "src/clips/dragon_2.clp", mapFrame, om);
+        
         this.agents.add(woodman);
         this.agents.add(woodman2);
         this.agents.add(courier);
         this.agents.add(courier2);
+        this.agents.add(dragon1);
+        this.agents.add(dragon2);
         om.drawAllTiles();
     }
     

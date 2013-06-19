@@ -1,8 +1,13 @@
 package agents;
 
+import CLIPSJNI.PrimitiveValue;
 import java.util.ArrayList;
 
 import agents.skills.Attack;
+import java.util.Arrays;
+
+import polskaad1340.window.OknoMapy;
+import world.MapFrame;
 
 /**
  * Klasa definiująca smoka.
@@ -16,10 +21,30 @@ public class Dragon extends Agent {
      */
     private ArrayList<Attack> _attacks;
 	
-    public Dragon(String id, String pathToClipsFile) {
+    public Dragon(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
     	super(id, pathToClipsFile);
     	 this.setGold(0);
+         
+        this.mapFrame = mapFrame;
+        this.opp = om.nowyObiektPierwszegoPlanu(mapFrame.getX(), mapFrame.getY(), this.id, 1088);
     }
+	public void loadFromClips(PrimitiveValue pv) {
+		try {
+			this.id = pv.getFactSlot("id").toString();
+			this.velocity = pv.getFactSlot("predkosc").intValue();
+			this.extraVelocity = pv.getFactSlot("dodatekPredkosc").intValue();
+			this.energy = pv.getFactSlot("energia").intValue();
+			this.energyLoss = pv.getFactSlot("strataEnergii").intValue();
+			this.energyRecovery = pv.getFactSlot("odnawianieEnergii").intValue();
+			this.gold = pv.getFactSlot("zloto").intValue();
+			this.fieldOfView = pv.getFactSlot("poleWidzenia").intValue();
+			this.mapFrame.setId(pv.getFactSlot("idKratki").intValue());
+			this.possibleMove = pv.getFactSlot("mozliwyRuch").intValue();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
     
 	 /**
      * Getter dla listy wszystkich ataków.
