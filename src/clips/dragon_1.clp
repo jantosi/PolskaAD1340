@@ -52,7 +52,7 @@
 (close)
 )
 
-;jak widzi rycerza zawsze go atakuje, nie zależnie od poziomu energii.
+;jak widzi rycerza i ma więcej niż 50 pkt energii to z nim walczy, jak nie to ucieka.
 (defrule smokReagujNaRycerza (declare (salience 100))
     (smok (id ?id)(energia ?energia))
     (rycerz (id ?idRycerza))
@@ -61,10 +61,34 @@
 =>
     (open "src/clips/agentResults.txt" resultFile "a")
 
-    ;wybierz sobie atak
-    (bind ?atak  (mod (random) 3) )
-    (assert (akcjaAtak (idAgenta ?id)(idOfiary ?idRycerza)(rodzajAtaku ?atak)))
-    (printout resultFile "Smok: " ?id " atakuje rycerza: " ?idRycerza "." crlf)  
+    (if (> ?energia 50)
+    then
+        ;wybierz sobie atak
+        (bind ?atak  (mod (random) 3) )
+        (assert (akcjaAtak (idAgenta ?id)(idOfiary ?idRycerza)(rodzajAtaku ?atak)))
+        (printout resultFile "Smok: " ?id " atakuje rycerza: " ?idRycerza "." crlf)  
+    else
+        ;smok ucieka w dowolnym kierunku.
+        (bind ?kierunek  (mod (random) 4) )
+        (if (eq ?kierunek 0)
+         then
+            (bind ?kierunek prawo)
+        )
+        (if (eq ?kierunek 1)
+         then
+            (bind ?kierunek dol)
+        )
+        (if (eq ?kierunek 2)
+         then
+            (bind ?kierunek dol)
+        )
+        (if (eq ?kierunek 3)
+         then
+            (bind ?kierunek prawo)
+        )
+        (assert (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?mozliwyRuch)(kierunek ?kierunek)))
+        (printout resultFile "Smok: " ?id " ucieka od rycerza." crlf)
+    )
     
     (assert (podjetoAkcje))
     (close)
