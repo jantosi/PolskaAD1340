@@ -6,8 +6,7 @@
 
 ;; Rycerz patroluje między grodami
 (defrule idzDoGrodu (declare (salience 20))
-    ?rycerz <- (rycerz (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch)
-     ( zbroja ?zbroja)
+    ?rycerz <- (rycerz (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch)( zbroja ?zbroja))
     (droga (id ?drogaId)(idKratki ?idKratki)(skadGrod ?skadGrod)(dokadGrod ?dokadGrod)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
     (test (eq ?cel nil))
@@ -45,14 +44,9 @@
 
 ;Ryczerz kupuje zbroje
 (defrule rycerzKupZbroje
- ?rycerz <- (rycerz (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch)
- 
-    ( zbroja ?zbroja) 
-    (zloto ?zloto))
-?grod<-(grod (nazwa ?idGrodu) (idKratki ?idKratki))
-?nowaZbroja <-(zbroja (id ?idZbroi) (cena ?cenaZbroi) 
-                (typ ?typZbroi) (zuzycie ?zuzycieZbroi)
-               (idGrodu ?idGrodu))
+?rycerz <- (rycerz (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch)(zbroja ?zbroja) (zloto ?zloto))
+?grod <- (grod (nazwa ?idGrodu) (idKratki ?idKratki))
+?nowaZbroja <-(zbroja (id ?idZbroi) (cena ?cenaZbroi)(zuzycie ?zuzycieZbroi)(grod ?idGrodu))
 (test (> ?zloto ?cenaZbroi))
 (test (neq ?cel zbroja))
 (not (podjetoAkcje))
@@ -84,9 +78,9 @@
     (close)
 )
 
-//Atakuje smoka gdy ma wiecej niz 30 energii i atakuje najmocniejszym uderzeniem
+;Atakuje smoka gdy ma wiecej niz 30 energii i atakuje najmocniejszym uderzeniem
 (defrule rycerzAtakujSmoka (declare (salience 100))
-    (rycerz (id ?id)(energia ?energia))
+    (rycerz (id ?id)(energia ?energia)(mozliwyRuch ?mozliwyRuch))
     (smok (id ?idSmoka))
     (iteracja ?it)
     (not (podjetoAkcje))
@@ -96,7 +90,7 @@
     (if (> ?energia 30)
     then
         ;wybierz sobie atak
-        (bind ?atak  (3) )
+        (bind ?atak 3)
         (assert (akcjaAtak (idAgenta ?id)(idOfiary ?idSmoka)(rodzajAtaku ?atak)))
         (printout resultFile "Rycerz: " ?id " atakuje smoka: " ?idSmoka "." crlf)  
     else

@@ -40,7 +40,7 @@
 )
 
 ;jak widzi smoka to odrazu atakuje
-defrule rycerzAtakujSmoka (declare (salience 100))
+(defrule rycerzAtakujSmoka (declare (salience 100))
     (rycerz (id ?id)(energia ?energia))
     (smok (id ?idSmoka))
     (iteracja ?it)

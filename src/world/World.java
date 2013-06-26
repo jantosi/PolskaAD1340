@@ -114,10 +114,10 @@ public class World {
         this.agents.add(woodman2);
         this.agents.add(courier);
         this.agents.add(courier2);
-       // this.agents.add(dragon1);
-       // this.agents.add(dragon2);
-        //this.agents.add(knight1);
-        //this.agents.add(knight2);
+        this.agents.add(dragon1);
+        this.agents.add(dragon2);
+        this.agents.add(knight1);
+        this.agents.add(knight2);
         om.drawAllTiles();
     }
     
