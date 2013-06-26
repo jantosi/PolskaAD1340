@@ -319,6 +319,28 @@
 (retract ?akcja)
 )
 
+(defrule agentDotarlDoCelu (declare (salience 80))
+    (or	
+		(and
+            ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel))
+            (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
+        )		
+        ?agent <- (rycerz (id ?id)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (drwal (id ?id)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (kupiec (id ?id)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (zlodziej (id ?id)(idKratki ?idKratki)(cel ?cel))
+		?agent <- (smok (id ?id)(idKratki ?idKratki)(cel ?cel))
+	)
+ 
+    (grod (nazwa ?cel)(idKratki ?idKratki))
+=>
+    (open "src/clips/agentResults.txt" resultFile "a")
+    
+    (printout resultFile "Agent: " ?id " aktualnie osiagnal cel podrozy" crlf)     
+    (modify ?agent (cel nil))
+    (close)
+)
+
 ;przemieszczanie agentow po kratkach
 (defrule przemieszczanie (declare (salience 10))
 	(or	

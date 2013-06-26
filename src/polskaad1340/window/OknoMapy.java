@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -84,6 +85,8 @@ public final class OknoMapy extends javax.swing.JFrame {
     private JMenu mnBrowse;
     private JMenu mnBrowseAgents;
     private JMenu mnBrowseTowns;
+    private JMenu mnInference;
+    private JMenuItem mnWorldInference;
 
     public int addObjectToForegroundList(ObiektPierwszegoPlanu opp) {
         int index = this.foregroundList.size();
@@ -145,6 +148,12 @@ public final class OknoMapy extends javax.swing.JFrame {
         this.defaultBorder = new BasicBorders.FieldBorder(Color.lightGray, new Color(0, true), new Color(0, true), new Color(0, true));
         jCheckBoxMenuItem1.setSelected(false);
         
+        mnInference = new JMenu("Pokaz wnioskowanie");
+        jMenuBar1.add(mnInference);
+        
+        mnWorldInference = new JMenuItem("swiat");
+        mnInference.add(mnWorldInference);
+        
         addTileGridToWindow(createTileGrid(100, defaultBgTileID), overallBackgroundPanel);
 
         drawAllTiles();
@@ -152,6 +161,7 @@ public final class OknoMapy extends javax.swing.JFrame {
         
         contextPanel.setVisible(false);
         this.requestFocus();
+
     }
 
     public ObiektPierwszegoPlanu nowyObiektPierwszegoPlanu(int x, int y, String id, int tileID) {
@@ -877,5 +887,21 @@ public final class OknoMapy extends javax.swing.JFrame {
 
 	public void setBrowseDetailFrame(JInternalFrame browseDetailFrame) {
 		this.browseDetailFrame = browseDetailFrame;
+	}
+
+	public JMenuItem getMnWorldInference() {
+		return mnWorldInference;
+	}
+
+	public void setMnWorldInference(JMenuItem mnWorldInference) {
+		this.mnWorldInference = mnWorldInference;
+	}
+
+	public javax.swing.JPanel getContextPanel() {
+		return contextPanel;
+	}
+
+	public void setContextPanel(javax.swing.JPanel contextPanel) {
+		this.contextPanel = contextPanel;
 	}
 }

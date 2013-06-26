@@ -307,6 +307,34 @@ public class ControlButtonsListeners {
 		
 	}
 	
+	private class MenuShowWorldInferenceListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			om.getBrowseDetailFrame().setVisible(false);
+			om.getBrowseDetailFrame().getContentPane().removeAll();
+			om.getBrowseDetailFrame().setBounds(300, 100, 400, 320);
+			
+			JScrollPane scrollPanel = new JScrollPane();
+			scrollPanel.getVerticalScrollBar().setUnitIncrement(8);
+			om.getBrowseDetailFrame().getContentPane().add(scrollPanel);
+			
+			StringBuffer buf = new StringBuffer();
+			buf.append("<html>");
+			buf.append(inference.getLastWorldInferenceres().replaceAll("\n", "<br>"));
+			buf.append("</html>");
+
+			JLabel content = new JLabel(buf.toString());
+			scrollPanel.setViewportView(content);
+			
+			om.getBrowseDetailFrame().setTitle("Ostatni wynik wnioskowania swiata");
+			om.getBrowseDetailFrame().setVisible(true);
+			om.getBrowseDetailFrame().setClosable(true);
+			om.getBrowseDetailFrame().validate();
+		}
+		
+	}
+	
 	public ControlButtonsListeners(OknoMapy om, Inference inference) {
 		this.om = om;
 		this.inference = inference;
@@ -332,5 +360,6 @@ public class ControlButtonsListeners {
 		this.om.getMnBrowse().addMouseListener(new MenuBrowseListener());
 		this.om.getMnBrowseAgents().addActionListener(new MenuBrowseAgentsListener());
 		this.om.getMnBrowseTowns().addActionListener(new MenuBrowseTownsListener());
+		this.om.getMnWorldInference().addActionListener(new MenuShowWorldInferenceListener());
 	}
 }

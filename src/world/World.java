@@ -84,7 +84,7 @@ public class World {
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
         
-        /*mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
+        mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
         Dragon dragon1 = new Dragon("smok1", "src/clips/dragon_1.clp", mapFrame, om);
         dragon1.addAttack(new Attack(10, 5, "atak1"));
         dragon1.addAttack(new Attack(20, 10, "atak2"));
@@ -107,17 +107,17 @@ public class World {
         Knight knight2 = new Knight("rycerz2", "src/clips/rycerz_2.clp", mapFrame, om);
         dragon2.addAttack(new Attack(10, 5, "atak1"));
         dragon2.addAttack(new Attack(20, 10, "atak2"));
-        dragon2.addAttack(new Attack(30, 15, "atak3"));*/
+        dragon2.addAttack(new Attack(30, 15, "atak3"));
         
         
         this.agents.add(woodman);
         this.agents.add(woodman2);
         this.agents.add(courier);
         this.agents.add(courier2);
-       /* this.agents.add(dragon1);
-        this.agents.add(dragon2);
-        this.agents.add(knight1);
-        this.agents.add(knight2);*/
+       // this.agents.add(dragon1);
+       // this.agents.add(dragon2);
+        //this.agents.add(knight1);
+        //this.agents.add(knight2);
         om.drawAllTiles();
     }
     
@@ -1017,7 +1017,6 @@ public class World {
         StringBuffer sbuf = new StringBuffer();
 
         sbuf.append("(mapa ").append(this.height).append(" ").append(this.width).append(" )\n");
-        // sbuf.append(";kratki\n");
         for (int i = 0; i < height; i++) {
             for (int k = 0; k < width; k++) {
                 if (mapFrames[k][i] != null) {
@@ -1028,32 +1027,26 @@ public class World {
             }
         }
 
-        // sbuf.append(";bandyci\n");
         for (Bandits temp : bandits) {
             sbuf.append(temp.toString()).append("\n");
         }
 
-        // sbuf.append(";blokady\n");
         for (Blockade temp : blockades) {
             sbuf.append(temp.toString()).append("\n");
         }
 
-        // sbuf.append(";kleski\n");
         for (Cataclysm temp : cataclysms) {
             sbuf.append(temp.toString()).append("\n");
         }
 
-        // sbuf.append(";drogi\n");
         for (Road temp : roads) {
             sbuf.append(temp.toString()).append("\n");
         }
 
-        // /sbuf.append(";grody\n");
         for (Town temp : towns) {
             sbuf.append(temp.toString()).append("\n");
         }
 
-        // sbuf.append(";drzewa\n");
         for (Tree temp : trees) {
             sbuf.append(temp.toString()).append("\n");
         }

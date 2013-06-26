@@ -3,18 +3,6 @@
 ; 2. jak mam cel to ide
 ; 3. jak jestem w grodzi to kupuje konia - oczywiscie jak mam zloto na niego
 ; 4. biore paczke
-
-(defrule poslaniecDotarlDoCelu (declare (salience 30))
-    ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel))
-    (grod (nazwa ?cel)(idKratki ?idKratki))
-=>
-    (open "src/clips/agentResults.txt" resultFile "a")
-    
-    (printout resultFile "Agent: " ?id " aktualnie osiagnal cel podrozy" crlf)     
-    (modify ?agent (cel nil))
-    (close)
-)
-
 (defrule poslaniecWybierzTrase (declare (salience 20))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(skadGrod ?skadGrod)(dokadGrod ?dokadGrod)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
@@ -213,20 +201,20 @@
         (assert (akcjaZobaczenieBlokady (idAgenta ?id)(idBlokady ?idBlokady)(podjetaAkcja ominiecie)))
         (printout resultFile "Agent: " ?id " jesli napotka blokade bedzie skakal poniewaz ma wiecej niz 30 pkt. energii" crlf) 
     else
-        (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 4))))   
-        (printout resultFile "Agent: " ?id " jesli napotka blokade odpoczywal 4 rundy, poniewaz ma mnie niz 30 pkt. energii" crlf) 
+        (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 2))))   
+        (printout resultFile "Agent: " ?id " jesli napotka blokade odpoczywal 2 rundy, poniewaz ma mniej niz 30 pkt. energii" crlf) 
     )
     
     (assert (okreslonoAkcjeNaBlokade))
     (close)
 )
 
-;jesli jest na platnej drodze i ma mniej niz 40 pkt. energii to zawsze odpoczywa 5 iteracji, bo mu sie najlepiej oplaca to
+;jesli jest na platnej drodze i ma mniej niz 15 pkt. energii to zawsze odpoczywa 5 iteracji, bo mu sie najlepiej oplaca to
 (defrule poslaniecOdpoczywaj (declare (salience 100))
     (poslaniec (id ?id)(energia ?energia)(idKratki ?idKratki))
     (droga (id ?drogaId)(idKratki ?idKratki)(platna ?platna))
     (iteracja ?it)
-    (test (and (eq ?platna TRUE) (< ?energia 40)))
+    (test (and (eq ?platna TRUE) (< ?energia 15)))
     (not (podjetoAkcje))
 =>
     (open "src/clips/agentResults.txt" resultFile "a")

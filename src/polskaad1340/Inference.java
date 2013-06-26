@@ -13,6 +13,7 @@ public class Inference {
 	private World world;
 	private OknoMapy om;
 	private ArrayList<String> agentsInferenceResults;
+	private String lastWorldInferenceres;
 	
 	//ostatnia pelna runda czyli swiat i wszyscy agenci
 	private int lastPerformedIter;
@@ -41,6 +42,7 @@ public class Inference {
 	
 	public void performWorldInference() {
 		this.clipsEnv.getWorldEnv().reset();
+		this.om.getContextPanel().setVisible(false);
 		
 		// do swiata przekazujemy obiekty swiata oraz wywnioskowane
 		// przez agentow fakty
@@ -56,11 +58,9 @@ public class Inference {
 		this.clipsEnv.getWorldEnv().run();
 		
 		String worldInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/results.txt");
+		this.lastWorldInferenceres = worldInfRes;
 		System.out.println(worldInfRes);
 		
-		om.setScrollFocusOn(10, 10);
-		this.om.displayInferenceResults(20 * this.om.tileSize, 20 * this.om.tileSize
-				, "Wynik wnioskowania swiata", worldInfRes, "world");
 		
 		System.out.println("fakty:");
 		//clipsEnv.displayWorldFacts();
@@ -181,6 +181,14 @@ public class Inference {
 
 	public void setOm(OknoMapy om) {
 		this.om = om;
+	}
+
+	public String getLastWorldInferenceres() {
+		return lastWorldInferenceres;
+	}
+
+	public void setLastWorldInferenceres(String lastWorldInferenceres) {
+		this.lastWorldInferenceres = lastWorldInferenceres;
 	}
 	
 }
