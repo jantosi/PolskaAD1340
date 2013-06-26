@@ -391,8 +391,9 @@
                     ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
                 ) 
+                (bind ?ilePrzesunac (+ ?ilePrzesunac 1))
            ) 
-           (bind ?ilePrzesunac (+ ?ilePrzesunac 1))
+          
 		)
 		(case lewo then 
 		    (bind ?nowaKratkaX (- ?kratkaX ?kratki))
@@ -414,9 +415,9 @@
                     (bind ?nowaKratkaX (- ?x 1))
                     ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
-                ) 
+                )
+                (bind ?ilePrzesunac (+ ?ilePrzesunac 1)) 
            )    
-           (bind ?ilePrzesunac (+ ?ilePrzesunac 1))
 		)
 		(case prawo then 
 			(bind ?nowaKratkaX (+ ?kratkaX ?kratki))
@@ -439,8 +440,8 @@
                     ;(printout resultFile "wykryto blokade" crlf)
                     (break)         
                 ) 
+                (bind ?ilePrzesunac (+ ?ilePrzesunac 1))
            ) 
-           (bind ?ilePrzesunac (+ ?ilePrzesunac 1))
 		)
 	)
 	
