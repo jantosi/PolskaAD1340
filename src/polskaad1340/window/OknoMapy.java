@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -60,7 +61,7 @@ public final class OknoMapy extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel overallBackgroundPanel;
-    private javax.swing.JPanel tileInfoPanel;
+    private JScrollPane tileInfoScrollPanel;
     private javax.swing.JLabel tileInfoPanelLabel1;
     private JPanel controlPanel;
     private JButton btnNextIter;
@@ -364,7 +365,7 @@ public final class OknoMapy extends javax.swing.JFrame {
         bulkPanel = new javax.swing.JPanel();
         contextPanel = new javax.swing.JPanel();
         iconDisplayPanel = new javax.swing.JPanel();
-        tileInfoPanel = new javax.swing.JPanel();
+        tileInfoScrollPanel = new JScrollPane();
         tileInfoPanelLabel1 = new javax.swing.JLabel();
         foregroundPanel = new javax.swing.JPanel();
         backgroundPanel = new javax.swing.JPanel();
@@ -406,11 +407,11 @@ public final class OknoMapy extends javax.swing.JFrame {
         iconDisplayPanel.setLayout(new java.awt.GridLayout(1, 1));
         contextPanel.add(iconDisplayPanel);
 
-        tileInfoPanel.setLayout(new java.awt.CardLayout());
+        
         tileInfoPanelLabel1.setText("jLabel1");
         tileInfoPanelLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        tileInfoPanel.add(tileInfoPanelLabel1, "card2");
-        contextPanel.add(tileInfoPanel);
+        tileInfoScrollPanel.setViewportView(tileInfoPanelLabel1);
+        contextPanel.add(tileInfoScrollPanel);
         
         bulkPanel.add(contextPanel);
         
@@ -756,14 +757,6 @@ public final class OknoMapy extends javax.swing.JFrame {
 
 	public void setIconDisplayPanel(javax.swing.JPanel iconDisplayPanel) {
 		this.iconDisplayPanel = iconDisplayPanel;
-	}
-
-	public javax.swing.JPanel getTileInfoPanel() {
-		return tileInfoPanel;
-	}
-
-	public void setTileInfoPanel(javax.swing.JPanel tileInfoPanel) {
-		this.tileInfoPanel = tileInfoPanel;
 	}
 
 	public javax.swing.JLabel getTileInfoPanelLabel1() {

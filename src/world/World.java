@@ -85,7 +85,7 @@ public class World {
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
         Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
         
-        mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
+        /*mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
         Dragon dragon1 = new Dragon("smok1", "src/clips/dragon_1.clp", mapFrame, om);
         dragon1.addAttack(new Attack(10, 5, "atak1"));
         dragon1.addAttack(new Attack(20, 10, "atak2"));
@@ -108,17 +108,17 @@ public class World {
         Knight knight2 = new Knight("rycerz2", "src/clips/rycerz_2.clp", mapFrame, om);
         dragon2.addAttack(new Attack(10, 5, "atak1"));
         dragon2.addAttack(new Attack(20, 10, "atak2"));
-        dragon2.addAttack(new Attack(30, 15, "atak3"));
+        dragon2.addAttack(new Attack(30, 15, "atak3"));*/
         
         
         this.agents.add(woodman);
         this.agents.add(woodman2);
         this.agents.add(courier);
         this.agents.add(courier2);
-        this.agents.add(dragon1);
+       /* this.agents.add(dragon1);
         this.agents.add(dragon2);
         this.agents.add(knight1);
-        this.agents.add(knight2);
+        this.agents.add(knight2);*/
         om.drawAllTiles();
     }
     

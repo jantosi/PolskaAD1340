@@ -45,7 +45,6 @@ public class Inference {
 		// do swiata przekazujemy obiekty swiata oraz wywnioskowane
 		// przez agentow fakty
 		this.world.saveToClips();
-		//System.out.println(world);
 		for (int k = 0; k < this.agentsInferenceResults.size(); k++) {
 			clipsEnv.getWorldEnv().assertString(this.agentsInferenceResults.get(k));
 		}
