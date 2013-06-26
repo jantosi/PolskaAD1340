@@ -3,14 +3,16 @@
 ; 2. jak mam cel to ide
 ; 3. jak jestem w grodzi to kupuje konia - oczywiscie jak mam zloto na niego
 ; 4. biore paczke
+
 (defrule poslaniecWybierzTrase (declare (salience 20))
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(skadGrod ?skadGrod)(dokadGrod ?dokadGrod)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (grod (idKratki ?idKratki)))    
     (not (podjetoAkcje))
     (test (eq ?cel nil))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>        
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC1.txt" resultFile "a")
     (if (> ?nrO (/ ?maxO 2))
     then    
         (bind ?celPodrozy ?dokadGrod)           
@@ -33,8 +35,9 @@
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (not (podjetoAkcje))
     (test (eq ?cel nil))    
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")   
+    (open "src/clips/resultsC1.txt" resultFile "a")   
     
     ;jesli ma jakas paczke i z danego grodu jest bezposrednio droga tam gdzie ma dostarczyc paczke
     ;to ja wybiera, w przeciwnym wypadku wybiera droge najkrotsza
@@ -99,8 +102,9 @@
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>  
-    (open "src/clips/agentResults.txt" resultFile "a")      
+    (open "src/clips/resultsC1.txt" resultFile "a")      
     (assert (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?mozliwyRuch)(docelowyGrod ?cel)))
     (assert (podjetoAkcje))   
    
@@ -114,8 +118,9 @@
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (test (eq ?kon nil))
     (not (podjetoAkcje))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")     
+    (open "src/clips/resultsC1.txt" resultFile "a")     
     
     ;znajduje najtanszego konia
     (bind $?dostepneKonie (create$ (find-all-facts ((?k kon))(eq ?k:grod ?idGrodu))))
@@ -144,9 +149,10 @@
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(zloto ?zloto)(paczki $?paczki)(udzwig ?udzwig))
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (not (podjetoAkcje))
-    (test (< (length $?paczki) 1))
+    (test (eq (length $?paczki) 0))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC1.txt" resultFile "a")
     
     ;znajduje najciezsza paczke, ktora jest w stanie udzwignac
     (bind $?dostepnePaczki (create$ (find-all-facts ((?p paczka))(eq ?p:grodStart ?idGrodu))))
@@ -193,8 +199,9 @@
     (blokada (id ?idBlokady))
     (iteracja ?it)
     (not (okreslonoAkcjeNaBlokade))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC1.txt" resultFile "a")
 
     (if (> ?energia 30)
     then
@@ -209,22 +216,33 @@
     (close)
 )
 
-;jesli jest na platnej drodze i ma mniej niz 15 pkt. energii to zawsze odpoczywa 5 iteracji, bo mu sie najlepiej oplaca to
+;jesli jest na platnej drodze i ma mniej niz 10 pkt. energii to zawsze odpoczywa 5 iteracji, bo mu sie najlepiej oplaca to
 (defrule poslaniecOdpoczywaj (declare (salience 100))
     (poslaniec (id ?id)(energia ?energia)(idKratki ?idKratki))
     (droga (id ?drogaId)(idKratki ?idKratki)(platna ?platna))
     (iteracja ?it)
-    (test (and (eq ?platna TRUE) (< ?energia 15)))
+    (test (and (eq ?platna TRUE) (< ?energia 10)))
     (not (podjetoAkcje))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC1.txt" resultFile "a")
 
-    (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 5))))   
+    (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaPoczatek ?it)(iteracjaKoniec (+ ?it 5))))   
     (assert (podjetoAkcje))
     (printout resultFile "Agent: " ?id " bedzie odpoczywal 5 iteracji poniewaz szybko sie zregeneruje na tej drodze" crlf) 
  
     (close)
 )
 
+(defrule infromujOOdpoczynku (declare (salience 100))
+    (poslaniec (id ?id))
+    (akcjaOdpoczywanie (idAgenta ?id))
+=>
+    (open "src/clips/resultsC1.txt" resultFile "a")
+
+    (printout resultFile "Agent: " ?id " odpoczywa" crlf) 
+ 
+    (close)
+)
 
 

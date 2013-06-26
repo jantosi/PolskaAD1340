@@ -113,7 +113,7 @@ public final class OknoMapy extends javax.swing.JFrame {
 
     public JLabel tileFromNumber(int num) {
         String path = "/images/" + num + ".png";
-
+        //System.out.println("path: " + path);
         ImageIcon ii = new ImageIcon(getClass().getResource(path));
 
         JLabel jl = new JLabel(ii);

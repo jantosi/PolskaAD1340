@@ -27,8 +27,8 @@ public class Knight extends Agent {
     
     private KnightStatistics_Interface _stat;
     
-    public Knight(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
-    	super(id, pathToClipsFile);
+    public Knight(String id, String pathToClipsFile, String clipsResultFile, MapFrame mapFrame, OknoMapy om) {
+    	super(id, pathToClipsFile, clipsResultFile);
     	this._attacks = new ArrayList<Attack>();
     	this.velocity = 2;
     	this.fieldOfView = 2;

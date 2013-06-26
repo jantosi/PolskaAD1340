@@ -17,6 +17,7 @@ abstract public class Agent implements Cloneable{
     
 	protected ObiektPierwszegoPlanu opp;
 	protected String pathToClipsFile;
+	protected String clipsResultFile;
 	
 	/**
 	 * Identyfikator agenta
@@ -81,7 +82,7 @@ abstract public class Agent implements Cloneable{
     /**
      * Konstruktor. Ustawienie domyślnych parametrów dla większości agentów.
      */
-    public Agent(String id, String pathToClipsFile) {
+    public Agent(String id, String pathToClipsFile, String clipsResultFile) {
         //Domyślne parametry dla większości agentów.
         this.setEnergy(100);
         this.setEnergyLoss(2);
@@ -89,6 +90,7 @@ abstract public class Agent implements Cloneable{
         this.setId(id);
         this.gold = 50;
         this.pathToClipsFile = pathToClipsFile;
+        this.clipsResultFile = clipsResultFile;
     }
     
     //wyciaga wszystkie podjete decyzje(akcje) agenta po wnioskowaniu
@@ -170,6 +172,7 @@ abstract public class Agent implements Cloneable{
 				
 				buf.append("(akcjaOdpoczywanie ")
 				   .append("(idAgenta ").append(tmpPv.getFactSlot("idAgenta").toString()).append(") ")
+				   .append("(iteracjaPoczatek ").append(tmpPv.getFactSlot("iteracjaPoczatek").toString()).append(") ")
 				   .append("(iteracjaKoniec ").append(tmpPv.getFactSlot("iteracjaKoniec").toString()).append(")) ");
 				
 				results.add(buf.toString());
@@ -431,5 +434,13 @@ abstract public class Agent implements Cloneable{
 
 	public void setOpp(ObiektPierwszegoPlanu opp) {
 		this.opp = opp;
+	}
+
+	public String getClipsResultFile() {
+		return clipsResultFile;
+	}
+
+	public void setClipsResultFile(String clipsResultFile) {
+		this.clipsResultFile = clipsResultFile;
 	}
 }

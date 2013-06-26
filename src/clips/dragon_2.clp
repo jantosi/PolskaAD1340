@@ -8,7 +8,7 @@
     (not (podjetoAkcje))
     (not (akcjaOdpoczywanie(idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsD2.txt" resultFile "a")
 
     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 5))))   
     (assert (podjetoAkcje))
@@ -47,7 +47,7 @@
 (assert (podjetoAkcje))
 (assert (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?mozliwyRuch)(kierunek ?kierunek)))
 
-(open "src/clips/agentResults.txt" resultFile "a")      
+(open "src/clips/resultsD2.txt" resultFile "a")      
     (printout resultFile "Smok: " ?id " sobie lata." crlf)   
 (close)
 )
@@ -59,7 +59,7 @@
     (iteracja ?it)
     (not (podjetoAkcje))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsD2.txt" resultFile "a")
 
     ;wybierz sobie atak
     (bind ?atak  (mod (random) 3) )

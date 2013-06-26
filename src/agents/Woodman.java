@@ -65,8 +65,8 @@ public class Woodman extends Agent {
 		this.woods.add("");
     }
     
-    public Woodman(String id, String pathToClipsFile, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
-        super(id, pathToClipsFile);
+    public Woodman(String id, String pathToClipsFile, String clipsResultFile, WoodmanStatistics_Interface stat, MapFrame mapFrame, OknoMapy om) {
+        super(id, pathToClipsFile, clipsResultFile);
         this.statistics = stat;
         this.ax = null;
         this.vehicle = null;

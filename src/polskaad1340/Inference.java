@@ -92,7 +92,7 @@ public class Inference {
 		System.out.println("<wnioskowanie agenta " + actualAgent.getId() + " >");
 		this.clipsEnv.getAgentEnv().run();
 		
-		String agentInfRes = this.clipsEnv.getWorldInferenceResults("src/clips/agentResults.txt");
+		String agentInfRes = this.clipsEnv.getWorldInferenceResults(actualAgent.getClipsResultFile());
 		System.out.println(agentInfRes);
 		
 		om.displayInferenceResults(actualAgent.getMapFrame().getX() * om.tileSize + 25, actualAgent.getMapFrame().getY() * om.tileSize + 10

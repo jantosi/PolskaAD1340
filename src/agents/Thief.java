@@ -41,8 +41,8 @@ public class Thief extends Agent {
     /**
      * Konstruktor złodzieja.
      */
-    public Thief(String id, String pathToClipsFile, ThiefStatistics_Interface stat) {
-        super(id, pathToClipsFile);
+    public Thief(String id, String pathToClipsFile, String clipsResultFile, ThiefStatistics_Interface stat) {
+        super(id, pathToClipsFile, clipsResultFile);
         this._statitics = stat;
         
         this.setNumberOfStaysInJail(0);

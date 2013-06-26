@@ -44,7 +44,7 @@ then
 )
 (if (>= ?maxUdzwig ( + ?udzwig ( * ?mnoznik ?waga)))
 then
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsW1.txt" resultFile "a")
 (printout resultFile "Sciecie drzewa " ?idKratki crlf) 
 
 
@@ -75,7 +75,7 @@ then
 (test (neq ?cel siekiera))
 (not (podjetoAkcje))
 =>
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsW1.txt" resultFile "a")
 (printout resultFile "Drwal " ?id " postanawia kupić siekiere" crlf) 
 (close)
 (modify ?drwal (cel siekiera))
@@ -91,7 +91,7 @@ then
 (test (neq ?cel drewno))
 (not (podjetoAkcje))
 =>
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsW1.txt" resultFile "a")
 (printout resultFile "Drwal " ?id " postanawia sprzedać drewno" crlf) 
 
 (close)
@@ -114,7 +114,7 @@ then
     (not (podjetoAkcje))
     (test (eq ?cel nil))
 =>        
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsW1.txt" resultFile "a")
     (if (> ?nrO (/ ?maxO 2))
     then    
         (bind ?celPodrozy ?dokadGrod)           
@@ -137,7 +137,7 @@ then
     (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
 =>  
-    (open "src/clips/agentResults.txt" resultFile "a")      
+    (open "src/clips/resultsW1.txt" resultFile "a")      
     (assert (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?mozliwyRuch)(docelowyGrod ?cel)))
     (assert (podjetoAkcje))   
    
@@ -175,7 +175,7 @@ then
 (assert (podjetoAkcje))
 (assert (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?mozliwyRuch)(kierunek ?kierunek)))
 (modify ?drwal (cel nil))
-(open "src/clips/agentResults.txt" resultFile "a")      
+(open "src/clips/resultsW1.txt" resultFile "a")      
     (printout resultFile "Drwal: " ?id " szuka drogi " crlf)   
 (close)
 )
@@ -232,7 +232,7 @@ then
 )
 (if (>= ?maxUdzwig ( + ?udzwig ( * ?mnoznik ?waga)))
 then
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsW1.txt" resultFile "a")
 (printout resultFile "Drzewo na kratce " ?kratkaDrzewa crlf) 
 
 
@@ -264,7 +264,7 @@ then
     ( cel ?cel) 
 )
 =>
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsW1.txt" resultFile "a")
 ;(printout resultFile "Drwal: " ?id "stoi na kratce" ?idKratki  crlf)
 ;(printout resultFile "Drwal udzwig: " ?udzwig " max udzwig " ?maxUdzwig  crlf)
 ;(printout resultFile "Drwal różnica" (test (>= (- ?maxUdzwig ?udzwig) 30 )  crlf)
@@ -296,7 +296,7 @@ then
  
 (not (podjetoAkcje))
 =>
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsW1.txt" resultFile "a")
  (printout resultFile "Drwal: " ?id "cos zadecydowal"  crlf)
  (assert (podjetoAkcje))
 (close)

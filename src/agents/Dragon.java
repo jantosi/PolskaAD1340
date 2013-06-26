@@ -23,8 +23,8 @@ public class Dragon extends Agent {
         this._attacks = new ArrayList<Attack>();
     }
 	
-    public Dragon(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
-    	super(id, pathToClipsFile);
+    public Dragon(String id, String pathToClipsFile, String clipsResultFile, MapFrame mapFrame, OknoMapy om) {
+    	super(id, pathToClipsFile, clipsResultFile);
     	 //this.setGold(0);
          
         this.mapFrame = mapFrame;

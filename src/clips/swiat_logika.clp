@@ -77,7 +77,7 @@
         (bind ?sumaWagPaczek (+ ?sumaWagPaczek ?paczkaWaga))                
     )
    
-    (bind ?strataEnergii (round (+ (* ?sumaWagPaczek 0.2) 2)))
+    (bind ?strataEnergii (round (* ?sumaWagPaczek 0.3)))
     ;sprawdzamy czy poslaniec ma konia
     (if (not (eq ?kon nil))
     then
@@ -128,32 +128,32 @@
         (if (eq ?czyDrzewo TRUE)
         then
             (bind ?dodatPredkosc (- ?dodatPredkosc 2))  
-            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 0))          
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 4))          
         )
         (if (eq ?czyScieteDrzewo TRUE)
         then
             (bind ?dodatPredkosc (- ?dodatPredkosc 1))
-            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 1))        
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 8))        
         ) 
         (if (eq ?czyDrogaBezplatna TRUE)
         then
             (bind ?dodatPredkosc (+ ?dodatPredkosc 0))   
-            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 2))       
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 10))       
         ) 
         (if (eq ?czyDrogaPlatna TRUE)
         then
             (bind ?dodatPredkosc (+ ?dodatPredkosc 1))
-            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 3))         
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 15))         
         ) 
         (if (eq ?czyDrogaUtwardzona TRUE)
         then
             (bind ?dodatPredkosc (+ ?dodatPredkosc 1))
-            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 2))    
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 5))    
         )
         (if (eq ?czyDrogaNieutwardzona TRUE)
         then
             (bind ?dodatPredkosc (+ ?dodatPredkosc 1)) 
-            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 1))           
+            (bind ?odnawianieEnergii (+ ?odnawianieEnergii 0))           
         )       
         
         (if (< ?dodatPredkosc 0)
@@ -319,12 +319,9 @@
 (retract ?akcja)
 )
 
-(defrule agentDotarlDoCelu (declare (salience 80))
+(defrule agentDotarlDoCelu (declare (salience 150))
     (or	
-		(and
-            ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel))
-            (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
-        )		
+        ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel))	
         ?agent <- (rycerz (id ?id)(idKratki ?idKratki)(cel ?cel))
 		?agent <- (drwal (id ?id)(idKratki ?idKratki)(cel ?cel))
 		?agent <- (kupiec (id ?id)(idKratki ?idKratki)(cel ?cel))
@@ -333,8 +330,10 @@
 	)
  
     (grod (nazwa ?cel)(idKratki ?idKratki))
+   
+
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/results.txt" resultFile "a")
     
     (printout resultFile "Agent: " ?id " aktualnie osiagnal cel podrozy" crlf)     
     (modify ?agent (cel nil))
@@ -533,7 +532,7 @@
        
 )
 (defrule uwzglednijZuzycieKonia (declare (salience 11))
-    ?agent <- (poslaniec (id ?id)(kon ?kon))
+    ?agent <- (poslaniec (id ?id)(kon ?kon)(paczki $?paczki))
     ?konik <- (kon (id ?kon)(zuzycie ?zuzycie)(predkoscZuzycia ?predkoscZuzycia))
     (not (uwzglednionoZuzycieKonia(idKonia ?kon)))
     ?modStrat <- (modyfikacjaStratEnergiiPoslanca (idPoslanca ?id))
@@ -547,7 +546,7 @@
         (retract ?modStrat)
         (retract ?modPredk)
         (retract ?konik)
-        (modify ?agent (kon nil)(predkosc 1)(poleWidzenia 1))        
+        (modify ?agent (kon nil)(predkosc 1)(poleWidzenia 1)(paczki (create$)))        
         (printout resultFile "Kon: " ?kon " agenta: " ?id " zuzyl sie" crlf)
     else
         (retract ?modStrat)

@@ -69,42 +69,42 @@ public class World {
     	
     	WoodmanStatistics ws = new WoodmanStatistics();
     	MapFrame mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Woodman woodman = new Woodman("drwal1", "src/clips/drwal_1.clp", ws, mapFrame, om);
+        Woodman woodman = new Woodman("drwal1", "src/clips/drwal_1.clp", "src/clips/resultsW1.txt", ws, mapFrame, om);
         //siekierka dla drwala
         woodman.setAx("siekiera1grod1");
         
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Woodman woodman2 = new Woodman("drwal2", "src/clips/drwal_2.clp", ws, mapFrame, om);
+        Woodman woodman2 = new Woodman("drwal2", "src/clips/drwal_2.clp", "src/clips/resultsW2.txt", ws, mapFrame, om);
         //siekierka dla drwala
         woodman2.setAx("siekiera1grod2");
         
-        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp", mapFrame, om);
+        MapFrame mapFrameC1 = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Courier courier = new Courier("poslaniec1", "src/clips/poslaniec.clp" , "src/clips/resultsC1.txt", mapFrameC1, om);
         
-        mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", mapFrame, om);
+        MapFrame mapFrameC2 = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
+        Courier courier2 = new Courier("poslaniec2", "src/clips/poslaniec2.clp", "src/clips/resultsC2.txt", mapFrameC2, om);
         
         mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
-        Dragon dragon1 = new Dragon("smok1", "src/clips/dragon_1.clp", mapFrame, om);
+        Dragon dragon1 = new Dragon("smok1", "src/clips/dragon_1.clp", "src/clips/resultsD1.txt", mapFrame, om);
         dragon1.addAttack(new Attack(10, 5, "atak1"));
         dragon1.addAttack(new Attack(20, 10, "atak2"));
         dragon1.addAttack(new Attack(30, 15, "atak3"));
         
         mapFrame = this.getFrameById(this.mapFrames[random.nextInt(40)][random.nextInt(40)].getId());
-        Dragon dragon2 = new Dragon("smok2", "src/clips/dragon_2.clp", mapFrame, om);
+        Dragon dragon2 = new Dragon("smok2", "src/clips/dragon_2.clp", "src/clips/resultsD2.txt", mapFrame, om);
         dragon2.addAttack(new Attack(10, 5, "atak1"));
         dragon2.addAttack(new Attack(20, 10, "atak2"));
         dragon2.addAttack(new Attack(30, 15, "atak3"));
         
         
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Knight knight1 = new Knight("rycerz1", "src/clips/rycerz_1.clp", mapFrame, om);
+        Knight knight1 = new Knight("rycerz1", "src/clips/rycerz_1.clp", "src/clips/resultsK1.txt", mapFrame, om);
         dragon1.addAttack(new Attack(10, 5, "atak1"));
         dragon1.addAttack(new Attack(20, 10, "atak2"));
         dragon1.addAttack(new Attack(30, 15, "atak3"));
         
         mapFrame = this.getFrameById(this.roads.get(random.nextInt(this.roads.size())).getMapFrame());
-        Knight knight2 = new Knight("rycerz2", "src/clips/rycerz_2.clp", mapFrame, om);
+        Knight knight2 = new Knight("rycerz2", "src/clips/rycerz_2.clp", "src/clips/resultsK2.txt", mapFrame, om);
         dragon2.addAttack(new Attack(10, 5, "atak1"));
         dragon2.addAttack(new Attack(20, 10, "atak2"));
         dragon2.addAttack(new Attack(30, 15, "atak3"));
@@ -275,10 +275,7 @@ public class World {
 					Woodman woodmanTmp = (Woodman) agent;
 					visibleObjects.addAll(woodmanTmp.findItems(clipsEnv));
 					
-				} else if (agent instanceof Dragon) {
-					Dragon dragonTmp = (Dragon) agent;
-					
-				} // TODO > i tak dla wszystkich pozostalych agentow
+				} 
 
 				break;
 			}
@@ -380,6 +377,7 @@ public class World {
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(woodmanTmp.getId())) {
                 		woodmanTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		woodmanTmp.setClipsResultFile(this.agents.get(k).getClipsResultFile());
                 		this.agents.set(k, woodmanTmp);
                 		break;
                 	}
@@ -408,6 +406,7 @@ public class World {
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(courierTmp.getId())) {
                 		courierTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		courierTmp.setClipsResultFile(this.agents.get(k).getClipsResultFile());
                 		this.agents.set(k, courierTmp);
                 		break;
                 	}
@@ -435,6 +434,7 @@ public class World {
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(dragonTmp.getId())) {
                 		dragonTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		dragonTmp.setClipsResultFile(this.agents.get(k).getClipsResultFile());
                 		this.agents.set(k, dragonTmp);
                 		break;
                 	}
@@ -462,6 +462,7 @@ public class World {
                 for (int k = 0; k < this.agents.size(); k++) {
                 	if (this.agents.get(k).getId().equalsIgnoreCase(knightTmp.getId())) {
                 		knightTmp.setPathToClipsFile(this.agents.get(k).getPathToClipsFile());
+                		knightTmp.setClipsResultFile(this.agents.get(k).getClipsResultFile());
                 		this.agents.set(k, knightTmp);
                 		break;
                 	}

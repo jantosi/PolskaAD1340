@@ -48,8 +48,8 @@ public class Courier extends Agent {
     /**
      * Konstruktor. Nadanie domyślnego udźwigu.
      */
-    public Courier(String id, String pathToClipsFile, MapFrame mapFrame, OknoMapy om) {
-        super(id, pathToClipsFile);
+    public Courier(String id, String pathToClipsFile, String clipsResultFile, MapFrame mapFrame, OknoMapy om) {
+        super(id, pathToClipsFile, clipsResultFile);
 
         this.capacity = 15;
         this.packages = new ArrayList<String>();

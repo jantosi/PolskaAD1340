@@ -5,8 +5,9 @@
     (not (grod (idKratki ?idKratki)))    
     (not (podjetoAkcje))
     (test (eq ?cel nil))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>        
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC2.txt" resultFile "a")
     (if (> ?nrO (/ ?maxO 2))
     then    
         (bind ?celPodrozy ?skadGrod)           
@@ -28,13 +29,14 @@
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(paczki $?paczki)(cel ?cel))
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (not (podjetoAkcje))
-    (test (eq ?cel nil))    
+    (test (eq ?cel nil))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))    
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")   
-    
+    (open "src/clips/resultsC2.txt" resultFile "a")   
+
     ;wybiera zawsze losowa trase do innego grodu bez sprawdzania paczek
     (bind $?dostepneTrasy (create$ (find-all-facts ((?d droga))(eq ?d:skadGrod ?idGrodu))))
-    (bind ?wybranaDroga (nth$ 1 $?dostepneTrasy))
+    (bind ?wybranaDroga (nth$ (mod (random) (+ (length $?dostepneTrasy) 1)) $?dostepneTrasy))
         
     (assert (akcjaZGroduNaDroge (idAgenta ?id)(idKratki (fact-slot-value ?wybranaDroga idKratki))))
     (modify ?agent (cel (fact-slot-value ?wybranaDroga dokadGrod)))
@@ -50,8 +52,9 @@
     ?agent <- (poslaniec (id ?id)(idKratki ?idKratki)(cel ?cel)(mozliwyRuch ?mozliwyRuch))
     (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>  
-    (open "src/clips/agentResults.txt" resultFile "a")      
+    (open "src/clips/resultsC2.txt" resultFile "a")      
     (assert (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?mozliwyRuch)(docelowyGrod ?cel)))
     (assert (podjetoAkcje))   
    
@@ -65,8 +68,9 @@
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (test (eq ?kon nil))
     (not (podjetoAkcje))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")     
+    (open "src/clips/resultsC2.txt" resultFile "a")     
     
     ;znajduje najdrozszego konia
     (bind $?dostepneKonie (create$ (find-all-facts ((?k kon))(eq ?k:grod ?idGrodu))))
@@ -97,8 +101,9 @@
     ?grod <- (grod (nazwa ?idGrodu)(idKratki ?idKratki))
     (not (podjetoAkcje))
     (not (nieWyszloZPaczkami))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC2.txt" resultFile "a")
     
     ;znajduje paczki o wadze mniejszej niz 8
     (bind ?czySaPaczki (any-factp ((?p paczka))(and (eq ?p:grodStart ?idGrodu) (< ?p:waga 8))))
@@ -146,8 +151,9 @@
     (blokada (id ?idBlokady))
     (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(skadGrod ?skadGrod))
     (not (podjetoAkcje))
+    (not (akcjaOdpoczywanie (idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC2.txt" resultFile "a")
 
     (modify ?agent (cel ?skadGrod))  
     (assert (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?mozliwyRuch)(docelowyGrod ?skadGrod)))
@@ -158,19 +164,30 @@
     (close)
 )
 
-;jesli ma mniej niz 40 pkt. energii to zawsze odpoczywa 3 iteracje
+;jesli ma mniej niz 10 pkt. energii to zawsze odpoczywa 3 iteracje
 (defrule poslaniecOdpoczywaj (declare (salience 100))
     (poslaniec (id ?id)(energia ?energia))
     (iteracja ?it)
-    (test (< ?energia 40))
+    (test (< ?energia 10))
     (not (podjetoAkcje))
     (not (akcjaOdpoczywanie(idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsC2.txt" resultFile "a")
 
     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 3))))   
     (assert (podjetoAkcje))
-    (printout resultFile "Agent: " ?id " bedzie odpoczywal 3 iteracje poniewaz ma mniej niz 40 pkt. energii" crlf) 
+    (printout resultFile "Agent: " ?id " bedzie odpoczywal 3 iteracje poniewaz ma mniej niz 10 pkt. energii" crlf) 
+ 
+    (close)
+)
+
+(defrule infromujOOdpoczynku (declare (salience 100))
+    (poslaniec (id ?id))
+    (akcjaOdpoczywanie (idAgenta ?id))
+=>
+    (open "src/clips/resultsC2.txt" resultFile "a")
+
+    (printout resultFile "Agent: " ?id " odpoczywa" crlf) 
  
     (close)
 )

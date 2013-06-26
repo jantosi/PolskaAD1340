@@ -11,7 +11,7 @@
     (not (podjetoAkcje))
     (test (eq ?cel nil))
 =>        
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsK2.txt" resultFile "a")
     (if (> ?nrO (/ ?maxO 2))
     then    
         (bind ?celPodrozy ?dokadGrod)           
@@ -34,7 +34,7 @@
     (droga (id ?drogaId)(idKratki ?idKratki)(dokadGrod ?cel)(nrOdcinka ?nrO)(maxOdcinek ?maxO))
     (not (podjetoAkcje))
 =>  
-    (open "src/clips/agentResults.txt" resultFile "a")      
+    (open "src/clips/resultsK2.txt" resultFile "a")      
     (assert (akcjaPrzemieszczaniePoDrodze (idAgenta ?id)(ileKratek ?mozliwyRuch)(docelowyGrod ?cel)))
     (assert (podjetoAkcje))   
    
@@ -51,7 +51,7 @@
 (test (neq ?cel zbroja))
 (not (podjetoAkcje))
 =>
-(open "src/clips/agentResults.txt" resultFile "a")
+(open "src/clips/resultsK2.txt" resultFile "a")
 (printout resultFile "Rycerz " ?id " postanawia kupić zbroje" crlf) 
 (close)
 (modify ?rycerz (cel zbroja))
@@ -69,7 +69,7 @@
     (not (podjetoAkcje))
     (not (akcjaOdpoczywanie(idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsK2.txt" resultFile "a")
 
     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 3))))   
     (assert (podjetoAkcje))
@@ -85,7 +85,7 @@
     (iteracja ?it)
     (not (podjetoAkcje))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsK2.txt" resultFile "a")
 
     (if (> ?energia 30)
     then

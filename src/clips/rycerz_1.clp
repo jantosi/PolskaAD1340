@@ -34,7 +34,7 @@
 (assert (podjetoAkcje))
 (assert (akcjaPrzemieszczanie (idAgenta ?id)(ileKratek ?mozliwyRuch)(kierunek ?kierunek)))
 (modify ?rycerz (cel nil))
-(open "src/clips/agentResults.txt" resultFile "a")      
+(open "src/clips/resultsK1.txt" resultFile "a")      
     (printout resultFile "Rycerz: " ?id " patroluje " crlf)   
 (close)
 )
@@ -46,7 +46,7 @@
     (iteracja ?it)
     (not (podjetoAkcje))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsK1.txt" resultFile "a")
 
     ;wybiera atak losowo
     (bind ?atak  (mod (random) 3) )
@@ -65,7 +65,7 @@
     (not (podjetoAkcje))
     (not (akcjaOdpoczywanie(idAgenta ?id)))
 =>
-    (open "src/clips/agentResults.txt" resultFile "a")
+    (open "src/clips/resultsK1.txt" resultFile "a")
 
     (assert (akcjaOdpoczywanie (idAgenta ?id)(iteracjaKoniec (+ ?it 3))))   
     (assert (podjetoAkcje))
