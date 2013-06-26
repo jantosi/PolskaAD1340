@@ -995,8 +995,8 @@ public class World {
     		} else {
     			roadType = "utwardzona";
     		}
-    		double robberyProbabilityFreeRoad = random.nextDouble() * 0.3 + 0.3;
-    		double robberyProbabilityPaidRoad = random.nextDouble() * 0.3;
+    		double robberyProbabilityFreeRoad = random.nextDouble() * 0.3;
+    		double robberyProbabilityPaidRoad = random.nextDouble() * 0.15;
     		for (Road road : this.roads) {
     			if (road.getId().equalsIgnoreCase(roadId)) {
     				road.setType(roadType);

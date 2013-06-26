@@ -445,6 +445,26 @@
 		)
 	)
 	
+    (if (> ?nowaKratkaX ?width)
+    then
+        (bind ?nowaKratkaX ?width)
+    ) 
+
+    (if (< ?nowaKratkaX 0)
+    then
+        (bind ?nowaKratkaX 0)
+    ) 
+
+    (if (> ?nowaKratkaY ?height)
+    then
+        (bind ?nowaKratkaY ?height)
+    ) 
+  
+    (if (< ?nowaKratkaY 0)
+    then
+        (bind ?nowaKratkaY 0)
+    ) 
+    
     ;sprawdzamy czy agent odpowiednia ilosc energii aby sie przmiescic
     ;jesli nie ma, automatycznie musi odpoczywac dana iteracje
     (bind ?potrzebnaEnergia (* ?strE ?ilePrzesunac))    
