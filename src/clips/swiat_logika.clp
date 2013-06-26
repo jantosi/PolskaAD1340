@@ -467,9 +467,9 @@
 		)
 	)
 	
-    (if (> ?nowaKratkaX ?width)
+    (if (> ?nowaKratkaX (- ?width 1))
     then
-        (bind ?nowaKratkaX ?width)
+        (bind ?nowaKratkaX (- ?width 1))
     ) 
 
     (if (< ?nowaKratkaX 0)
@@ -477,9 +477,9 @@
         (bind ?nowaKratkaX 0)
     ) 
 
-    (if (> ?nowaKratkaY ?height)
+    (if (> ?nowaKratkaY (- ?height 1))
     then
-        (bind ?nowaKratkaY ?height)
+        (bind ?nowaKratkaY (- ?height 1))
     ) 
   
     (if (< ?nowaKratkaY 0)
